@@ -29,7 +29,7 @@ func main() {
 	conf := api.DefaultConfig("yourhost.whatever", "username", "password")
 	client := api.NewClient(conf, httpClient)
 
-    ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 
 	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(ctx)
 	
