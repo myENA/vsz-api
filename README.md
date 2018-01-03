@@ -28,8 +28,11 @@ import (
 func main() {
 	conf := api.DefaultConfig("yourhost.whatever", "username", "password")
 	client := api.NewClient(conf, nil)
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	
+	// ctx here should make sense within the scope of your implementation.  Each request is given a new 
+	// context.WithTimeout using the RequestTimeout value in the config.  The context you provide is used as this 
+	// new context's parent.
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 
 	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(ctx)
 	
