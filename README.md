@@ -19,15 +19,13 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"log"
-	"net/http"
 	"os"
 	"time"
 )
 
 func main() {
-	httpClient := &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
 	conf := api.DefaultConfig("yourhost.whatever", "username", "password")
-	client := api.NewClient(conf, httpClient)
+	client := api.NewClient(conf, nil)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 
