@@ -9,53 +9,17 @@ import (
 	"net"
 	"net/http"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
 const (
 	DefaultScheme         = "https"
 	DefaultPathPrefix     = "api/public"
-	DefaultRequestTimeout = 5 * time.Second
+	DefaultRequestTimeout = 2500 * time.Millisecond
 
 	SessionCookieName = "JSESSIONID"
 )
-
-// SessionCookieRefreshFunc will be called in 2 circumstances:
-// 1. Initial query failed with 401
-// 2. Post-password refresh success
-//
-// It must attempt to refresh the cookie used during authenticated requests
-type SessionCookieRefreshFunc func(client *Client, username, password string) (*http.Cookie, error)
-
-func DefaultCookieRefresher(client *Client, username, password string) (*http.Cookie, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), client.Config().RequestTimeout)
-	defer cancel()
-	resp, _, err := client.Session().LoginSessionLogonPost(ctx, &LoginSessionLogonPostRequest{
-		Username: &username,
-		Password: &password,
-	})
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("unable to refresh cookie, expected 200 OK saw \"%d %s\"", resp.StatusCode, resp.Status)
-	}
-
-	cookie := TryExtractSessionCookie(resp)
-	if cookie == nil {
-		return nil, fmt.Errorf("unable to extract \"%s\" cookie", SessionCookieName)
-	}
-
-	return cookie, nil
-}
-
-// SessionPasswordRefreshFunc will only ever be called if the initial attempt to refresh the session cookie fails,
-// and if implemented should return a new password to use for this user.
-type SessionPasswordRefreshFunc func(client *Client, username, password string) (string, error)
-
-func DefaultPasswordRefresher(_ *Client, username, _ string) (string, error) {
-	return "", fmt.Errorf("user \"%s\" needs it's password refreshed, please implement a SessionPasswordRefreshFunc", username)
-}
 
 type Config struct {
 	Address  string // REQUIRED address of your VSZ
@@ -66,9 +30,6 @@ type Config struct {
 	PathPrefix string // OPTIONAL defaults to "api/public"
 
 	RequestTimeout time.Duration // OPTIONAL will default to value of DefaultRequestTimeout
-
-	CookieRefresher   SessionCookieRefreshFunc
-	PasswordRefresher SessionPasswordRefreshFunc
 }
 
 // DefaultConfig creates a new Config object with a non-pooled client
@@ -78,14 +39,12 @@ func DefaultConfig(address, username, password string) *Config {
 
 func defaultConfig(address, username, password string) *Config {
 	return &Config{
-		Address:           address,
-		Username:          username,
-		Password:          password,
-		Scheme:            DefaultScheme,
-		PathPrefix:        DefaultPathPrefix,
-		RequestTimeout:    DefaultRequestTimeout,
-		CookieRefresher:   DefaultCookieRefresher,
-		PasswordRefresher: DefaultPasswordRefresher,
+		Address:        address,
+		Username:       username,
+		Password:       password,
+		Scheme:         DefaultScheme,
+		PathPrefix:     DefaultPathPrefix,
+		RequestTimeout: DefaultRequestTimeout,
 	}
 }
 
@@ -94,17 +53,12 @@ type Client struct {
 	config *Config
 	client *http.Client
 
-	lastUsed time.Time
-
-	unauthProcessor *processor
-	authProcessor   *processor
-
 	closed     bool
 	closedLock sync.RWMutex
 
-	sessionCookie *http.Cookie
-
-	refreshLock sync.Mutex
+	cookie    *http.Cookie
+	cookieMu  sync.RWMutex
+	cookieCAS uint64
 }
 
 func NewClient(conf *Config, client *http.Client) *Client {
@@ -117,12 +71,6 @@ func NewClient(conf *Config, client *http.Client) *Client {
 	}
 	if conf.RequestTimeout > 0 {
 		def.RequestTimeout = conf.RequestTimeout
-	}
-	if conf.CookieRefresher != nil {
-		def.CookieRefresher = conf.CookieRefresher
-	}
-	if conf.PasswordRefresher != nil {
-		def.PasswordRefresher = conf.PasswordRefresher
 	}
 
 	if client == nil {
@@ -145,15 +93,11 @@ func NewClient(conf *Config, client *http.Client) *Client {
 	}
 
 	c := &Client{
-		config:   conf,
-		client:   client,
-		lastUsed: time.Now(),
+		config: conf,
+		client: client,
 	}
 
 	c.bridge = newBridge(c)
-
-	c.unauthProcessor = newProcessor(context.Background())
-	c.authProcessor = newProcessor(context.Background())
 
 	return c
 }
@@ -162,16 +106,10 @@ func (c *Client) Close() {
 	c.closedLock.Lock()
 	defer c.closedLock.Unlock()
 	c.closed = true
-	c.unauthProcessor.cancel()
-	c.authProcessor.cancel()
 }
 
 func (c *Client) Config() Config {
 	return *c.config
-}
-
-func (c *Client) LastUsed() time.Time {
-	return c.lastUsed
 }
 
 // doRequest will attempt to execute a VSZ API request.
@@ -190,20 +128,29 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 			request.uri)
 	}
 
-	var err error
-	var buff []byte
-	var httpResponse *http.Response
-
-	c.lastUsed = time.Now()
-
-	// initial attempt
-	httpResponse, err = c.process(request)
+	httpRequest, err := request.toHTTP()
 	if err != nil {
 		return nil, nil, err
 	}
 
+	if request.authenticated {
+		cookie, err := c.sessionCookie()
+		if err != nil {
+			return nil, nil, err
+		}
+		httpRequest.AddCookie(cookie)
+	}
+
+	httpResponse, err := c.client.Do(httpRequest)
+	if err != nil {
+		if httpResponse != nil {
+			httpResponse.Body.Close()
+		}
+		return nil, nil, err
+	}
+
 	// read everything out of the body and close it.
-	buff, err = ioutil.ReadAll(httpResponse.Body)
+	buff, err := ioutil.ReadAll(httpResponse.Body)
 	httpResponse.Body.Close()
 	if err != nil {
 		return httpResponse, nil, err
@@ -211,44 +158,29 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 
 	// if this endpoint requires authentication and received a 401, assume we need to refresh cookie / credentials
 	if request.authenticated && httpResponse.StatusCode == 401 {
-		if c.config.CookieRefresher != nil {
-			c.refreshLock.Lock()
-			defer c.refreshLock.Unlock()
-
-			// try to refresh cookie first...
-			c.sessionCookie, err = c.config.CookieRefresher(c, c.config.Username, c.config.Password)
-			if err != nil {
-				if c.config.PasswordRefresher != nil {
-					// should indicate to the implementor that this client's credentials are no longer valid
-					c.config.Password, err = c.config.PasswordRefresher(c, c.config.Username, c.config.Password)
-					if err != nil {
-						return nil, nil, err
-					}
-
-					// if we were able to refresh the user's credentials, try logging in again...
-					c.sessionCookie, err = c.config.CookieRefresher(c, c.config.Username, c.config.Password)
-					if err != nil {
-						return nil, nil, err
-					}
-				} else {
-					return nil, nil, err
-				}
+		if err := c.refreshCookie(); err != nil {
+			return nil, nil, err
+		}
+		httpRequest, err = request.toHTTP()
+		if err != nil {
+			return nil, nil, err
+		}
+		cookie, err := c.sessionCookie()
+		if err != nil {
+			return nil, nil, err
+		}
+		httpRequest.AddCookie(cookie)
+		httpResponse, err = c.client.Do(httpRequest)
+		if err != nil {
+			if httpResponse != nil {
+				httpResponse.Body.Close()
 			}
-
-			// if we get this far, assume we were able to refresh the cookie one way or another
-			httpResponse, err = c.process(request)
-			if err != nil {
-				return nil, nil, err
-			}
-
-			// read and close response body
-			buff, err = ioutil.ReadAll(httpResponse.Body)
-			httpResponse.Body.Close()
-			if err != nil {
-				return httpResponse, nil, err
-			}
-		} else {
-			return httpResponse, nil, errors.New("unauthorized")
+			return nil, nil, err
+		}
+		buff, err = ioutil.ReadAll(httpResponse.Body)
+		httpResponse.Body.Close()
+		if err != nil {
+			return httpResponse, nil, err
 		}
 	}
 
@@ -274,23 +206,54 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 	return httpResponse, buff, err
 }
 
-func (c *Client) process(request *request) (*http.Response, error) {
-	var req *processRequest
-	var resp *processResponse
-
-	req = &processRequest{
-		request:      request,
-		client:       c,
-		responseChan: make(chan *processResponse),
+func (c *Client) refreshCookie() error {
+	cas := atomic.LoadUint64(&c.cookieCAS)
+	c.cookieMu.Lock()
+	defer c.cookieMu.Unlock()
+	if atomic.LoadUint64(&c.cookieCAS) != cas {
+		// should mean that somebody else updated the cookie
+		if c.cookie == nil {
+			return errors.New("cookie was unable to be refreshed")
+		}
+		return nil
 	}
-
-	if request.authenticated {
-		c.authProcessor.do(req)
-	} else {
-		c.unauthProcessor.do(req)
+	ctx, cancel := context.WithTimeout(context.Background(), c.config.RequestTimeout)
+	defer cancel()
+	resp, _, err := c.Session().LoginSessionLogonPost(ctx, &LoginSessionLogonPostRequest{
+		Username: &c.config.Username,
+		Password: &c.config.Password,
+	})
+	if err != nil {
+		c.cookie = nil
+		c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
+		return err
 	}
+	cookie := TryExtractSessionCookie(resp)
+	if cookie == nil {
+		c.cookie = nil
+		c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
+		return fmt.Errorf("unable to refresh cookie, expected \"200 OK\" saw \"%s\"", resp.Status)
+	}
+	c.cookie = cookie
+	c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
+	return nil
+}
 
-	resp = <-req.responseChan
-
-	return resp.http, resp.err
+func (c *Client) sessionCookie() (*http.Cookie, error) {
+	c.cookieMu.RLock()
+	if c.cookie == nil {
+		c.cookieMu.RUnlock()
+		if err := c.refreshCookie(); err != nil {
+			return nil, err
+		} else {
+			c.cookieMu.RLock()
+		}
+	}
+	if c.cookie != nil {
+		cookie := c.cookie
+		c.cookieMu.Unlock()
+		return cookie, nil
+	}
+	c.cookieMu.RUnlock()
+	return nil, errors.New("cookie was unable to be fetched")
 }

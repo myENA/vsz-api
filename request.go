@@ -82,5 +82,5 @@ func (r *request) toHTTP() (*http.Request, error) {
 
 	httpRequest.Header.Set("Accept", "application/json")
 
-	return httpRequest, nil
+	return httpRequest.WithContext(r.ctx), nil
 }
