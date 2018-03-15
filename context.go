@@ -76,6 +76,14 @@ func (c *UserContext) Value(key interface{}) interface{} {
 	return c.context().Value(key)
 }
 
+// Cancel will make this UserContext defunct for Client query execution purposes
+func (c *UserContext) Cancel() {
+	// be lazy and ensure we have a context
+	c.context()
+	// cancel it
+	c.cancel()
+}
+
 // Username must return the username for this user context
 func (c *UserContext) Username() string {
 	c.mu.RLock()
