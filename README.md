@@ -10,6 +10,10 @@ Helps you ruckus vsz-ize stuff.
 (and sometimes not-so-subtle) differences, so please have a look at the various branches and pick the one that matches
 your VSZ version.  We currently will not guarantee any degree of backwards compatibility between versions.
 
+|VSZ Version|Package Version|
+|---|---|
+|3.5.0|0.1-0.2|
+
 ## Basic Usage
 
 ```go
