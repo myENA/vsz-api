@@ -146,19 +146,19 @@ func (c *UserContext) RefreshCookie(client *Client, cas CookieCAS) (CookieCAS, e
 	resp, _, err := client.doRequest(request, 200, nil)
 	if err != nil {
 		c.cookie = nil
-		c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
+		ncas := atomic.AddUint64(&c.cookieCAS, 1)
 		c.cookieMu.Unlock()
-		return CookieCAS(atomic.LoadUint64(&c.cookieCAS)), err
+		return CookieCAS(ncas), err
 	}
 	cookie := TryExtractSessionCookie(resp)
 	if cookie == nil {
 		c.cookie = nil
-		c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
+		ncas := atomic.AddUint64(&c.cookieCAS, 1)
 		c.cookieMu.Unlock()
-		return CookieCAS(atomic.LoadUint64(&c.cookieCAS)), errors.New("unable to locate cookie in response")
+		return CookieCAS(ncas), errors.New("unable to locate cookie in response")
 	}
 	c.cookie = cookie
-	c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
+	ncas := atomic.AddUint64(&c.cookieCAS, 1)
 	c.cookieMu.Unlock()
-	return CookieCAS(atomic.LoadUint64(&c.cookieCAS)), nil
+	return CookieCAS(ncas), nil
 }

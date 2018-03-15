@@ -67,4 +67,5 @@ Some things we'd like to have in the future:
 - Request struct field value validation
 - Better error typing
 - Better doc comments on api's
+- Cleanup of user session on shutdown
 - Tests... 
