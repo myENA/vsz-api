@@ -1,15 +1,15 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type ConfigurationSettings struct {
+type ConfigurationSettingsAPI struct {
 	client *Client
 }
 type (
@@ -22,16 +22,18 @@ type (
 // ConfigurationBackupAndRestoreGetAutoExportBackupGet: Get Auto Export Backup Settings
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ConfigurationBackupAndRestoreGetAutoExportBackupGet200Response
 // - error: Error seen or nil if none
-func (c *ConfigurationSettings) ConfigurationBackupAndRestoreGetAutoExportBackupGet(ctx context.Context) (*http.Response, *ConfigurationBackupAndRestoreGetAutoExportBackupGet200Response, error) {
+func (c *ConfigurationSettingsAPI) ConfigurationBackupAndRestoreGetAutoExportBackupGet(ctx *UserContext) (*http.Response, *ConfigurationBackupAndRestoreGetAutoExportBackupGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "GET", "/v5_0/configurationSettings/autoExportBackup")
 	request.authenticated = true
-
 	out := &ConfigurationBackupAndRestoreGetAutoExportBackupGet200Response{}
 	httpResponse, _, err := c.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -47,18 +49,20 @@ type (
 // ConfigurationBackupAndRestoreModifyAutoExportBackupPatch: Modify Auto Export Backup Settings
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ConfigurationBackupAndRestoreModifyAutoExportBackupPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ConfigurationSettings) ConfigurationBackupAndRestoreModifyAutoExportBackupPatch(ctx context.Context, requestBody *ConfigurationBackupAndRestoreModifyAutoExportBackupPatchRequest) (*http.Response, []byte, error) {
+func (c *ConfigurationSettingsAPI) ConfigurationBackupAndRestoreModifyAutoExportBackupPatch(ctx *UserContext, requestBody *ConfigurationBackupAndRestoreModifyAutoExportBackupPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "PATCH", "/v5_0/configurationSettings/autoExportBackup")
 	request.body = requestBody
 	request.authenticated = true
-
 	return c.client.doRequest(request, 204, nil)
 }
 
@@ -76,16 +80,18 @@ type (
 // ConfigurationBackupAndRestoreGetScheduleBackupSettingGet: Get Schedule Backup Setting
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ConfigurationBackupAndRestoreGetScheduleBackupSettingGet200Response
 // - error: Error seen or nil if none
-func (c *ConfigurationSettings) ConfigurationBackupAndRestoreGetScheduleBackupSettingGet(ctx context.Context) (*http.Response, *ConfigurationBackupAndRestoreGetScheduleBackupSettingGet200Response, error) {
+func (c *ConfigurationSettingsAPI) ConfigurationBackupAndRestoreGetScheduleBackupSettingGet(ctx *UserContext) (*http.Response, *ConfigurationBackupAndRestoreGetScheduleBackupSettingGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "GET", "/v5_0/configurationSettings/scheduleBackup")
 	request.authenticated = true
-
 	out := &ConfigurationBackupAndRestoreGetScheduleBackupSettingGet200Response{}
 	httpResponse, _, err := c.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -105,17 +111,19 @@ type (
 // ConfigurationBackupAndRestoreModifyScheduleBackupSettingPatch: Modify Schedule Backup Setting
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ConfigurationBackupAndRestoreModifyScheduleBackupSettingPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ConfigurationSettings) ConfigurationBackupAndRestoreModifyScheduleBackupSettingPatch(ctx context.Context, requestBody *ConfigurationBackupAndRestoreModifyScheduleBackupSettingPatchRequest) (*http.Response, []byte, error) {
+func (c *ConfigurationSettingsAPI) ConfigurationBackupAndRestoreModifyScheduleBackupSettingPatch(ctx *UserContext, requestBody *ConfigurationBackupAndRestoreModifyScheduleBackupSettingPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "PATCH", "/v5_0/configurationSettings/scheduleBackup")
 	request.body = requestBody
 	request.authenticated = true
-
 	return c.client.doRequest(request, 204, nil)
 }

@@ -1,18 +1,18 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type Query struct {
+type QueryAPI struct {
 	client *Client
 }
 type (
@@ -149,18 +149,20 @@ type (
 // QueryWithFilterQueryAps: Query aps with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryApsRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryAps200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryAps(ctx context.Context, requestBody *QueryWithFilterQueryApsRequest) (*http.Response, *QueryWithFilterQueryAps200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryAps(ctx *UserContext, requestBody *QueryWithFilterQueryApsRequest) (*http.Response, *QueryWithFilterQueryAps200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/ap")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryAps200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -322,18 +324,20 @@ type (
 // ApplicationVisibilityControlApplicationPolicyRetrieveListPost: Use this API command to retrieve a list of AVC Application Policy profiles.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationPolicyRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) ApplicationVisibilityControlApplicationPolicyRetrieveListPost(ctx context.Context, requestBody *ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequest) (*http.Response, *ApplicationVisibilityControlApplicationPolicyRetrieveListPost200Response, error) {
+func (q *QueryAPI) ApplicationVisibilityControlApplicationPolicyRetrieveListPost(ctx *UserContext, requestBody *ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequest) (*http.Response, *ApplicationVisibilityControlApplicationPolicyRetrieveListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/applicationPolicy")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlApplicationPolicyRetrieveListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -504,18 +508,20 @@ type (
 // QueryWithFilterQueryClientsPost: Query clients with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryClientsPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryClientsPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryClientsPost(ctx context.Context, requestBody *QueryWithFilterQueryClientsPostRequest) (*http.Response, *QueryWithFilterQueryClientsPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryClientsPost(ctx *UserContext, requestBody *QueryWithFilterQueryClientsPostRequest) (*http.Response, *QueryWithFilterQueryClientsPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/client")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryClientsPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -664,18 +670,20 @@ type (
 // QueryWithFilterQueryDpsksPost: Query DPSKs with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryDpsksPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryDpsksPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryDpsksPost(ctx context.Context, requestBody *QueryWithFilterQueryDpsksPostRequest) (*http.Response, *QueryWithFilterQueryDpsksPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryDpsksPost(ctx *UserContext, requestBody *QueryWithFilterQueryDpsksPostRequest) (*http.Response, *QueryWithFilterQueryDpsksPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/dpsk")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryDpsksPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -824,18 +832,20 @@ type (
 // WirelessClientHistoricalClientPost: Use this API command to retrive historical client.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *WirelessClientHistoricalClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *WirelessClientHistoricalClientPost200Response
 // - error: Error seen or nil if none
-func (q *Query) WirelessClientHistoricalClientPost(ctx context.Context, requestBody *WirelessClientHistoricalClientPostRequest) (*http.Response, *WirelessClientHistoricalClientPost200Response, error) {
+func (q *QueryAPI) WirelessClientHistoricalClientPost(ctx *UserContext, requestBody *WirelessClientHistoricalClientPostRequest) (*http.Response, *WirelessClientHistoricalClientPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/historicalclient")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &WirelessClientHistoricalClientPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1001,18 +1011,20 @@ type (
 // QueryWithFilterRetrieveIndoormapListPost: Query indoorMap with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveIndoormapListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterRetrieveIndoormapListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveIndoormapListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveIndoormapListPostRequest) (*http.Response, *QueryWithFilterRetrieveIndoormapListPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveIndoormapListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveIndoormapListPostRequest) (*http.Response, *QueryWithFilterRetrieveIndoormapListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/indoorMap")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterRetrieveIndoormapListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1081,7 +1093,7 @@ type (
 // QueryWithFilterQueryMeshNeighborApListPost: Use this API command to retrieve a list of neighbor access points on mesh AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *QueryWithFilterQueryMeshNeighborApListPostRequest
 //
@@ -1089,21 +1101,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryMeshNeighborApListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryMeshNeighborApListPost(ctx context.Context, apMac string, requestBody *QueryWithFilterQueryMeshNeighborApListPostRequest) (*http.Response, *QueryWithFilterQueryMeshNeighborApListPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryMeshNeighborApListPost(ctx *UserContext, apMac string, requestBody *QueryWithFilterQueryMeshNeighborApListPostRequest) (*http.Response, *QueryWithFilterQueryMeshNeighborApListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/mesh/{apMac}/neighbor")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &QueryWithFilterQueryMeshNeighborApListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1256,18 +1268,20 @@ type (
 // QueryWithFilterQueryRogueApListPost: Use this API command to retrieve a list of rogue access points.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryRogueApListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryRogueApListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryRogueApListPost(ctx context.Context, requestBody *QueryWithFilterQueryRogueApListPostRequest) (*http.Response, *QueryWithFilterQueryRogueApListPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryRogueApListPost(ctx *UserContext, requestBody *QueryWithFilterQueryRogueApListPostRequest) (*http.Response, *QueryWithFilterQueryRogueApListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/roguesInfoList")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryRogueApListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1430,18 +1444,20 @@ type (
 // QueryWithFilterQueryAaaserversPost: Query AAAServers with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryAaaserversPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryAaaserversPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryAaaserversPost(ctx context.Context, requestBody *QueryWithFilterQueryAaaserversPostRequest) (*http.Response, *QueryWithFilterQueryAaaserversPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryAaaserversPost(ctx *UserContext, requestBody *QueryWithFilterQueryAaaserversPostRequest) (*http.Response, *QueryWithFilterQueryAaaserversPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/aaaServer")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryAaaserversPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1604,18 +1620,20 @@ type (
 // QueryWithFilterQueryAccountingAaaserversPost: Query Accounting AAAServers with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryAccountingAaaserversPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryAccountingAaaserversPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryAccountingAaaserversPost(ctx context.Context, requestBody *QueryWithFilterQueryAccountingAaaserversPostRequest) (*http.Response, *QueryWithFilterQueryAccountingAaaserversPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryAccountingAaaserversPost(ctx *UserContext, requestBody *QueryWithFilterQueryAccountingAaaserversPostRequest) (*http.Response, *QueryWithFilterQueryAccountingAaaserversPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/aaaServer/acct")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryAccountingAaaserversPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1778,18 +1796,20 @@ type (
 // QueryWithFilterQueryAuthenticationAaaserversPost: Query Authentication AAAServers with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryAuthenticationAaaserversPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryAuthenticationAaaserversPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryAuthenticationAaaserversPost(ctx context.Context, requestBody *QueryWithFilterQueryAuthenticationAaaserversPostRequest) (*http.Response, *QueryWithFilterQueryAuthenticationAaaserversPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryAuthenticationAaaserversPost(ctx *UserContext, requestBody *QueryWithFilterQueryAuthenticationAaaserversPostRequest) (*http.Response, *QueryWithFilterQueryAuthenticationAaaserversPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/aaaServer/auth")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryAuthenticationAaaserversPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1909,18 +1929,20 @@ type (
 // QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPost: Query AP USBSoftware Package Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/apUsbSoftwarePackage")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -2072,18 +2094,20 @@ type (
 // BonjourFencingPolicyRetrieveListPost: Use this API command to retrieve a list of Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *BonjourFencingPolicyRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourFencingPolicyRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) BonjourFencingPolicyRetrieveListPost(ctx context.Context, requestBody *BonjourFencingPolicyRetrieveListPostRequest) (*http.Response, *BonjourFencingPolicyRetrieveListPost200Response, error) {
+func (q *QueryAPI) BonjourFencingPolicyRetrieveListPost(ctx *UserContext, requestBody *BonjourFencingPolicyRetrieveListPostRequest) (*http.Response, *BonjourFencingPolicyRetrieveListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/bonjourFencingPolicy")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &BonjourFencingPolicyRetrieveListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -2203,18 +2227,20 @@ type (
 // QueryWithFilterRetrieveBonjourpolicyProfileListPost: Query bonjourPolicy Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveBonjourpolicyProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveBonjourpolicyProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveBonjourpolicyProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveBonjourpolicyProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveBonjourpolicyProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/bonjourPolicy")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -2370,18 +2396,20 @@ type (
 // ClientIsolationWhitelistRetrieveListPost: Retrieve a list of Client Isolation Whitelist
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ClientIsolationWhitelistRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ClientIsolationWhitelistRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) ClientIsolationWhitelistRetrieveListPost(ctx context.Context, requestBody *ClientIsolationWhitelistRetrieveListPostRequest) (*http.Response, *ClientIsolationWhitelistRetrieveListPost200Response, error) {
+func (q *QueryAPI) ClientIsolationWhitelistRetrieveListPost(ctx *UserContext, requestBody *ClientIsolationWhitelistRetrieveListPostRequest) (*http.Response, *ClientIsolationWhitelistRetrieveListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/clientIsolationWhitelist")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &ClientIsolationWhitelistRetrieveListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -2501,18 +2529,20 @@ type (
 // QueryWithFilterRetrieveDevicePolicyProfileListPost: Query Device Policy Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveDevicePolicyProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveDevicePolicyProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveDevicePolicyProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveDevicePolicyProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveDevicePolicyProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/devicePolicy")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -2661,18 +2691,20 @@ type (
 // QueryWithFilterRetrieveDhcpProfileListPost: Query DHCP Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveDhcpProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterRetrieveDhcpProfileListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveDhcpProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveDhcpProfileListPostRequest) (*http.Response, *QueryWithFilterRetrieveDhcpProfileListPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveDhcpProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveDhcpProfileListPostRequest) (*http.Response, *QueryWithFilterRetrieveDhcpProfileListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/dhcpProfile")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterRetrieveDhcpProfileListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -2792,18 +2824,20 @@ type (
 // QueryWithFilterRetrieveDscpProfileListPost: Query DSCP Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveDscpProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveDscpProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveDscpProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveDscpProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveDscpProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/dscpProfile")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -2921,18 +2955,20 @@ type (
 // QueryWithFilterRetrieveEthernetPortProfileListPost: Query Ethernet Port Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveEthernetPortProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveEthernetPortProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveEthernetPortProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveEthernetPortProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveEthernetPortProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/ethernetPortProfile")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3050,18 +3086,20 @@ type (
 // QueryWithFilterRetrieveGuessAccessProfileListPost: Query Guess Access Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveGuessAccessProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveGuessAccessProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveGuessAccessProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveGuessAccessProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveGuessAccessProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/guessAccess")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3179,18 +3217,20 @@ type (
 // QueryWithFilterRetrieveHotspotProfileListPost: Query Hotspot Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveHotspotProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveHotspotProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveHotspotProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveHotspotProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveHotspotProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/hotspot")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3308,18 +3348,20 @@ type (
 // QueryWithFilterRetrieveHotspot20ProfileListPost: Query Hotspot20 Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveHotspot20ProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveHotspot20ProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveHotspot20ProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveHotspot20ProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveHotspot20ProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/hotspot20Profile")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3437,18 +3479,20 @@ type (
 // QueryWithFilterRetrieveL2AccesscontrolProfileListPost: Query L2 AccessControl Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveL2AccesscontrolProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveL2AccesscontrolProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/l2AccessControl")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3566,18 +3610,20 @@ type (
 // QueryWithFilterRetrieveVenueProfileListPost: Query Venue Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveVenueProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveVenueProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveVenueProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveVenueProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveVenueProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/venueProfile")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3695,18 +3741,20 @@ type (
 // QueryWithFilterRetrieveVlanPoolingProfileListPost: Query Vlan Pooling Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveVlanPoolingProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveVlanPoolingProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveVlanPoolingProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveVlanPoolingProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveVlanPoolingProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/vlanPooling")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3824,18 +3872,20 @@ type (
 // QueryWithFilterRetrieveWebAuthenticationProfileListPost: Query Web Authentications with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveWebAuthenticationProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveWebAuthenticationProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveWebAuthenticationProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveWebAuthenticationProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveWebAuthenticationProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/webAuthentication")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -3953,18 +4003,20 @@ type (
 // QueryWithFilterRetrieveWechatProfileListPost: Query Wechat Profiles with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveWechatProfileListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveWechatProfileListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveWechatProfileListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveWechatProfileListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveWechatProfileListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/wechatProfile")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -4082,18 +4134,20 @@ type (
 // QueryWithFilterRetrieveWlanSchedulerListPost: Query Wlan Schedulers with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveWlanSchedulerListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveWlanSchedulerListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveWlanSchedulerListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveWlanSchedulerListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveWlanSchedulerListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/services/wlanScheduler")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -4211,18 +4265,20 @@ type (
 // QueryWithFilterRetrieveUserListPost: Query users with specified filters.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterRetrieveUserListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterRetrieveUserListPost(ctx context.Context, requestBody *QueryWithFilterRetrieveUserListPostRequest) (*http.Response, []byte, error) {
+func (q *QueryAPI) QueryWithFilterRetrieveUserListPost(ctx *UserContext, requestBody *QueryWithFilterRetrieveUserListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/user")
 	request.body = requestBody
 	request.authenticated = true
-
 	return q.client.doRequest(request, 200, nil)
 }
 
@@ -4369,18 +4425,20 @@ type (
 // ApplicationVisibilityControlUserDefinedRetrieveListPost: Use this API command to retrieve a list of AVC User Defined profiles.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ApplicationVisibilityControlUserDefinedRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlUserDefinedRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (q *Query) ApplicationVisibilityControlUserDefinedRetrieveListPost(ctx context.Context, requestBody *ApplicationVisibilityControlUserDefinedRetrieveListPostRequest) (*http.Response, *ApplicationVisibilityControlUserDefinedRetrieveListPost200Response, error) {
+func (q *QueryAPI) ApplicationVisibilityControlUserDefinedRetrieveListPost(ctx *UserContext, requestBody *ApplicationVisibilityControlUserDefinedRetrieveListPostRequest) (*http.Response, *ApplicationVisibilityControlUserDefinedRetrieveListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/userDefined")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlUserDefinedRetrieveListPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -4537,18 +4595,20 @@ type (
 // QueryWithFilterQueryWlansPost: Query WLANs with specified filters
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *QueryWithFilterQueryWlansPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *QueryWithFilterQueryWlansPost200Response
 // - error: Error seen or nil if none
-func (q *Query) QueryWithFilterQueryWlansPost(ctx context.Context, requestBody *QueryWithFilterQueryWlansPostRequest) (*http.Response, *QueryWithFilterQueryWlansPost200Response, error) {
+func (q *QueryAPI) QueryWithFilterQueryWlansPost(ctx *UserContext, requestBody *QueryWithFilterQueryWlansPostRequest) (*http.Response, *QueryWithFilterQueryWlansPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := q.client.newRequest(ctx, "POST", "/v5_0/query/wlan")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &QueryWithFilterQueryWlansPost200Response{}
 	httpResponse, _, err := q.client.doRequest(request, 200, out)
 	return httpResponse, out, err

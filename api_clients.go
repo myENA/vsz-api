@@ -1,18 +1,18 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type Clients struct {
+type ClientsAPI struct {
 	client *Client
 }
 type (
@@ -31,18 +31,20 @@ type (
 // WirelessClientBulkDeauthClientPost: Use this API command to bulk deauth client.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *WirelessClientBulkDeauthClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *Clients) WirelessClientBulkDeauthClientPost(ctx context.Context, requestBody *WirelessClientBulkDeauthClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientBulkDeauthClientPost(ctx *UserContext, requestBody *WirelessClientBulkDeauthClientPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/bulkDeauth")
 	request.body = requestBody
 	request.authenticated = true
-
 	return c.client.doRequest(request, 204, nil)
 }
 
@@ -62,18 +64,20 @@ type (
 // WirelessClientBulkDisconnectClientPost: Use this API command to bulk disconnect client.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *WirelessClientBulkDisconnectClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *Clients) WirelessClientBulkDisconnectClientPost(ctx context.Context, requestBody *WirelessClientBulkDisconnectClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientBulkDisconnectClientPost(ctx *UserContext, requestBody *WirelessClientBulkDisconnectClientPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/bulkDisconnect")
 	request.body = requestBody
 	request.authenticated = true
-
 	return c.client.doRequest(request, 204, nil)
 }
 
@@ -242,7 +246,7 @@ type (
 // WirelessClientQueryClientByWlanNamePost: Use this API command to query client by wlan name.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - wlanname (string)
 // - requestBody: *WirelessClientQueryClientByWlanNamePostRequest
 //
@@ -250,21 +254,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WirelessClientQueryClientByWlanNamePost200Response
 // - error: Error seen or nil if none
-func (c *Clients) WirelessClientQueryClientByWlanNamePost(ctx context.Context, wlanname string, requestBody *WirelessClientQueryClientByWlanNamePostRequest) (*http.Response, *WirelessClientQueryClientByWlanNamePost200Response, error) {
+func (c *ClientsAPI) WirelessClientQueryClientByWlanNamePost(ctx *UserContext, wlanname string, requestBody *WirelessClientQueryClientByWlanNamePostRequest) (*http.Response, *WirelessClientQueryClientByWlanNamePost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(wlanname)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"wlanname\" failed validation check: %s", err)
 	}
-
 	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/byWlanName/{wlanname}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"wlanname": wlanname,
 	}
-
 	out := &WirelessClientQueryClientByWlanNamePost200Response{}
 	httpResponse, _, err := c.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -280,18 +284,20 @@ type (
 // WirelessClientDeauthClientPost: Use this API command to deauth client.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *WirelessClientDeauthClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *Clients) WirelessClientDeauthClientPost(ctx context.Context, requestBody *WirelessClientDeauthClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientDeauthClientPost(ctx *UserContext, requestBody *WirelessClientDeauthClientPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/deauth")
 	request.body = requestBody
 	request.authenticated = true
-
 	return c.client.doRequest(request, 204, nil)
 }
 
@@ -305,17 +311,19 @@ type (
 // WirelessClientDisconnectClientPost: Use this API command to disconnect client.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *WirelessClientDisconnectClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *Clients) WirelessClientDisconnectClientPost(ctx context.Context, requestBody *WirelessClientDisconnectClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientDisconnectClientPost(ctx *UserContext, requestBody *WirelessClientDisconnectClientPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/disconnect")
 	request.body = requestBody
 	request.authenticated = true
-
 	return c.client.doRequest(request, 204, nil)
 }

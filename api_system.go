@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type System struct {
+type SystemAPI struct {
 	client *Client
 }
 type (
@@ -38,18 +38,20 @@ type (
 // TestAaaServerTestAaaPost: Use this API command to test AAA server.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *TestAaaServerTestAaaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *TestAaaServerTestAaaPost200Response
 // - error: Error seen or nil if none
-func (s *System) TestAaaServerTestAaaPost(ctx context.Context, requestBody *TestAaaServerTestAaaPostRequest) (*http.Response, *TestAaaServerTestAaaPost200Response, error) {
+func (s *SystemAPI) TestAaaServerTestAaaPost(ctx *UserContext, requestBody *TestAaaServerTestAaaPostRequest) (*http.Response, *TestAaaServerTestAaaPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/aaa/test")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &TestAaaServerTestAaaPost200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -58,16 +60,18 @@ func (s *System) TestAaaServerTestAaaPost(ctx context.Context, requestBody *Test
 // SystemExecuteApBalancePost: Execute ap balance
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SystemExecuteApBalancePost(ctx context.Context) (*http.Response, []byte, error) {
+func (s *SystemAPI) SystemExecuteApBalancePost(ctx *UserContext) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/ap_balance")
 	request.authenticated = true
-
 	return s.client.doRequest(request, 200, nil)
 }
 
@@ -82,16 +86,18 @@ type (
 // SystemGetApRecoverySettingGet: Use this API command to get system level ap recovery ssid information.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemGetApRecoverySettingGet200Response
 // - error: Error seen or nil if none
-func (s *System) SystemGetApRecoverySettingGet(ctx context.Context) (*http.Response, *SystemGetApRecoverySettingGet200Response, error) {
+func (s *SystemAPI) SystemGetApRecoverySettingGet(ctx *UserContext) (*http.Response, *SystemGetApRecoverySettingGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/ap_recovery")
 	request.authenticated = true
-
 	out := &SystemGetApRecoverySettingGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -109,18 +115,20 @@ type (
 // SystemModifyApRecoverySettingPost: Use this API command to patch system level ap recovery ssid.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SystemModifyApRecoverySettingPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SystemModifyApRecoverySettingPost(ctx context.Context, requestBody *SystemModifyApRecoverySettingPostRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) SystemModifyApRecoverySettingPost(ctx *UserContext, requestBody *SystemModifyApRecoverySettingPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/ap_recovery")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -131,16 +139,18 @@ type (
 // SystemApModelsGet: Use this API command to retrieve AP models.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - SystemApModelsGet200Response
 // - error: Error seen or nil if none
-func (s *System) SystemApModelsGet(ctx context.Context) (*http.Response, SystemApModelsGet200Response, error) {
+func (s *SystemAPI) SystemApModelsGet(ctx *UserContext) (*http.Response, SystemApModelsGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/apmodels")
 	request.authenticated = true
-
 	out := make(SystemApModelsGet200Response, 0)
 	httpResponse, _, err := s.client.doRequest(request, 200, &(out))
 	return httpResponse, out, err
@@ -155,16 +165,18 @@ type (
 // SystemGetApRoutineStatusIntervalSettingGet: Use this API command to get AP routine status interval setting.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemGetApRoutineStatusIntervalSettingGet200Response
 // - error: Error seen or nil if none
-func (s *System) SystemGetApRoutineStatusIntervalSettingGet(ctx context.Context) (*http.Response, *SystemGetApRoutineStatusIntervalSettingGet200Response, error) {
+func (s *SystemAPI) SystemGetApRoutineStatusIntervalSettingGet(ctx *UserContext) (*http.Response, *SystemGetApRoutineStatusIntervalSettingGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/apRoutineStatusInterval")
 	request.authenticated = true
-
 	out := &SystemGetApRoutineStatusIntervalSettingGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -173,32 +185,36 @@ func (s *System) SystemGetApRoutineStatusIntervalSettingGet(ctx context.Context)
 // SystemIncreaseApRoutineStatusIntervalPost: Use this API command to set AP routine status interval setting to 900 seconds.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SystemIncreaseApRoutineStatusIntervalPost(ctx context.Context) (*http.Response, []byte, error) {
+func (s *SystemAPI) SystemIncreaseApRoutineStatusIntervalPost(ctx *UserContext) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/apRoutineStatusInterval/slowdown")
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
 // SystemDecreaseApRoutineStatusIntervalPost: Use this API command to set AP routine status interval setting to 180 seconds.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SystemDecreaseApRoutineStatusIntervalPost(ctx context.Context) (*http.Response, []byte, error) {
+func (s *SystemAPI) SystemDecreaseApRoutineStatusIntervalPost(ctx *UserContext) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/apRoutineStatusInterval/speedup")
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -212,16 +228,18 @@ type (
 // CaleaGetCaleaCommonSettingGet: Use this API command to get CALEA common setting.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CaleaGetCaleaCommonSettingGet200Response
 // - error: Error seen or nil if none
-func (s *System) CaleaGetCaleaCommonSettingGet(ctx context.Context) (*http.Response, *CaleaGetCaleaCommonSettingGet200Response, error) {
+func (s *SystemAPI) CaleaGetCaleaCommonSettingGet(ctx *UserContext) (*http.Response, *CaleaGetCaleaCommonSettingGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/caleaCommonSetting")
 	request.authenticated = true
-
 	out := &CaleaGetCaleaCommonSettingGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -237,18 +255,20 @@ type (
 // CaleaSetCaleaCommonSettingPost: Use this API command to set CALEA common setting.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *CaleaSetCaleaCommonSettingPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) CaleaSetCaleaCommonSettingPost(ctx context.Context, requestBody *CaleaSetCaleaCommonSettingPostRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) CaleaSetCaleaCommonSettingPost(ctx *UserContext, requestBody *CaleaSetCaleaCommonSettingPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/caleaCommonSetting")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -263,18 +283,20 @@ type (
 // CaleaDeleteCaleaUeMacListDelete1: Use this API command to delete CALEA UE mac list.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *CaleaDeleteCaleaUeMacListDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) CaleaDeleteCaleaUeMacListDelete1(ctx context.Context, requestBody *CaleaDeleteCaleaUeMacListDelete1Request) (*http.Response, []byte, error) {
+func (s *SystemAPI) CaleaDeleteCaleaUeMacListDelete1(ctx *UserContext, requestBody *CaleaDeleteCaleaUeMacListDelete1Request) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "DELETE", "/v5_0/system/caleaMac")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -289,34 +311,38 @@ type (
 // CaleaAddCaleaUeMacListPost: Use this API command to add CALEA UE mac list.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *CaleaAddCaleaUeMacListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) CaleaAddCaleaUeMacListPost(ctx context.Context, requestBody *CaleaAddCaleaUeMacListPostRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) CaleaAddCaleaUeMacListPost(ctx *UserContext, requestBody *CaleaAddCaleaUeMacListPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/caleaMac")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
 // CaleaDeleteCaleaUeMacListDelete: Use this API command to delete all CALEA UE mac list.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) CaleaDeleteCaleaUeMacListDelete(ctx context.Context) (*http.Response, []byte, error) {
+func (s *SystemAPI) CaleaDeleteCaleaUeMacListDelete(ctx *UserContext) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "DELETE", "/v5_0/system/caleaMacList")
 	request.authenticated = true
-
 	return s.client.doRequest(request, 200, nil)
 }
 
@@ -334,16 +360,18 @@ type (
 // CaleaGetCaleaUeMacListGet: Use this API command to get all CALEA UE mac list.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CaleaGetCaleaUeMacListGet200Response
 // - error: Error seen or nil if none
-func (s *System) CaleaGetCaleaUeMacListGet(ctx context.Context) (*http.Response, *CaleaGetCaleaUeMacListGet200Response, error) {
+func (s *SystemAPI) CaleaGetCaleaUeMacListGet(ctx *UserContext) (*http.Response, *CaleaGetCaleaUeMacListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/caleaMacList")
 	request.authenticated = true
-
 	out := &CaleaGetCaleaUeMacListGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -352,16 +380,18 @@ func (s *System) CaleaGetCaleaUeMacListGet(ctx context.Context) (*http.Response,
 // CaleaUploadCaleaUeMacListCsvFilePost: Use this API command to upload CALEA UE mac list csv file.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) CaleaUploadCaleaUeMacListCsvFilePost(ctx context.Context) (*http.Response, []byte, error) {
+func (s *SystemAPI) CaleaUploadCaleaUeMacListCsvFilePost(ctx *UserContext) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/system/caleaMacList")
 	request.authenticated = true
-
 	return s.client.doRequest(request, 200, nil)
 }
 
@@ -406,7 +436,7 @@ type (
 // SystemSystemInventoryGet: Use this API command to retrieve the system inventory with current logon user domain.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -416,9 +446,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *SystemSystemInventoryGet200Response
 // - error: Error seen or nil if none
-func (s *System) SystemSystemInventoryGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *SystemSystemInventoryGet200Response, error) {
+func (s *SystemAPI) SystemSystemInventoryGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *SystemSystemInventoryGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -437,14 +469,12 @@ func (s *System) SystemSystemInventoryGet(ctx context.Context, optionalParams ma
 	} else {
 		listSize = "100"
 	}
-
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/inventory")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"index":    index,
 		"listSize": listSize,
 	}
-
 	out := &SystemSystemInventoryGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -453,7 +483,7 @@ func (s *System) SystemSystemInventoryGet(ctx context.Context, optionalParams ma
 // SystemDisableNbiDelete: Use this API command to disable the user information by Northbound Portal Interface.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - domainId (UUIDv4): Domain ID.
@@ -462,9 +492,11 @@ func (s *System) SystemSystemInventoryGet(ctx context.Context, optionalParams ma
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SystemDisableNbiDelete(ctx context.Context, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (s *SystemAPI) SystemDisableNbiDelete(ctx *UserContext, optionalParams map[string]string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	domainId, ok := optionalParams["domainId"]
 	if ok {
 		err = validators.StrIsUUIDv4(domainId)
@@ -472,13 +504,11 @@ func (s *System) SystemDisableNbiDelete(ctx context.Context, optionalParams map[
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-
 	request := s.client.newRequest(ctx, "DELETE", "/v5_0/system/nbi")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"domainId": domainId,
 	}
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -492,7 +522,7 @@ type (
 // SystemRetrieveNbiGet: Use this API command to retrieve user information by Northbound Portal Interface.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - domainId (UUIDv4): Domain ID.
@@ -501,9 +531,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *SystemRetrieveNbiGet200Response
 // - error: Error seen or nil if none
-func (s *System) SystemRetrieveNbiGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *SystemRetrieveNbiGet200Response, error) {
+func (s *SystemAPI) SystemRetrieveNbiGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *SystemRetrieveNbiGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	domainId, ok := optionalParams["domainId"]
 	if ok {
 		err = validators.StrIsUUIDv4(domainId)
@@ -511,13 +543,11 @@ func (s *System) SystemRetrieveNbiGet(ctx context.Context, optionalParams map[st
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/nbi")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"domainId": domainId,
 	}
-
 	out := &SystemRetrieveNbiGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -533,7 +563,7 @@ type (
 // SystemModifyNbiBasicPatch: Use this API command to modify the user information by Northbound Portal Interface.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SystemModifyNbiBasicPatchRequest
 //
 // Optional Parameter Map:
@@ -543,9 +573,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SystemModifyNbiBasicPatch(ctx context.Context, requestBody *SystemModifyNbiBasicPatchRequest, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (s *SystemAPI) SystemModifyNbiBasicPatch(ctx *UserContext, requestBody *SystemModifyNbiBasicPatchRequest, optionalParams map[string]string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	domainId, ok := optionalParams["domainId"]
 	if ok {
 		err = validators.StrIsUUIDv4(domainId)
@@ -553,14 +585,12 @@ func (s *System) SystemModifyNbiBasicPatch(ctx context.Context, requestBody *Sys
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-
 	request := s.client.newRequest(ctx, "PATCH", "/v5_0/system/nbi")
 	request.body = requestBody
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"domainId": domainId,
 	}
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -615,16 +645,18 @@ type (
 // SnmpAgentRetrieveSnmpAgentGet: Retrieve SNMP Agent sertting
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SnmpAgentRetrieveSnmpAgentGet200Response
 // - error: Error seen or nil if none
-func (s *System) SnmpAgentRetrieveSnmpAgentGet(ctx context.Context) (*http.Response, *SnmpAgentRetrieveSnmpAgentGet200Response, error) {
+func (s *SystemAPI) SnmpAgentRetrieveSnmpAgentGet(ctx *UserContext) (*http.Response, *SnmpAgentRetrieveSnmpAgentGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/snmpAgent")
 	request.authenticated = true
-
 	out := &SnmpAgentRetrieveSnmpAgentGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -681,18 +713,20 @@ type (
 // SnmpAgentModifySnmpAgentPut: Modify syslog server setting
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SnmpAgentModifySnmpAgentPutRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SnmpAgentModifySnmpAgentPut(ctx context.Context, requestBody *SnmpAgentModifySnmpAgentPutRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) SnmpAgentModifySnmpAgentPut(ctx *UserContext, requestBody *SnmpAgentModifySnmpAgentPutRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "PUT", "/v5_0/system/snmpAgent")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -735,7 +769,7 @@ type (
 // SyslogServerRetrieveSyslogGet: Retrieve syslog server sertting
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -745,9 +779,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *SyslogServerRetrieveSyslogGet200Response
 // - error: Error seen or nil if none
-func (s *System) SyslogServerRetrieveSyslogGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *SyslogServerRetrieveSyslogGet200Response, error) {
+func (s *SystemAPI) SyslogServerRetrieveSyslogGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *SyslogServerRetrieveSyslogGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -766,14 +802,12 @@ func (s *System) SyslogServerRetrieveSyslogGet(ctx context.Context, optionalPara
 	} else {
 		listSize = "100"
 	}
-
 	request := s.client.newRequest(ctx, "GET", "/v5_0/system/syslog")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"index":    index,
 		"listSize": listSize,
 	}
-
 	out := &SyslogServerRetrieveSyslogGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -795,18 +829,20 @@ type (
 // SyslogServerModifySyslogPatch: Modify syslog server setting
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SyslogServerModifySyslogPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SyslogServerModifySyslogPatch(ctx context.Context, requestBody *SyslogServerModifySyslogPatchRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) SyslogServerModifySyslogPatch(ctx *UserContext, requestBody *SyslogServerModifySyslogPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "PATCH", "/v5_0/system/syslog")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -820,18 +856,20 @@ type (
 // SyslogServerModifyPrimaryServerPatch: Modify Primary Server of syslog
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SyslogServerModifyPrimaryServerPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SyslogServerModifyPrimaryServerPatch(ctx context.Context, requestBody *SyslogServerModifyPrimaryServerPatchRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) SyslogServerModifyPrimaryServerPatch(ctx *UserContext, requestBody *SyslogServerModifyPrimaryServerPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "PATCH", "/v5_0/system/syslog/primaryServer")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -849,18 +887,20 @@ type (
 // SyslogServerModifyPriorityPatch: Modify Priority of syslog
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SyslogServerModifyPriorityPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SyslogServerModifyPriorityPatch(ctx context.Context, requestBody *SyslogServerModifyPriorityPatchRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) SyslogServerModifyPriorityPatch(ctx *UserContext, requestBody *SyslogServerModifyPriorityPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "PATCH", "/v5_0/system/syslog/priority")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }
 
@@ -875,17 +915,19 @@ type (
 // SyslogServerModifySecondaryServerPatch: Modify Secondary Server of syslog
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SyslogServerModifySecondaryServerPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *System) SyslogServerModifySecondaryServerPatch(ctx context.Context, requestBody *SyslogServerModifySecondaryServerPatchRequest) (*http.Response, []byte, error) {
+func (s *SystemAPI) SyslogServerModifySecondaryServerPatch(ctx *UserContext, requestBody *SyslogServerModifySecondaryServerPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "PATCH", "/v5_0/system/syslog/secondaryServer")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 204, nil)
 }

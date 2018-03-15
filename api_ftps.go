@@ -1,18 +1,18 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type FTPS struct {
+type FTPSAPI struct {
 	client *Client
 }
 type (
@@ -26,18 +26,20 @@ type (
 // FtpserversettingsRemoveFtpServersDelete: Remove FTP servers
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *FtpserversettingsRemoveFtpServersDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsRemoveFtpServersDelete(ctx context.Context, requestBody *FtpserversettingsRemoveFtpServersDeleteRequest) (*http.Response, []byte, error) {
+func (f *FTPSAPI) FtpserversettingsRemoveFtpServersDelete(ctx *UserContext, requestBody *FtpserversettingsRemoveFtpServersDeleteRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := f.client.newRequest(ctx, "DELETE", "/v5_0/ftps")
 	request.body = requestBody
 	request.authenticated = true
-
 	return f.client.doRequest(request, 200, nil)
 }
 
@@ -63,18 +65,20 @@ type (
 // FtpserversettingsAddFtpServerPost: Add FTP server
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *FtpserversettingsAddFtpServerPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsAddFtpServerPost(ctx context.Context, requestBody *FtpserversettingsAddFtpServerPostRequest) (*http.Response, []byte, error) {
+func (f *FTPSAPI) FtpserversettingsAddFtpServerPost(ctx *UserContext, requestBody *FtpserversettingsAddFtpServerPostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := f.client.newRequest(ctx, "POST", "/v5_0/ftps")
 	request.body = requestBody
 	request.authenticated = true
-
 	return f.client.doRequest(request, 201, nil)
 }
 
@@ -219,18 +223,20 @@ type (
 // FtpserversettingsRetrieveFtpServerListPost: Retrieve information of all FTP server
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *FtpserversettingsRetrieveFtpServerListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *FtpserversettingsRetrieveFtpServerListPost200Response
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsRetrieveFtpServerListPost(ctx context.Context, requestBody *FtpserversettingsRetrieveFtpServerListPostRequest) (*http.Response, *FtpserversettingsRetrieveFtpServerListPost200Response, error) {
+func (f *FTPSAPI) FtpserversettingsRetrieveFtpServerListPost(ctx *UserContext, requestBody *FtpserversettingsRetrieveFtpServerListPostRequest) (*http.Response, *FtpserversettingsRetrieveFtpServerListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := f.client.newRequest(ctx, "POST", "/v5_0/ftps/query")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &FtpserversettingsRetrieveFtpServerListPost200Response{}
 	httpResponse, _, err := f.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -265,18 +271,20 @@ type (
 // FtpserversettingsTestFtpServerGet: Test ftp server of specific FTP server settings
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *FtpserversettingsTestFtpServerGetRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *FtpserversettingsTestFtpServerGet200Response
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsTestFtpServerGet(ctx context.Context, requestBody *FtpserversettingsTestFtpServerGetRequest) (*http.Response, *FtpserversettingsTestFtpServerGet200Response, error) {
+func (f *FTPSAPI) FtpserversettingsTestFtpServerGet(ctx *UserContext, requestBody *FtpserversettingsTestFtpServerGetRequest) (*http.Response, *FtpserversettingsTestFtpServerGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := f.client.newRequest(ctx, "GET", "/v5_0/ftps/test")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &FtpserversettingsTestFtpServerGet200Response{}
 	httpResponse, _, err := f.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -294,27 +302,27 @@ type (
 // FtpserversettingsTestFtpServerGet1: Test ftp server of specific FTP server id
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - ftpId (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *FtpserversettingsTestFtpServerGet1200Response
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsTestFtpServerGet1(ctx context.Context, ftpId string) (*http.Response, *FtpserversettingsTestFtpServerGet1200Response, error) {
+func (f *FTPSAPI) FtpserversettingsTestFtpServerGet1(ctx *UserContext, ftpId string) (*http.Response, *FtpserversettingsTestFtpServerGet1200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(ftpId)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"ftpId\" failed validation check: %s", err)
 	}
-
 	request := f.client.newRequest(ctx, "GET", "/v5_0/ftps/test/{ftpId}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"ftpId": ftpId,
 	}
-
 	out := &FtpserversettingsTestFtpServerGet1200Response{}
 	httpResponse, _, err := f.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -323,27 +331,27 @@ func (f *FTPS) FtpserversettingsTestFtpServerGet1(ctx context.Context, ftpId str
 // FtpserversettingsRemoveFtpServerDelete: Remove FTP server
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - ftpId (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsRemoveFtpServerDelete(ctx context.Context, ftpId string) (*http.Response, []byte, error) {
+func (f *FTPSAPI) FtpserversettingsRemoveFtpServerDelete(ctx *UserContext, ftpId string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(ftpId)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"ftpId\" failed validation check: %s", err)
 	}
-
 	request := f.client.newRequest(ctx, "DELETE", "/v5_0/ftps/{ftpId}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"ftpId": ftpId,
 	}
-
 	return f.client.doRequest(request, 204, nil)
 }
 
@@ -369,27 +377,27 @@ type (
 // FtpserversettingsRetrieveFtpServerInformationGet: Retrieve information of specific FTP server
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - ftpId (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *FtpserversettingsRetrieveFtpServerInformationGet200Response
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsRetrieveFtpServerInformationGet(ctx context.Context, ftpId string) (*http.Response, *FtpserversettingsRetrieveFtpServerInformationGet200Response, error) {
+func (f *FTPSAPI) FtpserversettingsRetrieveFtpServerInformationGet(ctx *UserContext, ftpId string) (*http.Response, *FtpserversettingsRetrieveFtpServerInformationGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(ftpId)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"ftpId\" failed validation check: %s", err)
 	}
-
 	request := f.client.newRequest(ctx, "GET", "/v5_0/ftps/{ftpId}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"ftpId": ftpId,
 	}
-
 	out := &FtpserversettingsRetrieveFtpServerInformationGet200Response{}
 	httpResponse, _, err := f.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -417,7 +425,7 @@ type (
 // FtpserversettingsUpdateFtpServerPatch: Update FTP server settings
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - ftpId (string)
 // - requestBody: *FtpserversettingsUpdateFtpServerPatchRequest
 //
@@ -425,20 +433,20 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (f *FTPS) FtpserversettingsUpdateFtpServerPatch(ctx context.Context, ftpId string, requestBody *FtpserversettingsUpdateFtpServerPatchRequest) (*http.Response, []byte, error) {
+func (f *FTPSAPI) FtpserversettingsUpdateFtpServerPatch(ctx *UserContext, ftpId string, requestBody *FtpserversettingsUpdateFtpServerPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(ftpId)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"ftpId\" failed validation check: %s", err)
 	}
-
 	request := f.client.newRequest(ctx, "PATCH", "/v5_0/ftps/{ftpId}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"ftpId": ftpId,
 	}
-
 	return f.client.doRequest(request, 204, nil)
 }

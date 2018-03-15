@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type BlockClient struct {
+type BlockClientAPI struct {
 	client *Client
 }
 type (
@@ -25,18 +25,20 @@ type (
 // BlockClientDeleteDelete1: Delete Block Client List
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *BlockClientDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientDeleteDelete1(ctx context.Context, requestBody *BlockClientDeleteDelete1Request) (*http.Response, []byte, error) {
+func (b *BlockClientAPI) BlockClientDeleteDelete1(ctx *UserContext, requestBody *BlockClientDeleteDelete1Request) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := b.client.newRequest(ctx, "DELETE", "/v5_0/blockClient")
 	request.body = requestBody
 	request.authenticated = true
-
 	return b.client.doRequest(request, 204, nil)
 }
 
@@ -63,18 +65,20 @@ type (
 // BlockClientCreateBlockClientsPost: Create new Block Clients by list
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *BlockClientCreateBlockClientsPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - BlockClientCreateBlockClientsPost201ResponseSlice
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientCreateBlockClientsPost(ctx context.Context, requestBody *BlockClientCreateBlockClientsPostRequest) (*http.Response, BlockClientCreateBlockClientsPost201ResponseSlice, error) {
+func (b *BlockClientAPI) BlockClientCreateBlockClientsPost(ctx *UserContext, requestBody *BlockClientCreateBlockClientsPostRequest) (*http.Response, BlockClientCreateBlockClientsPost201ResponseSlice, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := b.client.newRequest(ctx, "POST", "/v5_0/blockClient")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := make(BlockClientCreateBlockClientsPost201ResponseSlice, 0)
 	httpResponse, _, err := b.client.doRequest(request, 201, &(out))
 	return httpResponse, out, err
@@ -101,7 +105,7 @@ type (
 // BlockClientCreateBlockClientByApMacPost: Create a new Block Client by AP MAC
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *BlockClientCreateBlockClientByApMacPostRequest
 //
@@ -109,21 +113,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *BlockClientCreateBlockClientByApMacPost201Response
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientCreateBlockClientByApMacPost(ctx context.Context, apMac string, requestBody *BlockClientCreateBlockClientByApMacPostRequest) (*http.Response, *BlockClientCreateBlockClientByApMacPost201Response, error) {
+func (b *BlockClientAPI) BlockClientCreateBlockClientByApMacPost(ctx *UserContext, apMac string, requestBody *BlockClientCreateBlockClientByApMacPostRequest) (*http.Response, *BlockClientCreateBlockClientByApMacPost201Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "POST", "/v5_0/blockClient/byApMac/{apMac}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &BlockClientCreateBlockClientByApMacPost201Response{}
 	httpResponse, _, err := b.client.doRequest(request, 201, out)
 	return httpResponse, out, err
@@ -152,27 +156,27 @@ type (
 // BlockClientRetrieveListGet: Retrieve a list of Block Client
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BlockClientRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *BlockClientRetrieveListGet200Response, error) {
+func (b *BlockClientAPI) BlockClientRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *BlockClientRetrieveListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(zoneId)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "GET", "/v5_0/blockClient/byZone/{zoneId}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"zoneId": zoneId,
 	}
-
 	out := &BlockClientRetrieveListGet200Response{}
 	httpResponse, _, err := b.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -310,18 +314,20 @@ type (
 // BlockClientRetrieveListPost: Retrieve a list of Block Client
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *BlockClientRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BlockClientRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientRetrieveListPost(ctx context.Context, requestBody *BlockClientRetrieveListPostRequest) (*http.Response, *BlockClientRetrieveListPost200Response, error) {
+func (b *BlockClientAPI) BlockClientRetrieveListPost(ctx *UserContext, requestBody *BlockClientRetrieveListPostRequest) (*http.Response, *BlockClientRetrieveListPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := b.client.newRequest(ctx, "POST", "/v5_0/blockClient/query")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &BlockClientRetrieveListPost200Response{}
 	httpResponse, _, err := b.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -330,27 +336,27 @@ func (b *BlockClient) BlockClientRetrieveListPost(ctx context.Context, requestBo
 // BlockClientDeleteDelete: Delete a Block Client
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
+func (b *BlockClientAPI) BlockClientDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "DELETE", "/v5_0/blockClient/{id}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return b.client.doRequest(request, 204, nil)
 }
 
@@ -371,27 +377,27 @@ type (
 // BlockClientRetrieveGet: Retrieve a Block Client
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BlockClientRetrieveGet200Response
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientRetrieveGet(ctx context.Context, id string) (*http.Response, *BlockClientRetrieveGet200Response, error) {
+func (b *BlockClientAPI) BlockClientRetrieveGet(ctx *UserContext, id string) (*http.Response, *BlockClientRetrieveGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "GET", "/v5_0/blockClient/{id}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	out := &BlockClientRetrieveGet200Response{}
 	httpResponse, _, err := b.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -407,7 +413,7 @@ type (
 // BlockClientModifyBasicPatch: Modify a specific Block Client basic
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 // - requestBody: *BlockClientModifyBasicPatchRequest
 //
@@ -415,21 +421,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientModifyBasicPatch(ctx context.Context, id string, requestBody *BlockClientModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (b *BlockClientAPI) BlockClientModifyBasicPatch(ctx *UserContext, id string, requestBody *BlockClientModifyBasicPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "PATCH", "/v5_0/blockClient/{id}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return b.client.doRequest(request, 204, nil)
 }
 
@@ -443,7 +449,7 @@ type (
 // BlockClientModifyBasicPut: Modify a specific Block Client basic
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 // - requestBody: *BlockClientModifyBasicPutRequest
 //
@@ -451,21 +457,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientModifyBasicPut(ctx context.Context, id string, requestBody *BlockClientModifyBasicPutRequest) (*http.Response, []byte, error) {
+func (b *BlockClientAPI) BlockClientModifyBasicPut(ctx *UserContext, id string, requestBody *BlockClientModifyBasicPutRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "PUT", "/v5_0/blockClient/{id}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return b.client.doRequest(request, 204, nil)
 }
 
@@ -490,7 +496,7 @@ type (
 // BlockClientCreateBlockClientPost: Create a new Block Client
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *BlockClientCreateBlockClientPostRequest
 //
@@ -498,21 +504,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *BlockClientCreateBlockClientPost201Response
 // - error: Error seen or nil if none
-func (b *BlockClient) BlockClientCreateBlockClientPost(ctx context.Context, zoneId string, requestBody *BlockClientCreateBlockClientPostRequest) (*http.Response, *BlockClientCreateBlockClientPost201Response, error) {
+func (b *BlockClientAPI) BlockClientCreateBlockClientPost(ctx *UserContext, zoneId string, requestBody *BlockClientCreateBlockClientPostRequest) (*http.Response, *BlockClientCreateBlockClientPost201Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(zoneId)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-
 	request := b.client.newRequest(ctx, "POST", "/v5_0/blockClient/{zoneId}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"zoneId": zoneId,
 	}
-
 	out := &BlockClientCreateBlockClientPost201Response{}
 	httpResponse, _, err := b.client.doRequest(request, 201, out)
 	return httpResponse, out, err

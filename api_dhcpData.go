@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type DHCPData struct {
+type DHCPDataAPI struct {
 	client *Client
 }
 type (
@@ -42,27 +42,27 @@ type (
 // DhcpGetApDhcpMessageStatisticUsageGet: Use this API command to get AP DHCP Message Statistic
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpGetApDhcpMessageStatisticUsageGet200Response
 // - error: Error seen or nil if none
-func (d *DHCPData) DhcpGetApDhcpMessageStatisticUsageGet(ctx context.Context, apMac string) (*http.Response, *DhcpGetApDhcpMessageStatisticUsageGet200Response, error) {
+func (d *DHCPDataAPI) DhcpGetApDhcpMessageStatisticUsageGet(ctx *UserContext, apMac string) (*http.Response, *DhcpGetApDhcpMessageStatisticUsageGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := d.client.newRequest(ctx, "GET", "/v5_0/dhcpData/dhcpMsgStats/{apMac}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &DhcpGetApDhcpMessageStatisticUsageGet200Response{}
 	httpResponse, _, err := d.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -113,27 +113,27 @@ type (
 // DhcpGetApDhcpPoolsUsageGet: Use this API command to get AP DHCP Pools Usage
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpGetApDhcpPoolsUsageGet200Response
 // - error: Error seen or nil if none
-func (d *DHCPData) DhcpGetApDhcpPoolsUsageGet(ctx context.Context, apMac string) (*http.Response, *DhcpGetApDhcpPoolsUsageGet200Response, error) {
+func (d *DHCPDataAPI) DhcpGetApDhcpPoolsUsageGet(ctx *UserContext, apMac string) (*http.Response, *DhcpGetApDhcpPoolsUsageGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := d.client.newRequest(ctx, "GET", "/v5_0/dhcpData/dhcpPools/{apMac}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &DhcpGetApDhcpPoolsUsageGet200Response{}
 	httpResponse, _, err := d.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -173,7 +173,7 @@ type (
 // DhcpGetApDhcpPoolUsageByPoolSIndexGet: Use this API command to get AP DHCP Pool Usage by pool's index
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - poolIndex (string)
 //
@@ -181,9 +181,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpGetApDhcpPoolUsageByPoolSIndexGet200Response
 // - error: Error seen or nil if none
-func (d *DHCPData) DhcpGetApDhcpPoolUsageByPoolSIndexGet(ctx context.Context, apMac string, poolIndex string) (*http.Response, *DhcpGetApDhcpPoolUsageByPoolSIndexGet200Response, error) {
+func (d *DHCPDataAPI) DhcpGetApDhcpPoolUsageByPoolSIndexGet(ctx *UserContext, apMac string, poolIndex string) (*http.Response, *DhcpGetApDhcpPoolUsageByPoolSIndexGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
@@ -192,14 +194,12 @@ func (d *DHCPData) DhcpGetApDhcpPoolUsageByPoolSIndexGet(ctx context.Context, ap
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"poolIndex\" failed validation check: %s", err)
 	}
-
 	request := d.client.newRequest(ctx, "GET", "/v5_0/dhcpData/dhcpPools/{apMac}/{poolIndex}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac":     apMac,
 		"poolIndex": poolIndex,
 	}
-
 	out := &DhcpGetApDhcpPoolUsageByPoolSIndexGet200Response{}
 	httpResponse, _, err := d.client.doRequest(request, 200, out)
 	return httpResponse, out, err

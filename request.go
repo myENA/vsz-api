@@ -2,7 +2,6 @@ package api
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -16,7 +15,7 @@ type request struct {
 	config *Config
 	method string
 	uri    string
-	ctx    context.Context
+	ctx    *UserContext
 
 	authenticated   bool
 	pathParameters  map[string]string
@@ -24,7 +23,7 @@ type request struct {
 	body            interface{}
 }
 
-func (c *Client) newRequest(ctx context.Context, method, uri string) *request {
+func (c *Client) newRequest(ctx *UserContext, method, uri string) *request {
 	r := &request{
 		id:     atomic.AddUint64(&requestID, 1),
 		config: c.config,
@@ -44,6 +43,7 @@ func (r *request) toHTTP() (*http.Request, error) {
 	method := r.method
 	compiledURL := compileRequestURLString(r.config.Scheme, r.config.Address, r.config.PathPrefix, r.uri, r.pathParameters, r.queryParameters)
 
+	// if debug mode is enabled, prepare a big'ol log statement.
 	if debug {
 		logMsg := fmt.Sprintf("Preparing request \"%s %s\"", method, compiledURL)
 
@@ -82,5 +82,5 @@ func (r *request) toHTTP() (*http.Request, error) {
 
 	httpRequest.Header.Set("Accept", "application/json")
 
-	return httpRequest, nil
+	return httpRequest.WithContext(r.ctx), nil
 }
