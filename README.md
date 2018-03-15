@@ -26,18 +26,16 @@ import (
 )
 
 func main() {
-	conf := api.DefaultConfig("yourhost.whatever", "username", "password")
+	conf := api.DefaultConfig("yourhost.whatever")
+	
+	// nil as a 2nd argument will use a default non-pooled http client
 	client := api.NewClient(conf, nil)
 	
-	// ctx here should make sense within the scope of your implementation.  Each request is given a new 
-	// context.WithTimeout using the RequestTimeout value in the config.  The context you provide is used as this 
-	// new context's parent.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
-
-	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(ctx)
+	userCtx := api.NewUserContext(context.Background(), "username", "password", 2 * time.Second)
+    defer userCtx.Cancel()
+    
+	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(userCtx)
 	
-	cancel()
-	 
 	if err != nil {
 		log.Printf("Unable to retrieve current login session: %s", err)
 		os.Exit(1)
@@ -58,21 +56,6 @@ func main() {
 	os.Exit(0)
 }
 ```
-
-## Setting a Session Cookie Refresher
-
-If a 401 unauthorized response is seen the client will attempt to refresh it's session using a 
-[SessionCookieRefreshFunc](./client.go#L28).  There is a default implementation of this that simply attempts to re-use
-the password sent in at init.
-
-To specify your own set [CookieRefresher](./client.go#L70) in your [Config](./client.go#L60).
-
-## Setting a Session Password Refresher
-
-In the event that a 401 is seen even AFTER a session refresh is attempted, the client will attempt to use a
-[SessionPasswordRefreshFunc](./client.go#L54).  This MUST return a now-valid password or error.  If the returned
-password STILL results in a 401, the execution chain will exit with an error.
-
 
 ### Future Development
 Some things we'd like to have in the future:

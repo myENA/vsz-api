@@ -50,11 +50,13 @@ type Client struct {
 
 func NewClient(conf *Config, client *http.Client) *Client {
 	def := defaultConfig(conf.Address)
-	if conf.Scheme != "" {
-		def.Scheme = conf.Scheme
-	}
-	if conf.PathPrefix != "" {
-		def.PathPrefix = conf.PathPrefix
+	if conf != nil {
+		if conf.Scheme != "" {
+			def.Scheme = conf.Scheme
+		}
+		if conf.PathPrefix != "" {
+			def.PathPrefix = conf.PathPrefix
+		}
 	}
 	if client == nil {
 		// shamelessly borrowed from https://github.com/hashicorp/go-cleanhttp/blob/master/cleanhttp.go
