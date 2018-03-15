@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type APs struct {
+type APsAPI struct {
 	client *Client
 }
 type (
@@ -35,7 +35,7 @@ type (
 // AccessPointConfigurationRetrieveListGet: Use this API command to retrieve the list of APs that belong to a zone or a domain.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -47,9 +47,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointConfigurationRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *AccessPointConfigurationRetrieveListGet200Response, error) {
+func (a *APsAPI) AccessPointConfigurationRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *AccessPointConfigurationRetrieveListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -82,7 +84,6 @@ func (a *APs) AccessPointConfigurationRetrieveListGet(ctx context.Context, optio
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
@@ -91,7 +92,6 @@ func (a *APs) AccessPointConfigurationRetrieveListGet(ctx context.Context, optio
 		"zoneId":   zoneId,
 		"domainId": domainId,
 	}
-
 	out := &AccessPointConfigurationRetrieveListGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -119,18 +119,20 @@ type (
 // AccessPointConfigurationCreatePost: Use this API command to create a new access point.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *AccessPointConfigurationCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationCreatePost(ctx context.Context, requestBody *AccessPointConfigurationCreatePostRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationCreatePost(ctx *UserContext, requestBody *AccessPointConfigurationCreatePostRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "POST", "/v5_0/aps")
 	request.body = requestBody
 	request.authenticated = true
-
 	return a.client.doRequest(request, 201, nil)
 }
 
@@ -165,7 +167,7 @@ type (
 // ApAppRetrieveApSummaryGet: Use this API command to retrieve the summary information of an AP. This is used by the Ruckus Wireless AP mobile app.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -178,9 +180,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApAppRetrieveApSummaryGet200Response
 // - error: Error seen or nil if none
-func (a *APs) ApAppRetrieveApSummaryGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *ApAppRetrieveApSummaryGet200Response, error) {
+func (a *APsAPI) ApAppRetrieveApSummaryGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *ApAppRetrieveApSummaryGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -222,7 +226,6 @@ func (a *APs) ApAppRetrieveApSummaryGet(ctx context.Context, optionalParams map[
 	} else {
 		showAlarm = "true"
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/lineman")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
@@ -232,7 +235,6 @@ func (a *APs) ApAppRetrieveApSummaryGet(ctx context.Context, optionalParams map[
 		"domainId":  domainId,
 		"showAlarm": showAlarm,
 	}
-
 	out := &ApAppRetrieveApSummaryGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -241,7 +243,7 @@ func (a *APs) ApAppRetrieveApSummaryGet(ctx context.Context, optionalParams map[
 // ApAppRetrieveTotalApCountGet: Use this API command to retrieve the total AP count within a zone or a domain.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - zoneId (UUIDv4): filter AP total count by zone.
@@ -251,9 +253,11 @@ func (a *APs) ApAppRetrieveApSummaryGet(ctx context.Context, optionalParams map[
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) ApAppRetrieveTotalApCountGet(ctx context.Context, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (a *APsAPI) ApAppRetrieveTotalApCountGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	zoneId, ok := optionalParams["zoneId"]
 	if ok {
 		err = validators.StrIsUUIDv4(zoneId)
@@ -268,41 +272,39 @@ func (a *APs) ApAppRetrieveTotalApCountGet(ctx context.Context, optionalParams m
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/totalCount")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"zoneId":   zoneId,
 		"domainId": domainId,
 	}
-
 	return a.client.doRequest(request, 200, nil)
 }
 
 // AccessPointConfigurationDeleteDelete: Use this API command to delete an access point.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDeleteDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDeleteDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -545,27 +547,27 @@ type (
 // AccessPointConfigurationRetrieveGet: Use this API command to retrieve the configuration of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointConfigurationRetrieveGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationRetrieveGet(ctx context.Context, apMac string) (*http.Response, *AccessPointConfigurationRetrieveGet200Response, error) {
+func (a *APsAPI) AccessPointConfigurationRetrieveGet(ctx *UserContext, apMac string) (*http.Response, *AccessPointConfigurationRetrieveGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &AccessPointConfigurationRetrieveGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -596,7 +598,7 @@ type (
 // AccessPointConfigurationModifyBasicPatch: Use this API command to modify the basic information of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyBasicPatchRequest
 //
@@ -604,48 +606,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyBasicPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyBasicPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyBasicPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableAltitudeOverrideDelete: Use this API command to disable AP level override of altitude. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableAltitudeOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableAltitudeOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/altitude")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -659,7 +661,7 @@ type (
 // AccessPointConfigurationModifyAltitudeOverridePatch: Use this API command to modify the altitude of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyAltitudeOverridePatchRequest
 //
@@ -667,48 +669,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyAltitudeOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyAltitudeOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyAltitudeOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyAltitudeOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/altitude")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableApManagementVlanOverrideDelete: Disable AP Management Vlan Override of an AP
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableApManagementVlanOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableApManagementVlanOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/apMgmtVlan")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -722,7 +724,7 @@ type (
 // AccessPointConfigurationModifyApManagementVlanPatch: Modify AP Management Vlan of an AP
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyApManagementVlanPatchRequest
 //
@@ -730,48 +732,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyApManagementVlanPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyApManagementVlanPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyApManagementVlanPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyApManagementVlanPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/apMgmtVlan")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio24gAutoChannelSelectionDelete: Use this API command to disable the AP level override of auto channel selection on the 2.4GHz radio. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio24gAutoChannelSelectionDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio24gAutoChannelSelectionDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/autoChannelSelection24")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -785,7 +787,7 @@ type (
 // AccessPointConfigurationModifyRadio24gAutoChannelselectmodeOverridePatch: Override Radio 2.4G Auto ChannelSelectMode and ChannelFly MTBC of an AP
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyRadio24gAutoChannelselectmodeOverridePatchRequest
 //
@@ -793,48 +795,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyRadio24gAutoChannelselectmodeOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyRadio24gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyRadio24gAutoChannelselectmodeOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyRadio24gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/autoChannelSelection24")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio5gAutoChannelSelectionDelete: Use this API command to disable the AP level override of auto channel selection on the 5GHz radio. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio5gAutoChannelSelectionDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio5gAutoChannelSelectionDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/autoChannelSelection50")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -848,7 +850,7 @@ type (
 // AccessPointConfigurationModifyRadio5gAutoChannelselectmodeOverridePatch: Override Radio 5G Auto ChannelSelectMode and ChannelFly MTBC of an AP
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyRadio5gAutoChannelselectmodeOverridePatchRequest
 //
@@ -856,21 +858,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyRadio5gAutoChannelselectmodeOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyRadio5gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyRadio5gAutoChannelselectmodeOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyRadio5gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/autoChannelSelection50")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -895,27 +897,27 @@ type (
 // BonjourFencingPolicyGetBonjourFencingStatisticGet: Use this API command to get Bonjour Fencing Statistic per AP
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourFencingPolicyGetBonjourFencingStatisticGet200Response
 // - error: Error seen or nil if none
-func (a *APs) BonjourFencingPolicyGetBonjourFencingStatisticGet(ctx context.Context, apMac string) (*http.Response, *BonjourFencingPolicyGetBonjourFencingStatisticGet200Response, error) {
+func (a *APsAPI) BonjourFencingPolicyGetBonjourFencingStatisticGet(ctx *UserContext, apMac string) (*http.Response, *BonjourFencingPolicyGetBonjourFencingStatisticGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/bonjourFencingStatistic")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &BonjourFencingPolicyGetBonjourFencingStatisticGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -924,27 +926,27 @@ func (a *APs) BonjourFencingPolicyGetBonjourFencingStatisticGet(ctx context.Cont
 // AccessPointConfigurationDisableBonjourGatewayOverrideDelete: Use this API command to disable AP level override of bonjour gateway. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableBonjourGatewayOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableBonjourGatewayOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/bonjourGateway")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -958,7 +960,7 @@ type (
 // AccessPointConfigurationModifyBonjourGatewayPatch: Use this API command to modify bonjour gateway of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyBonjourGatewayPatchRequest
 //
@@ -966,75 +968,75 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyBonjourGatewayPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyBonjourGatewayPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyBonjourGatewayPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyBonjourGatewayPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/bonjourGateway")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableApChannelEvaluationIntervalDelete: Disable AP lChannel Evaluation Interval. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableApChannelEvaluationIntervalDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableApChannelEvaluationIntervalDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/channelEvaluationInterval")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableClientAdmissionControl24gOverrideDelete: Use this API command to disable AP level override of client admission control 2.4GHz radio configuration. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableClientAdmissionControl24gOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableClientAdmissionControl24gOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/clientAdmissionControl24")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -1050,7 +1052,7 @@ type (
 // AccessPointConfigurationModifyClientAdmissionControl24gPatch: Use this API command to modify client admission control 2.4GHz radio configuration of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyClientAdmissionControl24gPatchRequest
 //
@@ -1058,48 +1060,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyClientAdmissionControl24gPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyClientAdmissionControl24gPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyClientAdmissionControl24gPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyClientAdmissionControl24gPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/clientAdmissionControl24")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableClientAdmissionControl5gOverrideDelete: Use this API command to disable AP level override of client admission control 5GHz radio configuration. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableClientAdmissionControl5gOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableClientAdmissionControl5gOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/clientAdmissionControl50")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -1115,7 +1117,7 @@ type (
 // AccessPointConfigurationModifyClientAdmissionControl5gPatch: Use this API command to modify client admission control 5GHz radio configuration of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyClientAdmissionControl5gPatchRequest
 //
@@ -1123,129 +1125,129 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyClientAdmissionControl5gPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyClientAdmissionControl5gPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyClientAdmissionControl5gPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyClientAdmissionControl5gPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/clientAdmissionControl50")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableApManagementGpsCooordinatesDelete: Disable AP Management GPS Cooordinates of an AP
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableApManagementGpsCooordinatesDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableApManagementGpsCooordinatesDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/gpsCoordinates")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableLocationOverrideDelete: Use this API command to disable AP level override of location. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableLocationOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableLocationOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/location")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableLocationAdditionalinfoOverrideDelete: Use this API command to disable AP level override of location additionalInfo. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableLocationAdditionalinfoOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableLocationAdditionalinfoOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/locationAdditionalInfo")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableLoginOverrideDelete: Use this API command to disable the AP-level logon override. The AP will apply its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableLoginOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableLoginOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/login")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -1259,7 +1261,7 @@ type (
 // AccessPointConfigurationModifyLoginOverridePatch: Use this API command to enable or modify the AP-level logon override settings.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyLoginOverridePatchRequest
 //
@@ -1267,48 +1269,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyLoginOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyLoginOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyLoginOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyLoginOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/login")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableMeshOptionsDelete: Use this API command to disable mesh options.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableMeshOptionsDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableMeshOptionsDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/meshOptions")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -1325,7 +1327,7 @@ type (
 // AccessPointConfigurationModifyMeshOptionsPatch: Use this API command to modify mesh options of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyMeshOptionsPatchRequest
 //
@@ -1333,21 +1335,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyMeshOptionsPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyMeshOptionsPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyMeshOptionsPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyMeshOptionsPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/meshOptions")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -1365,7 +1367,7 @@ type (
 // AccessPointConfigurationModifyNetworkSettingsPatch: Use this API command to modify the network settings of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyNetworkSettingsPatchRequest
 //
@@ -1373,21 +1375,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyNetworkSettingsPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyNetworkSettingsPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyNetworkSettingsPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyNetworkSettingsPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/network")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -1418,7 +1420,7 @@ type (
 // AccessPointOperationalRetrieveAlarmListGet: Use this API command to retrieve the list of alarms on an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Optional Parameter Map:
@@ -1435,14 +1437,15 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveAlarmListGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalRetrieveAlarmListGet(ctx context.Context, apMac string, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveAlarmListGet200Response, error) {
+func (a *APsAPI) AccessPointOperationalRetrieveAlarmListGet(ctx *UserContext, apMac string, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveAlarmListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -1475,7 +1478,6 @@ func (a *APs) AccessPointOperationalRetrieveAlarmListGet(ctx context.Context, ap
 			return nil, nil, fmt.Errorf("parameter \"status\" failed validation check: %s", err)
 		}
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/alarms")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
@@ -1491,7 +1493,6 @@ func (a *APs) AccessPointOperationalRetrieveAlarmListGet(ctx context.Context, ap
 		"endTime":   optionalParams["endTime"],
 		"status":    status,
 	}
-
 	out := &AccessPointOperationalRetrieveAlarmListGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1509,27 +1510,27 @@ type (
 // AccessPointOperationalRetrieveAlarmSummaryGet: Use this API command to retrieve the alarm summary of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveAlarmSummaryGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalRetrieveAlarmSummaryGet(ctx context.Context, apMac string) (*http.Response, *AccessPointOperationalRetrieveAlarmSummaryGet200Response, error) {
+func (a *APsAPI) AccessPointOperationalRetrieveAlarmSummaryGet(ctx *UserContext, apMac string) (*http.Response, *AccessPointOperationalRetrieveAlarmSummaryGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/alarmSummary")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &AccessPointOperationalRetrieveAlarmSummaryGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1538,27 +1539,27 @@ func (a *APs) AccessPointOperationalRetrieveAlarmSummaryGet(ctx context.Context,
 // AccessPointOperationalApBlinkLedPost: use this API to make ap blink its led to show its position
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalApBlinkLedPost(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointOperationalApBlinkLedPost(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "POST", "/v5_0/aps/{apMac}/operational/blinkLed")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 200, nil)
 }
 
@@ -1605,7 +1606,7 @@ type (
 // WirelessClientRetrieveClientListGet: Use this API command to retrieve the client list per AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Optional Parameter Map:
@@ -1616,14 +1617,15 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WirelessClientRetrieveClientListGet200Response
 // - error: Error seen or nil if none
-func (a *APs) WirelessClientRetrieveClientListGet(ctx context.Context, apMac string, optionalParams map[string]string) (*http.Response, *WirelessClientRetrieveClientListGet200Response, error) {
+func (a *APsAPI) WirelessClientRetrieveClientListGet(ctx *UserContext, apMac string, optionalParams map[string]string) (*http.Response, *WirelessClientRetrieveClientListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -1642,7 +1644,6 @@ func (a *APs) WirelessClientRetrieveClientListGet(ctx context.Context, apMac str
 	} else {
 		listSize = "100"
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/client")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
@@ -1652,7 +1653,6 @@ func (a *APs) WirelessClientRetrieveClientListGet(ctx context.Context, apMac str
 		"index":    index,
 		"listSize": listSize,
 	}
-
 	out := &WirelessClientRetrieveClientListGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1661,27 +1661,27 @@ func (a *APs) WirelessClientRetrieveClientListGet(ctx context.Context, apMac str
 // WirelessClientRetrieveTotalClientCountGet: Use this API command to retrieve the total client count per AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) WirelessClientRetrieveTotalClientCountGet(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) WirelessClientRetrieveTotalClientCountGet(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/client/totalCount")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 200, nil)
 }
 
@@ -1709,7 +1709,7 @@ type (
 // AccessPointOperationalRetrieveEventListGet: Use this API command to retrieve the list of events from an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Optional Parameter Map:
@@ -1725,14 +1725,15 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveEventListGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalRetrieveEventListGet(ctx context.Context, apMac string, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveEventListGet200Response, error) {
+func (a *APsAPI) AccessPointOperationalRetrieveEventListGet(ctx *UserContext, apMac string, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveEventListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -1758,7 +1759,6 @@ func (a *APs) AccessPointOperationalRetrieveEventListGet(ctx context.Context, ap
 			return nil, nil, fmt.Errorf("parameter \"severity\" failed validation check: %s", err)
 		}
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/events")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
@@ -1773,7 +1773,6 @@ func (a *APs) AccessPointOperationalRetrieveEventListGet(ctx context.Context, ap
 		"startTime": optionalParams["startTime"],
 		"endTime":   optionalParams["endTime"],
 	}
-
 	out := &AccessPointOperationalRetrieveEventListGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1793,27 +1792,27 @@ type (
 // AccessPointOperationalRetrieveEventSummaryGet: Use this API command to retrieve the event summary of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveEventSummaryGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalRetrieveEventSummaryGet(ctx context.Context, apMac string) (*http.Response, *AccessPointOperationalRetrieveEventSummaryGet200Response, error) {
+func (a *APsAPI) AccessPointOperationalRetrieveEventSummaryGet(ctx *UserContext, apMac string) (*http.Response, *AccessPointOperationalRetrieveEventSummaryGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/eventSummary")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &AccessPointOperationalRetrieveEventSummaryGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1847,7 +1846,7 @@ type (
 // AccessPointOperationalRetrieveMeshNeighborApListGet: Use this API command to retrieve a list of neighbor access points on mesh AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Optional Parameter Map:
@@ -1858,14 +1857,15 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveMeshNeighborApListGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalRetrieveMeshNeighborApListGet(ctx context.Context, apMac string, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveMeshNeighborApListGet200Response, error) {
+func (a *APsAPI) AccessPointOperationalRetrieveMeshNeighborApListGet(ctx *UserContext, apMac string, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveMeshNeighborApListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -1884,7 +1884,6 @@ func (a *APs) AccessPointOperationalRetrieveMeshNeighborApListGet(ctx context.Co
 	} else {
 		listSize = "100"
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/neighbor")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
@@ -1894,7 +1893,6 @@ func (a *APs) AccessPointOperationalRetrieveMeshNeighborApListGet(ctx context.Co
 		"index":    index,
 		"listSize": listSize,
 	}
-
 	out := &AccessPointOperationalRetrieveMeshNeighborApListGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1944,27 +1942,27 @@ type (
 // AccessPointOperationalRetrieveOperationalInformationGet: Use this API command to retrieve the operational information of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveOperationalInformationGet200Response
 // - error: Error seen or nil if none
-func (a *APs) AccessPointOperationalRetrieveOperationalInformationGet(ctx context.Context, apMac string) (*http.Response, *AccessPointOperationalRetrieveOperationalInformationGet200Response, error) {
+func (a *APsAPI) AccessPointOperationalRetrieveOperationalInformationGet(ctx *UserContext, apMac string) (*http.Response, *AccessPointOperationalRetrieveOperationalInformationGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/operational/summary")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &AccessPointOperationalRetrieveOperationalInformationGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -1973,54 +1971,54 @@ func (a *APs) AccessPointOperationalRetrieveOperationalInformationGet(ctx contex
 // AccessPointConfigurationRebootPut: reboot an access point
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationRebootPut(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationRebootPut(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PUT", "/v5_0/aps/{apMac}/reboot")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableSmartMonitorOverrideDelete: Use this API command to disable AP level override of smart monitor. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableSmartMonitorOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableSmartMonitorOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/smartMonitor")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2035,7 +2033,7 @@ type (
 // AccessPointConfigurationModifySmartMonitorPatch: Use this API command to modify smart monitor of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifySmartMonitorPatchRequest
 //
@@ -2043,48 +2041,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifySmartMonitorPatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifySmartMonitorPatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifySmartMonitorPatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifySmartMonitorPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/smartMonitor")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableModelSpecificOverrideDelete: Use this API command to disable model specific configuration override from AP group or zone.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableModelSpecificOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableModelSpecificOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/specific")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2143,7 +2141,7 @@ type (
 // AccessPointConfigurationModifyModelSpecificPut: Use this API command to modify model specific configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyModelSpecificPutRequest
 //
@@ -2151,75 +2149,75 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyModelSpecificPut(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyModelSpecificPutRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyModelSpecificPut(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyModelSpecificPutRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PUT", "/v5_0/aps/{apMac}/specific")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDownloadApSupportLogGet: Use this API command to download AP support log.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDownloadApSupportLogGet(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDownloadApSupportLogGet(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/supportLog")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 200, nil)
 }
 
 // AccessPointConfigurationDisableSyslogOverrideDelete: Use this API command to disable the AP level syslog override. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableSyslogOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableSyslogOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/syslog")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2236,7 +2234,7 @@ type (
 // AccessPointConfigurationModifySyslogOverridePatch: Use this API command to enable or modify the AP-level syslog override settings.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifySyslogOverridePatchRequest
 //
@@ -2244,21 +2242,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifySyslogOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifySyslogOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifySyslogOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifySyslogOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/syslog")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2272,27 +2270,27 @@ type (
 // ApUsbSoftwarePackageGetApAssociateGet: Get APUsbSoftwarePackage associate AP by model name
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApUsbSoftwarePackageGetApAssociateGet200Response
 // - error: Error seen or nil if none
-func (a *APs) ApUsbSoftwarePackageGetApAssociateGet(ctx context.Context, apMac string) (*http.Response, *ApUsbSoftwarePackageGetApAssociateGet200Response, error) {
+func (a *APsAPI) ApUsbSoftwarePackageGetApAssociateGet(ctx *UserContext, apMac string) (*http.Response, *ApUsbSoftwarePackageGetApAssociateGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/aps/{apMac}/usbsoftware")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	out := &ApUsbSoftwarePackageGetApAssociateGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -2301,27 +2299,27 @@ func (a *APs) ApUsbSoftwarePackageGetApAssociateGet(ctx context.Context, apMac s
 // AccessPointConfigurationDisableApUsbSoftwarePackageDelete: Disable AP level Usb Software Package. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableApUsbSoftwarePackageDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableApUsbSoftwarePackageDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/usbSoftwarePackage")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2342,7 +2340,7 @@ type (
 // AccessPointConfigurationModifyApUsbSoftwarePackagePatch: Modify AP Usb Software Package of an access point
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyApUsbSoftwarePackagePatchRequest
 //
@@ -2350,48 +2348,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyApUsbSoftwarePackagePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyApUsbSoftwarePackagePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyApUsbSoftwarePackagePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyApUsbSoftwarePackagePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/usbSoftwarePackage")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableVenueProfileOverrideDelete: Use this API command to disable AP level override of venue profile. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableVenueProfileOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableVenueProfileOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/venueProfile")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2405,7 +2403,7 @@ type (
 // AccessPointConfigurationModifyVenueProfilePatch: Use this API command to modify venue profile of an AP.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyVenueProfilePatchRequest
 //
@@ -2413,48 +2411,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyVenueProfilePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyVenueProfilePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyVenueProfilePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyVenueProfilePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/venueProfile")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio24gOverrideDelete: Use this API command to disable the AP level override of the 2.4GHz radio configuration. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio24gOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio24gOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi24")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2472,7 +2470,7 @@ type (
 // AccessPointConfigurationModifyRadio24gOverridePatch: Use this API command to modify the AP level override of the 2.4GHz radio configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyRadio24gOverridePatchRequest
 //
@@ -2480,156 +2478,156 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyRadio24gOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyRadio24gOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyRadio24gOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyRadio24gOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/wifi24")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio24gChannelOverrideDelete: Use this API command to disable the AP level override of the 2.4GHz radio channel. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio24gChannelOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio24gChannelOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi24/channel")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio24gChannelrangeOverrideDelete: Use this API command to disable the AP level override of the 2.4GHz radio channelRange. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio24gChannelrangeOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio24gChannelrangeOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi24/channelRange")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio24gChannelwidthOverrideDelete: Use this API command to disable the AP level override of the 2.4GHz radio channelWidth. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio24gChannelwidthOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio24gChannelwidthOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi24/channelWidth")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio24gTxpowerOverrideDelete: Use this API command to disable the AP level override of the 2.4GHz radio txPower. The access point will take its group's configuration or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio24gTxpowerOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio24gTxpowerOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi24/txPower")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio5gOverrideDelete: Use this API command to disable the AP level override of 5GHz radio configuration. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio5gOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio5gOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi50")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2648,7 +2646,7 @@ type (
 // AccessPointConfigurationModifyRadio5gOverridePatch: Use this API command to Modify the AP level override of the 5GHz radio configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyRadio5gOverridePatchRequest
 //
@@ -2656,156 +2654,156 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyRadio5gOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyRadio5gOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyRadio5gOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyRadio5gOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/wifi50")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio5gChannelOverrideDelete: Use this API command to disable the AP level override of 5GHz radio channel. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio5gChannelOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio5gChannelOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi50/channel")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio5gChannelrangeOverrideDelete: Use this API command to disable the AP level override of 5GHz radio channelRange. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio5gChannelrangeOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio5gChannelrangeOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi50/channelRange")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio5gChannelwidthOverrideDelete: Use this API command to disable the AP level override of 5GHz radio channelWidth. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio5gChannelwidthOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio5gChannelwidthOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi50/channelWidth")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableRadio5gTxpowerOverrideDelete: Use this API command to disable the AP level override of 5GHz radio txPower. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableRadio5gTxpowerOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableRadio5gTxpowerOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wifi50/txPower")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableWlanGroup24gOverrideDelete: Use this API command to disable the AP level override of WLAN group configuration on 2.4GHz radio. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableWlanGroup24gOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableWlanGroup24gOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wlanGroup24")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2819,7 +2817,7 @@ type (
 // AccessPointConfigurationModifyWlanGroup24gOverridePatch: Use this API command to enable or modify the AP level override of the WLAN group configuration on the 2.4GHz radio.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyWlanGroup24gOverridePatchRequest
 //
@@ -2827,48 +2825,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyWlanGroup24gOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyWlanGroup24gOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyWlanGroup24gOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyWlanGroup24gOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/wlanGroup24")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
 // AccessPointConfigurationDisableWlanGroup5gOverrideDelete: Use this API command to disable the AP level override of WLAN group on the 5GHz radio. The access point will take its group's or zone's configuration.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationDisableWlanGroup5gOverrideDelete(ctx context.Context, apMac string) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationDisableWlanGroup5gOverrideDelete(ctx *UserContext, apMac string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/aps/{apMac}/wlanGroup50")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -2882,7 +2880,7 @@ type (
 // AccessPointConfigurationModifyWlanGroup5gOverridePatch: Use this API command to enable or modify the AP level override of the WLAN group configuration on the 5GHz radio.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - apMac (MAC): Access Point MAC Address
 // - requestBody: *AccessPointConfigurationModifyWlanGroup5gOverridePatchRequest
 //
@@ -2890,20 +2888,20 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APs) AccessPointConfigurationModifyWlanGroup5gOverridePatch(ctx context.Context, apMac string, requestBody *AccessPointConfigurationModifyWlanGroup5gOverridePatchRequest) (*http.Response, []byte, error) {
+func (a *APsAPI) AccessPointConfigurationModifyWlanGroup5gOverridePatch(ctx *UserContext, apMac string, requestBody *AccessPointConfigurationModifyWlanGroup5gOverridePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsMAC(apMac)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/aps/{apMac}/wlanGroup50")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"apMac": apMac,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }

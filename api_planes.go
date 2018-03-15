@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type Planes struct {
+type PlanesAPI struct {
 	client *Client
 }
 type (
@@ -44,16 +44,18 @@ type (
 // DataPlaneRetrieveListGet: Use this API command to retrieve a list of data planes.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DataPlaneRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneRetrieveListGet(ctx context.Context) (*http.Response, *DataPlaneRetrieveListGet200Response, error) {
+func (p *PlanesAPI) DataPlaneRetrieveListGet(ctx *UserContext) (*http.Response, *DataPlaneRetrieveListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := p.client.newRequest(ctx, "GET", "/v5_0/planes")
 	request.authenticated = true
-
 	out := &DataPlaneRetrieveListGet200Response{}
 	httpResponse, _, err := p.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -68,16 +70,18 @@ type (
 // DataPlaneGetDpMeshTunnelSettingGet: Use this API command to get DP mesh tunnel setting.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DataPlaneGetDpMeshTunnelSettingGet200Response
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneGetDpMeshTunnelSettingGet(ctx context.Context) (*http.Response, *DataPlaneGetDpMeshTunnelSettingGet200Response, error) {
+func (p *PlanesAPI) DataPlaneGetDpMeshTunnelSettingGet(ctx *UserContext) (*http.Response, *DataPlaneGetDpMeshTunnelSettingGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := p.client.newRequest(ctx, "GET", "/v5_0/planes/dpTunnel/setting")
 	request.authenticated = true
-
 	out := &DataPlaneGetDpMeshTunnelSettingGet200Response{}
 	httpResponse, _, err := p.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -92,18 +96,20 @@ type (
 // DataPlaneUpdateDpMeshTunnelSettingPut: Use this API command to update DP mesh tunnel setting.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *DataPlaneUpdateDpMeshTunnelSettingPutRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneUpdateDpMeshTunnelSettingPut(ctx context.Context, requestBody *DataPlaneUpdateDpMeshTunnelSettingPutRequest) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneUpdateDpMeshTunnelSettingPut(ctx *UserContext, requestBody *DataPlaneUpdateDpMeshTunnelSettingPutRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := p.client.newRequest(ctx, "PUT", "/v5_0/planes/dpTunnel/setting")
 	request.body = requestBody
 	request.authenticated = true
-
 	return p.client.doRequest(request, 204, nil)
 }
 
@@ -153,27 +159,27 @@ type (
 // DataPlaneRetrieveGet: Use this API command to retrieve data plane by id.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DataPlaneRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneRetrieveGet(ctx context.Context, bladeUUID string) (*http.Response, *DataPlaneRetrieveGet200Response, error) {
+func (p *PlanesAPI) DataPlaneRetrieveGet(ctx *UserContext, bladeUUID string) (*http.Response, *DataPlaneRetrieveGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "GET", "/v5_0/planes/{bladeUUID}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	out := &DataPlaneRetrieveGet200Response{}
 	httpResponse, _, err := p.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -188,7 +194,7 @@ type (
 // DataPlaneModifyBasicPatch: Use this API command to modify the basic information of data plane.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 // - requestBody: *DataPlaneModifyBasicPatchRequest
 //
@@ -196,21 +202,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneModifyBasicPatch(ctx context.Context, bladeUUID string, requestBody *DataPlaneModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneModifyBasicPatch(ctx *UserContext, bladeUUID string, requestBody *DataPlaneModifyBasicPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "PATCH", "/v5_0/planes/{bladeUUID}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	return p.client.doRequest(request, 204, nil)
 }
 
@@ -227,7 +233,7 @@ type (
 // DataPlaneModifyIpv6PrimaryInterfacePatch: Use this API command to modify ipv6 Primary Interface of data plane.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 // - requestBody: *DataPlaneModifyIpv6PrimaryInterfacePatchRequest
 //
@@ -235,21 +241,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneModifyIpv6PrimaryInterfacePatch(ctx context.Context, bladeUUID string, requestBody *DataPlaneModifyIpv6PrimaryInterfacePatchRequest) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneModifyIpv6PrimaryInterfacePatch(ctx *UserContext, bladeUUID string, requestBody *DataPlaneModifyIpv6PrimaryInterfacePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "PATCH", "/v5_0/planes/{bladeUUID}/ipv6PrimaryInterface")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	return p.client.doRequest(request, 204, nil)
 }
 
@@ -269,7 +275,7 @@ type (
 // DataPlaneModifyPrimaryInterfacePatch: Use this API command to modify primary interface of data plane.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 // - requestBody: *DataPlaneModifyPrimaryInterfacePatchRequest
 //
@@ -277,21 +283,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneModifyPrimaryInterfacePatch(ctx context.Context, bladeUUID string, requestBody *DataPlaneModifyPrimaryInterfacePatchRequest) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneModifyPrimaryInterfacePatch(ctx *UserContext, bladeUUID string, requestBody *DataPlaneModifyPrimaryInterfacePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "PATCH", "/v5_0/planes/{bladeUUID}/primaryInterface")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	return p.client.doRequest(request, 204, nil)
 }
 
@@ -306,7 +312,7 @@ type (
 // DataPlaneModifySecondaryInterfacePatch: Use this API command to modify secondary interface of data plane.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 // - requestBody: *DataPlaneModifySecondaryInterfacePatchRequest
 //
@@ -314,48 +320,48 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneModifySecondaryInterfacePatch(ctx context.Context, bladeUUID string, requestBody *DataPlaneModifySecondaryInterfacePatchRequest) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneModifySecondaryInterfacePatch(ctx *UserContext, bladeUUID string, requestBody *DataPlaneModifySecondaryInterfacePatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "PATCH", "/v5_0/planes/{bladeUUID}/secondaryInterface")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	return p.client.doRequest(request, 204, nil)
 }
 
 // DataPlaneDeleteStaticRouteDelete: Use this API command to delete static route.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneDeleteStaticRouteDelete(ctx context.Context, bladeUUID string) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneDeleteStaticRouteDelete(ctx *UserContext, bladeUUID string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "DELETE", "/v5_0/planes/{bladeUUID}/staticRoute")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	return p.client.doRequest(request, 204, nil)
 }
 
@@ -372,7 +378,7 @@ type (
 // DataPlaneModifyStaticRoutePatch: Use this API command to modify static route of data plane.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - bladeUUID (UUIDv4)
 // - requestBody: *DataPlaneModifyStaticRoutePatchRequestSlice
 //
@@ -380,20 +386,20 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *Planes) DataPlaneModifyStaticRoutePatch(ctx context.Context, bladeUUID string, requestBody DataPlaneModifyStaticRoutePatchRequestSlice) (*http.Response, []byte, error) {
+func (p *PlanesAPI) DataPlaneModifyStaticRoutePatch(ctx *UserContext, bladeUUID string, requestBody DataPlaneModifyStaticRoutePatchRequestSlice) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrIsUUIDv4(bladeUUID)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"bladeUUID\" failed validation check: %s", err)
 	}
-
 	request := p.client.newRequest(ctx, "PATCH", "/v5_0/planes/{bladeUUID}/staticRoute")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"bladeUUID": bladeUUID,
 	}
-
 	return p.client.doRequest(request, 204, nil)
 }

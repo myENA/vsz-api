@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type RogueAPs struct {
+type RogueAPsAPI struct {
 	client *Client
 }
 type (
@@ -43,7 +43,7 @@ type (
 // AccessPointOperationalRetrieveRogueApListGet: Use this API command to retrieve a list of rogue access points.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -55,9 +55,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveRogueApListGet200Response
 // - error: Error seen or nil if none
-func (r *RogueAPs) AccessPointOperationalRetrieveRogueApListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveRogueApListGet200Response, error) {
+func (r *RogueAPsAPI) AccessPointOperationalRetrieveRogueApListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveRogueApListGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -90,7 +92,6 @@ func (r *RogueAPs) AccessPointOperationalRetrieveRogueApListGet(ctx context.Cont
 			return nil, nil, fmt.Errorf("parameter \"rogueMac\" failed validation check: %s", err)
 		}
 	}
-
 	request := r.client.newRequest(ctx, "GET", "/v5_0/rogueaps")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
@@ -99,7 +100,6 @@ func (r *RogueAPs) AccessPointOperationalRetrieveRogueApListGet(ctx context.Cont
 		"type":     xtype,
 		"rogueMac": rogueMac,
 	}
-
 	out := &AccessPointOperationalRetrieveRogueApListGet200Response{}
 	httpResponse, _, err := r.client.doRequest(request, 200, out)
 	return httpResponse, out, err

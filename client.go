@@ -1,15 +1,12 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"sync"
-	"sync/atomic"
 	"time"
 )
 
@@ -22,29 +19,22 @@ const (
 )
 
 type Config struct {
-	Address  string // REQUIRED address of your VSZ
-	Username string // REQUIRED username to use for this config
-	Password string // REQUIRED password to use for this config
+	Address string // REQUIRED address of your VSZ
 
 	Scheme     string // OPTIONAL defaults to https
 	PathPrefix string // OPTIONAL defaults to "api/public"
-
-	RequestTimeout time.Duration // OPTIONAL will default to value of DefaultRequestTimeout
 }
 
 // DefaultConfig creates a new Config object with a non-pooled client
-func DefaultConfig(address, username, password string) *Config {
-	return defaultConfig(address, username, password)
+func DefaultConfig(address string) *Config {
+	return defaultConfig(address)
 }
 
-func defaultConfig(address, username, password string) *Config {
+func defaultConfig(address string) *Config {
 	return &Config{
-		Address:        address,
-		Username:       username,
-		Password:       password,
-		Scheme:         DefaultScheme,
-		PathPrefix:     DefaultPathPrefix,
-		RequestTimeout: DefaultRequestTimeout,
+		Address:    address,
+		Scheme:     DefaultScheme,
+		PathPrefix: DefaultPathPrefix,
 	}
 }
 
@@ -62,17 +52,13 @@ type Client struct {
 }
 
 func NewClient(conf *Config, client *http.Client) *Client {
-	def := defaultConfig(conf.Address, conf.Username, conf.Password)
+	def := defaultConfig(conf.Address)
 	if conf.Scheme != "" {
 		def.Scheme = conf.Scheme
 	}
 	if conf.PathPrefix != "" {
 		def.PathPrefix = conf.PathPrefix
 	}
-	if conf.RequestTimeout > 0 {
-		def.RequestTimeout = conf.RequestTimeout
-	}
-
 	if client == nil {
 		// shamelessly borrowed from https://github.com/hashicorp/go-cleanhttp/blob/master/cleanhttp.go
 		client = &http.Client{
@@ -128,21 +114,37 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 			request.uri)
 	}
 
-	httpRequest, err := request.toHTTP()
-	if err != nil {
+	var httpRequest *http.Request
+	var httpResponse *http.Response
+	var cookie *http.Cookie
+	var cas CookieCAS
+	var buff []byte
+	var err error
+
+	if httpRequest, err = request.toHTTP(); err != nil {
 		return nil, nil, err
 	}
 
+	// if this api requires an active auth session, try to locate cookie
 	if request.authenticated {
-		cookie, err := c.sessionCookie()
-		if err != nil {
-			return nil, nil, err
+		if cookie, cas = request.ctx.Cookie(); cookie == nil {
+			// if cookie is not set, attempt to refresh
+			if _, err = request.ctx.RefreshCookie(c, cas); err != nil {
+				// if refresh fails, bail out
+				return nil, nil, err
+			}
 		}
+		// attempt to locate cookie one more time after refresh
+		if cookie, cas = request.ctx.Cookie(); cookie == nil {
+			// if cookie still nil, bail out
+			return nil, nil, fmt.Errorf("unable to locate cookie for user %s", request.ctx.Username())
+		}
+		// otherwise add cookie to request
 		httpRequest.AddCookie(cookie)
 	}
 
-	httpResponse, err := c.client.Do(httpRequest)
-	if err != nil {
+	// actually attempt request
+	if httpResponse, err = c.client.Do(httpRequest); err != nil {
 		if httpResponse != nil {
 			httpResponse.Body.Close()
 		}
@@ -150,33 +152,38 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 	}
 
 	// read everything out of the body and close it.
-	buff, err := ioutil.ReadAll(httpResponse.Body)
+	buff, err = ioutil.ReadAll(httpResponse.Body)
 	httpResponse.Body.Close()
 	if err != nil {
 		return httpResponse, nil, err
 	}
 
-	// if this endpoint requires authentication and received a 401, assume we need to refresh cookie / credentials
+	// if this endpoint requires authentication and received a 401, try to refresh cookie once.
 	if request.authenticated && httpResponse.StatusCode == 401 {
-		if err := c.refreshCookie(); err != nil {
+		if _, err = request.ctx.RefreshCookie(c, cas); err != nil {
+			// if fail, bail out
 			return nil, nil, err
 		}
-		httpRequest, err = request.toHTTP()
-		if err != nil {
-			return nil, nil, err
+		// try one more time to locate, this time we don't care about cas as this is the last time we'll try in this routine.
+		if cookie, _ = request.ctx.Cookie(); cookie == nil {
+			// if cookie still nil, bail out
+			return nil, nil, fmt.Errorf("unable to refresh cookief or user %s", request.ctx.Username())
 		}
-		cookie, err := c.sessionCookie()
-		if err != nil {
+		// build request one more time and set cookie
+		if httpRequest, err = request.toHTTP(); err != nil {
 			return nil, nil, err
 		}
 		httpRequest.AddCookie(cookie)
-		httpResponse, err = c.client.Do(httpRequest)
-		if err != nil {
+		// try to execute request one final time
+		if httpResponse, err = c.client.Do(httpRequest); err != nil {
+			// if we got a client error, bail out
 			if httpResponse != nil {
 				httpResponse.Body.Close()
 			}
 			return nil, nil, err
 		}
+		// from this point on we only care if the response code matches the provided "success" one, we will not attempt
+		// to refresh cookie again in this routine.
 		buff, err = ioutil.ReadAll(httpResponse.Body)
 		httpResponse.Body.Close()
 		if err != nil {
@@ -186,7 +193,7 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 
 	// if success :D
 	if successCode == httpResponse.StatusCode {
-		if nil != out {
+		if out != nil {
 			err = json.Unmarshal(buff, out)
 		}
 		return httpResponse, buff, err
@@ -196,64 +203,12 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 	err2 := &Error{}
 	err = json.Unmarshal(buff, err2)
 	if err != nil {
-		log.Printf("Unable to unmarshal response from call \"%s %s\": %s", request.method, request.uri, err)
-		log.Printf("Response: %s", string(buff))
+		log.Printf("ERROR: Unable to unmarshal response from call \"%s %s\": %s", request.method, request.uri, err)
+		log.Printf("ERROR: Response: %s", string(buff))
 		err = fmt.Errorf("expected \"%d %s\", saw \"%s\"", successCode, http.StatusText(successCode), httpResponse.Status)
 	} else {
 		err = *err2
 	}
 
 	return httpResponse, buff, err
-}
-
-func (c *Client) refreshCookie() error {
-	cas := atomic.LoadUint64(&c.cookieCAS)
-	c.cookieMu.Lock()
-	defer c.cookieMu.Unlock()
-	if atomic.LoadUint64(&c.cookieCAS) != cas {
-		// should mean that somebody else updated the cookie
-		if c.cookie == nil {
-			return errors.New("cookie was unable to be refreshed")
-		}
-		return nil
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), c.config.RequestTimeout)
-	defer cancel()
-	resp, _, err := c.Session().LoginSessionLogonPost(ctx, &LoginSessionLogonPostRequest{
-		Username: &c.config.Username,
-		Password: &c.config.Password,
-	})
-	if err != nil {
-		c.cookie = nil
-		c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
-		return err
-	}
-	cookie := TryExtractSessionCookie(resp)
-	if cookie == nil {
-		c.cookie = nil
-		c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
-		return fmt.Errorf("unable to refresh cookie, expected \"200 OK\" saw \"%s\"", resp.Status)
-	}
-	c.cookie = cookie
-	c.cookieCAS = atomic.AddUint64(&c.cookieCAS, 1)
-	return nil
-}
-
-func (c *Client) sessionCookie() (*http.Cookie, error) {
-	c.cookieMu.RLock()
-	if c.cookie == nil {
-		c.cookieMu.RUnlock()
-		if err := c.refreshCookie(); err != nil {
-			return nil, err
-		} else {
-			c.cookieMu.RLock()
-		}
-	}
-	if c.cookie != nil {
-		cookie := c.cookie
-		c.cookieMu.Unlock()
-		return cookie, nil
-	}
-	c.cookieMu.RUnlock()
-	return nil, errors.New("cookie was unable to be fetched")
 }

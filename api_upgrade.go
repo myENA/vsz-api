@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type Upgrade struct {
+type UpgradeAPI struct {
 	client *Client
 }
 type (
@@ -50,16 +50,18 @@ type (
 // SystemUpgradeSystemUpgradePost: Use this API command to do system upgrade
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeSystemUpgradePost200Response
 // - error: Error seen or nil if none
-func (u *Upgrade) SystemUpgradeSystemUpgradePost(ctx context.Context) (*http.Response, *SystemUpgradeSystemUpgradePost200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeSystemUpgradePost(ctx *UserContext) (*http.Response, *SystemUpgradeSystemUpgradePost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := u.client.newRequest(ctx, "POST", "/v5_0/upgrade")
 	request.authenticated = true
-
 	out := &SystemUpgradeSystemUpgradePost200Response{}
 	httpResponse, _, err := u.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -93,7 +95,7 @@ type (
 // SystemUpgradeRetriveUpgradeHistoryGet: Use this API command to retrive upgrade history
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -104,9 +106,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeRetriveUpgradeHistoryGet200Response
 // - error: Error seen or nil if none
-func (u *Upgrade) SystemUpgradeRetriveUpgradeHistoryGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *SystemUpgradeRetriveUpgradeHistoryGet200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeRetriveUpgradeHistoryGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *SystemUpgradeRetriveUpgradeHistoryGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	index, ok := optionalParams["index"]
 	if ok {
 		err = validators.StrIsPositiveInt(index)
@@ -125,7 +129,6 @@ func (u *Upgrade) SystemUpgradeRetriveUpgradeHistoryGet(ctx context.Context, opt
 	} else {
 		listSize = "100"
 	}
-
 	request := u.client.newRequest(ctx, "GET", "/v5_0/upgrade/history")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
@@ -133,7 +136,6 @@ func (u *Upgrade) SystemUpgradeRetriveUpgradeHistoryGet(ctx context.Context, opt
 		"listSize": listSize,
 		"timezone": optionalParams["timezone"],
 	}
-
 	out := &SystemUpgradeRetriveUpgradeHistoryGet200Response{}
 	httpResponse, _, err := u.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -189,16 +191,18 @@ type (
 // SystemUpgradeRetriveUploadPatchInfoGet: Use this API command to retrive upload file Info
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeRetriveUploadPatchInfoGet200Response
 // - error: Error seen or nil if none
-func (u *Upgrade) SystemUpgradeRetriveUploadPatchInfoGet(ctx context.Context) (*http.Response, *SystemUpgradeRetriveUploadPatchInfoGet200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeRetriveUploadPatchInfoGet(ctx *UserContext) (*http.Response, *SystemUpgradeRetriveUploadPatchInfoGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := u.client.newRequest(ctx, "GET", "/v5_0/upgrade/patch")
 	request.authenticated = true
-
 	out := &SystemUpgradeRetriveUploadPatchInfoGet200Response{}
 	httpResponse, _, err := u.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -240,16 +244,18 @@ type (
 // SystemUpgradeRetriveClusterProgressStatusGet: Use this API command to retrive cluster progress status
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeRetriveClusterProgressStatusGet200Response
 // - error: Error seen or nil if none
-func (u *Upgrade) SystemUpgradeRetriveClusterProgressStatusGet(ctx context.Context) (*http.Response, *SystemUpgradeRetriveClusterProgressStatusGet200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeRetriveClusterProgressStatusGet(ctx *UserContext) (*http.Response, *SystemUpgradeRetriveClusterProgressStatusGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := u.client.newRequest(ctx, "GET", "/v5_0/upgrade/status")
 	request.authenticated = true
-
 	out := &SystemUpgradeRetriveClusterProgressStatusGet200Response{}
 	httpResponse, _, err := u.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -291,16 +297,18 @@ type (
 // SystemUpgradeUploadFilePost: Use this API command to upload patch file
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeUploadFilePost200Response
 // - error: Error seen or nil if none
-func (u *Upgrade) SystemUpgradeUploadFilePost(ctx context.Context) (*http.Response, *SystemUpgradeUploadFilePost200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeUploadFilePost(ctx *UserContext) (*http.Response, *SystemUpgradeUploadFilePost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := u.client.newRequest(ctx, "POST", "/v5_0/upgrade/upload")
 	request.authenticated = true
-
 	out := &SystemUpgradeUploadFilePost200Response{}
 	httpResponse, _, err := u.client.doRequest(request, 200, out)
 	return httpResponse, out, err

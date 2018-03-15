@@ -1,18 +1,18 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type SMSGateway struct {
+type SMSGatewayAPI struct {
 	client *Client
 }
 type (
@@ -31,7 +31,7 @@ type (
 // SmsGatewayGetSmsGatewayGet: Get SMS gateway
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Optional Parameter Map:
 // - domainId (UUIDv4): MSP/Partner domain id of the SMS gateway
@@ -40,9 +40,11 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *SmsGatewayGetSmsGatewayGet200Response
 // - error: Error seen or nil if none
-func (s *SMSGateway) SmsGatewayGetSmsGatewayGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *SmsGatewayGetSmsGatewayGet200Response, error) {
+func (s *SMSGatewayAPI) SmsGatewayGetSmsGatewayGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *SmsGatewayGetSmsGatewayGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	domainId, ok := optionalParams["domainId"]
 	if ok {
 		err = validators.StrIsUUIDv4(domainId)
@@ -50,13 +52,11 @@ func (s *SMSGateway) SmsGatewayGetSmsGatewayGet(ctx context.Context, optionalPar
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-
 	request := s.client.newRequest(ctx, "GET", "/v5_0/smsGateway")
 	request.authenticated = true
 	request.queryParameters = map[string]string{
 		"domainId": domainId,
 	}
-
 	out := &SmsGatewayGetSmsGatewayGet200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -78,18 +78,20 @@ type (
 // SmsGatewayUpdateSmsGatewayPatch: Update SMS gateway
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *SmsGatewayUpdateSmsGatewayPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SMSGateway) SmsGatewayUpdateSmsGatewayPatch(ctx context.Context, requestBody *SmsGatewayUpdateSmsGatewayPatchRequest) (*http.Response, []byte, error) {
+func (s *SMSGatewayAPI) SmsGatewayUpdateSmsGatewayPatch(ctx *UserContext, requestBody *SmsGatewayUpdateSmsGatewayPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "PATCH", "/v5_0/smsGateway")
 	request.body = requestBody
 	request.authenticated = true
-
 	return s.client.doRequest(request, 200, nil)
 }
 
@@ -119,16 +121,18 @@ type (
 // SmsGatewayCreateSmsGatewayPost: Create SMS gateway
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SmsGatewayCreateSmsGatewayPost200Response
 // - error: Error seen or nil if none
-func (s *SMSGateway) SmsGatewayCreateSmsGatewayPost(ctx context.Context) (*http.Response, *SmsGatewayCreateSmsGatewayPost200Response, error) {
+func (s *SMSGatewayAPI) SmsGatewayCreateSmsGatewayPost(ctx *UserContext) (*http.Response, *SmsGatewayCreateSmsGatewayPost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := s.client.newRequest(ctx, "POST", "/v5_0/smsGateway")
 	request.authenticated = true
-
 	out := &SmsGatewayCreateSmsGatewayPost200Response{}
 	httpResponse, _, err := s.client.doRequest(request, 200, out)
 	return httpResponse, out, err

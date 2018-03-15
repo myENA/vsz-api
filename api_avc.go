@@ -1,17 +1,17 @@
 package api
 
 import (
-	"context"
+	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2017-11-28T11:37:31-0600
+// Generation Date: 2018-03-15T14:33:32-0500
 // API Version: v5
 
-type AVC struct {
+type AVCAPI struct {
 	client *Client
 }
 type (
@@ -25,18 +25,20 @@ type (
 // ApplicationVisibilityControlApplicationPolicyMultipleDeleteDelete: Use this API command to delete a AVC Application Policy Profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationPolicyMultipleDeleteDelete(ctx context.Context, requestBody *ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequest) (*http.Response, []byte, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationPolicyMultipleDeleteDelete(ctx *UserContext, requestBody *ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/avc/applicationPolicy")
 	request.body = requestBody
 	request.authenticated = true
-
 	return a.client.doRequest(request, 200, nil)
 }
 
@@ -73,18 +75,20 @@ type (
 // ApplicationVisibilityControlApplicationPolicyCreatePost: Use this API command to create a new AVC Application Policy profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ApplicationVisibilityControlApplicationPolicyCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationPolicyCreatePost201Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationPolicyCreatePost(ctx context.Context, requestBody *ApplicationVisibilityControlApplicationPolicyCreatePostRequest) (*http.Response, *ApplicationVisibilityControlApplicationPolicyCreatePost201Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationPolicyCreatePost(ctx *UserContext, requestBody *ApplicationVisibilityControlApplicationPolicyCreatePostRequest) (*http.Response, *ApplicationVisibilityControlApplicationPolicyCreatePost201Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "POST", "/v5_0/avc/applicationPolicy")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlApplicationPolicyCreatePost201Response{}
 	httpResponse, _, err := a.client.doRequest(request, 201, out)
 	return httpResponse, out, err
@@ -93,27 +97,27 @@ func (a *AVC) ApplicationVisibilityControlApplicationPolicyCreatePost(ctx contex
 // ApplicationVisibilityControlApplicationPolicyDeleteDelete: Use this API command to delete a AVC Application Policy Profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationPolicyDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationPolicyDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/avc/applicationPolicy/{id}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -154,27 +158,27 @@ type (
 // ApplicationVisibilityControlApplicationPolicyRetrieveGet: Use this API command to retrieve a AVC Application Policy profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationPolicyRetrieveGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationPolicyRetrieveGet(ctx context.Context, id string) (*http.Response, *ApplicationVisibilityControlApplicationPolicyRetrieveGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationPolicyRetrieveGet(ctx *UserContext, id string) (*http.Response, *ApplicationVisibilityControlApplicationPolicyRetrieveGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/applicationPolicy/{id}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	out := &ApplicationVisibilityControlApplicationPolicyRetrieveGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -190,7 +194,7 @@ type (
 // ApplicationVisibilityControlApplicationPolicyModifyBasicPatch: Use this API command to modify the basic information on AVC Application Policy profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 // - requestBody: *ApplicationVisibilityControlApplicationPolicyModifyBasicPatchRequest
 //
@@ -198,21 +202,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationPolicyModifyBasicPatch(ctx context.Context, id string, requestBody *ApplicationVisibilityControlApplicationPolicyModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationPolicyModifyBasicPatch(ctx *UserContext, id string, requestBody *ApplicationVisibilityControlApplicationPolicyModifyBasicPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/avc/applicationPolicy/{id}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -238,7 +242,7 @@ type (
 // ApplicationVisibilityControlApplicationPolicyModifyApplicationrulesPatch: Use this API command to modify the applicationRules information on AVC Application Policy profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 // - requestBody: *ApplicationVisibilityControlApplicationPolicyModifyApplicationrulesPatchRequestSlice
 //
@@ -246,21 +250,21 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationPolicyModifyApplicationrulesPatch(ctx context.Context, id string, requestBody ApplicationVisibilityControlApplicationPolicyModifyApplicationrulesPatchRequestSlice) (*http.Response, []byte, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationPolicyModifyApplicationrulesPatch(ctx *UserContext, id string, requestBody ApplicationVisibilityControlApplicationPolicyModifyApplicationrulesPatchRequestSlice) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/avc/applicationPolicy/{id}/applicationRules")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -276,16 +280,18 @@ type (
 // ApplicationVisibilityControlCurrentSignaturePackageInfoGet: Get current Signature Package info
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlCurrentSignaturePackageInfoGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlCurrentSignaturePackageInfoGet(ctx context.Context) (*http.Response, *ApplicationVisibilityControlCurrentSignaturePackageInfoGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlCurrentSignaturePackageInfoGet(ctx *UserContext) (*http.Response, *ApplicationVisibilityControlCurrentSignaturePackageInfoGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/signaturePackage")
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlCurrentSignaturePackageInfoGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -311,16 +317,18 @@ type (
 // ApplicationVisibilityControlApplicationsGet: Get Application list from current Signature Package
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationsGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationsGet(ctx context.Context) (*http.Response, *ApplicationVisibilityControlApplicationsGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationsGet(ctx *UserContext) (*http.Response, *ApplicationVisibilityControlApplicationsGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/signaturePackage/applications")
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlApplicationsGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -337,27 +345,27 @@ type (
 // ApplicationVisibilityControlApplicationGet: Get Application info (catId, appId and name) by application name
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - applicationName (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationGet(ctx context.Context, applicationName string) (*http.Response, *ApplicationVisibilityControlApplicationGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationGet(ctx *UserContext, applicationName string) (*http.Response, *ApplicationVisibilityControlApplicationGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(applicationName)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"applicationName\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/signaturePackage/application/{applicationName}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"applicationName": applicationName,
 	}
-
 	out := &ApplicationVisibilityControlApplicationGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -382,16 +390,18 @@ type (
 // ApplicationVisibilityControlApplicationCategoriesGet: Get Application Category list from current Signature Package
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationCategoriesGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationCategoriesGet(ctx context.Context) (*http.Response, *ApplicationVisibilityControlApplicationCategoriesGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationCategoriesGet(ctx *UserContext) (*http.Response, *ApplicationVisibilityControlApplicationCategoriesGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/signaturePackage/categories")
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlApplicationCategoriesGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -407,27 +417,27 @@ type (
 // ApplicationVisibilityControlApplicationCategoryGet: Get Application Category info (catId and name) by category name
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - categoryName (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlApplicationCategoryGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlApplicationCategoryGet(ctx context.Context, categoryName string) (*http.Response, *ApplicationVisibilityControlApplicationCategoryGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlApplicationCategoryGet(ctx *UserContext, categoryName string) (*http.Response, *ApplicationVisibilityControlApplicationCategoryGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(categoryName)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"categoryName\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/signaturePackage/category/{categoryName}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"categoryName": categoryName,
 	}
-
 	out := &ApplicationVisibilityControlApplicationCategoryGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -445,16 +455,18 @@ type (
 // ApplicationVisibilityControlUploadFilePost: Update AVC Signature Package by upload file
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlUploadFilePost200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlUploadFilePost(ctx context.Context) (*http.Response, *ApplicationVisibilityControlUploadFilePost200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlUploadFilePost(ctx *UserContext) (*http.Response, *ApplicationVisibilityControlUploadFilePost200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "POST", "/v5_0/avc/signaturePackage/upload")
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlUploadFilePost200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -471,16 +483,18 @@ type (
 // ApplicationVisibilityControlUserDefinedMultipleDeleteDelete: Use this API command to delete a AVC User Defined Profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlUserDefinedMultipleDeleteDelete(ctx context.Context) (*http.Response, *ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlUserDefinedMultipleDeleteDelete(ctx *UserContext) (*http.Response, *ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/avc/userDefined")
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -505,18 +519,20 @@ type (
 // ApplicationVisibilityControlUserDefinedCreatePost: Use this API command to create a new AVC User Defined profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - requestBody: *ApplicationVisibilityControlUserDefinedCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlUserDefinedCreatePost201Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlUserDefinedCreatePost(ctx context.Context, requestBody *ApplicationVisibilityControlUserDefinedCreatePostRequest) (*http.Response, *ApplicationVisibilityControlUserDefinedCreatePost201Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlUserDefinedCreatePost(ctx *UserContext, requestBody *ApplicationVisibilityControlUserDefinedCreatePostRequest) (*http.Response, *ApplicationVisibilityControlUserDefinedCreatePost201Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	request := a.client.newRequest(ctx, "POST", "/v5_0/avc/userDefined")
 	request.body = requestBody
 	request.authenticated = true
-
 	out := &ApplicationVisibilityControlUserDefinedCreatePost201Response{}
 	httpResponse, _, err := a.client.doRequest(request, 201, out)
 	return httpResponse, out, err
@@ -525,27 +541,27 @@ func (a *AVC) ApplicationVisibilityControlUserDefinedCreatePost(ctx context.Cont
 // ApplicationVisibilityControlUserDefinedDeleteDelete: Use this API command to delete a AVC User Defined Profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlUserDefinedDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
+func (a *AVCAPI) ApplicationVisibilityControlUserDefinedDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "DELETE", "/v5_0/avc/userDefined/{id}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }
 
@@ -573,27 +589,27 @@ type (
 // ApplicationVisibilityControlUserDefinedRetrieveGet: Use this API command to retrieve a AVC User Defined profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApplicationVisibilityControlUserDefinedRetrieveGet200Response
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlUserDefinedRetrieveGet(ctx context.Context, id string) (*http.Response, *ApplicationVisibilityControlUserDefinedRetrieveGet200Response, error) {
+func (a *AVCAPI) ApplicationVisibilityControlUserDefinedRetrieveGet(ctx *UserContext, id string) (*http.Response, *ApplicationVisibilityControlUserDefinedRetrieveGet200Response, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "GET", "/v5_0/avc/userDefined/{id}")
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	out := &ApplicationVisibilityControlUserDefinedRetrieveGet200Response{}
 	httpResponse, _, err := a.client.doRequest(request, 200, out)
 	return httpResponse, out, err
@@ -613,7 +629,7 @@ type (
 // ApplicationVisibilityControlUserDefinedModifyBasicPatch: Use this API command to modify the basic information on AVC User Defined profile.
 //
 // Required Parameters:
-// - ctx (context.Context): Context to use for this request
+// - ctx (*UserContext): Context to use for this request
 // - id (string)
 // - requestBody: *ApplicationVisibilityControlUserDefinedModifyBasicPatchRequest
 //
@@ -621,20 +637,20 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AVC) ApplicationVisibilityControlUserDefinedModifyBasicPatch(ctx context.Context, id string, requestBody *ApplicationVisibilityControlUserDefinedModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (a *AVCAPI) ApplicationVisibilityControlUserDefinedModifyBasicPatch(ctx *UserContext, id string, requestBody *ApplicationVisibilityControlUserDefinedModifyBasicPatchRequest) (*http.Response, []byte, error) {
+	if ctx == nil {
+		return nil, nil, errors.New("user context cannot be nil")
+	}
 	var err error
-
 	err = validators.StrNotEmpty(id)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-
 	request := a.client.newRequest(ctx, "PATCH", "/v5_0/avc/userDefined/{id}")
 	request.body = requestBody
 	request.authenticated = true
 	request.pathParameters = map[string]string{
 		"id": id,
 	}
-
 	return a.client.doRequest(request, 204, nil)
 }

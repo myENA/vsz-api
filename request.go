@@ -2,7 +2,6 @@ package api
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -16,7 +15,7 @@ type request struct {
 	config *Config
 	method string
 	uri    string
-	ctx    context.Context
+	ctx    *UserContext
 
 	authenticated   bool
 	pathParameters  map[string]string
@@ -24,7 +23,7 @@ type request struct {
 	body            interface{}
 }
 
-func (c *Client) newRequest(ctx context.Context, method, uri string) *request {
+func (c *Client) newRequest(ctx *UserContext, method, uri string) *request {
 	r := &request{
 		id:     atomic.AddUint64(&requestID, 1),
 		config: c.config,

@@ -1,200 +1,200 @@
 package api
 
 type bridge struct {
-	alert                 *Alert
-	apRules               *APRules
-	applications          *Applications
-	aps                   *APs
-	avc                   *AVC
-	blockClient           *BlockClient
-	certstore             *CertStore
-	clients               *Clients
-	cluster               *Cluster
-	configuration         *Configuration
-	configurationSettings *ConfigurationSettings
-	controlPlanes         *ControlPlanes
-	controller            *Controller
-	dhcpData              *DHCPData
-	ftps                  *FTPS
-	globalSettings        *GlobalSettings
-	identity              *Identity
-	lwapp2scg             *LWAPP2SCG
-	maps                  *Maps
-	planes                *Planes
-	precedence            *Precedence
-	profiles              *Profiles
-	query                 *Query
-	restart               *Restart
-	rkszones              *RuckusZones
-	rogue                 *Rogue
-	rogueaps              *RogueAPs
-	sci                   *SCI
-	services              *Services
-	session               *Session
-	shutdown              *Shutdown
-	smsGateway            *SMSGateway
-	system                *System
-	tool                  *Tool
-	upgrade               *Upgrade
-	userGroups            *UserGroups
-	users                 *Users
-	vlanpoolings          *VLANPoolings
+	alert                 *AlertAPI
+	apRules               *APRulesAPI
+	applications          *ApplicationsAPI
+	aps                   *APsAPI
+	avc                   *AVCAPI
+	blockClient           *BlockClientAPI
+	certstore             *CertStoreAPI
+	clients               *ClientsAPI
+	cluster               *ClusterAPI
+	configuration         *ConfigurationAPI
+	configurationSettings *ConfigurationSettingsAPI
+	controlPlanes         *ControlPlanesAPI
+	controller            *ControllerAPI
+	dhcpData              *DHCPDataAPI
+	ftps                  *FTPSAPI
+	globalSettings        *GlobalSettingsAPI
+	identity              *IdentityAPI
+	lwapp2scg             *LWAPP2SCGAPI
+	maps                  *MapsAPI
+	planes                *PlanesAPI
+	precedence            *PrecedenceAPI
+	profiles              *ProfilesAPI
+	query                 *QueryAPI
+	restart               *RestartAPI
+	rkszones              *RuckusZonesAPI
+	rogue                 *RogueAPI
+	rogueaps              *RogueAPsAPI
+	sci                   *SCIAPI
+	services              *ServicesAPI
+	session               *SessionAPI
+	shutdown              *ShutdownAPI
+	smsGateway            *SMSGatewayAPI
+	system                *SystemAPI
+	tool                  *ToolAPI
+	upgrade               *UpgradeAPI
+	userGroups            *UserGroupsAPI
+	users                 *UsersAPI
+	vlanpoolings          *VLANPoolingsAPI
 }
 
 func newBridge(c *Client) *bridge {
 	return &bridge{
-		alert:                 &Alert{c},
-		apRules:               &APRules{c},
-		applications:          &Applications{c},
-		aps:                   &APs{c},
-		avc:                   &AVC{c},
-		blockClient:           &BlockClient{c},
-		certstore:             &CertStore{c},
-		clients:               &Clients{c},
-		cluster:               &Cluster{c},
-		configuration:         &Configuration{c},
-		configurationSettings: &ConfigurationSettings{c},
-		controlPlanes:         &ControlPlanes{c},
-		controller:            &Controller{c},
-		dhcpData:              &DHCPData{c},
-		ftps:                  &FTPS{c},
-		globalSettings:        &GlobalSettings{c},
-		identity:              &Identity{c},
-		lwapp2scg:             &LWAPP2SCG{c},
-		maps:                  &Maps{c},
-		planes:                &Planes{c},
-		precedence:            &Precedence{c},
-		profiles:              &Profiles{c},
-		query:                 &Query{c},
-		restart:               &Restart{c},
-		rkszones:              &RuckusZones{c},
-		rogue:                 &Rogue{c},
-		rogueaps:              &RogueAPs{c},
-		sci:                   &SCI{c},
-		services:              &Services{c},
-		session:               &Session{c},
-		shutdown:              &Shutdown{c},
-		smsGateway:            &SMSGateway{c},
-		system:                &System{c},
-		tool:                  &Tool{c},
-		upgrade:               &Upgrade{c},
-		userGroups:            &UserGroups{c},
-		users:                 &Users{c},
-		vlanpoolings:          &VLANPoolings{c},
+		alert:                 &AlertAPI{c},
+		apRules:               &APRulesAPI{c},
+		applications:          &ApplicationsAPI{c},
+		aps:                   &APsAPI{c},
+		avc:                   &AVCAPI{c},
+		blockClient:           &BlockClientAPI{c},
+		certstore:             &CertStoreAPI{c},
+		clients:               &ClientsAPI{c},
+		cluster:               &ClusterAPI{c},
+		configuration:         &ConfigurationAPI{c},
+		configurationSettings: &ConfigurationSettingsAPI{c},
+		controlPlanes:         &ControlPlanesAPI{c},
+		controller:            &ControllerAPI{c},
+		dhcpData:              &DHCPDataAPI{c},
+		ftps:                  &FTPSAPI{c},
+		globalSettings:        &GlobalSettingsAPI{c},
+		identity:              &IdentityAPI{c},
+		lwapp2scg:             &LWAPP2SCGAPI{c},
+		maps:                  &MapsAPI{c},
+		planes:                &PlanesAPI{c},
+		precedence:            &PrecedenceAPI{c},
+		profiles:              &ProfilesAPI{c},
+		query:                 &QueryAPI{c},
+		restart:               &RestartAPI{c},
+		rkszones:              &RuckusZonesAPI{c},
+		rogue:                 &RogueAPI{c},
+		rogueaps:              &RogueAPsAPI{c},
+		sci:                   &SCIAPI{c},
+		services:              &ServicesAPI{c},
+		session:               &SessionAPI{c},
+		shutdown:              &ShutdownAPI{c},
+		smsGateway:            &SMSGatewayAPI{c},
+		system:                &SystemAPI{c},
+		tool:                  &ToolAPI{c},
+		upgrade:               &UpgradeAPI{c},
+		userGroups:            &UserGroupsAPI{c},
+		users:                 &UsersAPI{c},
+		vlanpoolings:          &VLANPoolingsAPI{c},
 	}
 }
 
-func (b *bridge) Alert() *Alert {
+func (b *bridge) Alert() *AlertAPI {
 	return b.alert
 }
-func (b *bridge) APRules() *APRules {
+func (b *bridge) APRules() *APRulesAPI {
 	return b.apRules
 }
-func (b *bridge) Applications() *Applications {
+func (b *bridge) Applications() *ApplicationsAPI {
 	return b.applications
 }
-func (b *bridge) APs() *APs {
+func (b *bridge) APs() *APsAPI {
 	return b.aps
 }
-func (b *bridge) AVC() *AVC {
+func (b *bridge) AVC() *AVCAPI {
 	return b.avc
 }
-func (b *bridge) BlockClient() *BlockClient {
+func (b *bridge) BlockClient() *BlockClientAPI {
 	return b.blockClient
 }
-func (b *bridge) CertStore() *CertStore {
+func (b *bridge) CertStore() *CertStoreAPI {
 	return b.certstore
 }
-func (b *bridge) Clients() *Clients {
+func (b *bridge) Clients() *ClientsAPI {
 	return b.clients
 }
-func (b *bridge) Cluster() *Cluster {
+func (b *bridge) Cluster() *ClusterAPI {
 	return b.cluster
 }
-func (b *bridge) Configuration() *Configuration {
+func (b *bridge) Configuration() *ConfigurationAPI {
 	return b.configuration
 }
-func (b *bridge) ConfigurationSettings() *ConfigurationSettings {
+func (b *bridge) ConfigurationSettings() *ConfigurationSettingsAPI {
 	return b.configurationSettings
 }
-func (b *bridge) ControlPlanes() *ControlPlanes {
+func (b *bridge) ControlPlanes() *ControlPlanesAPI {
 	return b.controlPlanes
 }
-func (b *bridge) Controller() *Controller {
+func (b *bridge) Controller() *ControllerAPI {
 	return b.controller
 }
-func (b *bridge) DHCPData() *DHCPData {
+func (b *bridge) DHCPData() *DHCPDataAPI {
 	return b.dhcpData
 }
-func (b *bridge) FTPS() *FTPS {
+func (b *bridge) FTPS() *FTPSAPI {
 	return b.ftps
 }
-func (b *bridge) GlobalSettings() *GlobalSettings {
+func (b *bridge) GlobalSettings() *GlobalSettingsAPI {
 	return b.globalSettings
 }
-func (b *bridge) Identity() *Identity {
+func (b *bridge) Identity() *IdentityAPI {
 	return b.identity
 }
-func (b *bridge) LWAPP2SCG() *LWAPP2SCG {
+func (b *bridge) LWAPP2SCG() *LWAPP2SCGAPI {
 	return b.lwapp2scg
 }
-func (b *bridge) Maps() *Maps {
+func (b *bridge) Maps() *MapsAPI {
 	return b.maps
 }
-func (b *bridge) Planes() *Planes {
+func (b *bridge) Planes() *PlanesAPI {
 	return b.planes
 }
-func (b *bridge) Precedence() *Precedence {
+func (b *bridge) Precedence() *PrecedenceAPI {
 	return b.precedence
 }
-func (b *bridge) Profiles() *Profiles {
+func (b *bridge) Profiles() *ProfilesAPI {
 	return b.profiles
 }
-func (b *bridge) Query() *Query {
+func (b *bridge) Query() *QueryAPI {
 	return b.query
 }
-func (b *bridge) Restart() *Restart {
+func (b *bridge) Restart() *RestartAPI {
 	return b.restart
 }
-func (b *bridge) RuckusZones() *RuckusZones {
+func (b *bridge) RuckusZones() *RuckusZonesAPI {
 	return b.rkszones
 }
-func (b *bridge) Rogue() *Rogue {
+func (b *bridge) Rogue() *RogueAPI {
 	return b.rogue
 }
-func (b *bridge) RogueAPs() *RogueAPs {
+func (b *bridge) RogueAPs() *RogueAPsAPI {
 	return b.rogueaps
 }
-func (b *bridge) SCI() *SCI {
+func (b *bridge) SCI() *SCIAPI {
 	return b.sci
 }
-func (b *bridge) Services() *Services {
+func (b *bridge) Services() *ServicesAPI {
 	return b.services
 }
-func (b *bridge) Session() *Session {
+func (b *bridge) Session() *SessionAPI {
 	return b.session
 }
-func (b *bridge) Shutdown() *Shutdown {
+func (b *bridge) Shutdown() *ShutdownAPI {
 	return b.shutdown
 }
-func (b *bridge) SMSGateway() *SMSGateway {
+func (b *bridge) SMSGateway() *SMSGatewayAPI {
 	return b.smsGateway
 }
-func (b *bridge) System() *System {
+func (b *bridge) System() *SystemAPI {
 	return b.system
 }
-func (b *bridge) Tool() *Tool {
+func (b *bridge) Tool() *ToolAPI {
 	return b.tool
 }
-func (b *bridge) Upgrade() *Upgrade {
+func (b *bridge) Upgrade() *UpgradeAPI {
 	return b.upgrade
 }
-func (b *bridge) UserGroups() *UserGroups {
+func (b *bridge) UserGroups() *UserGroupsAPI {
 	return b.userGroups
 }
-func (b *bridge) Users() *Users {
+func (b *bridge) Users() *UsersAPI {
 	return b.users
 }
-func (b *bridge) VLANPoolings() *VLANPoolings {
+func (b *bridge) VLANPoolings() *VLANPoolingsAPI {
 	return b.vlanpoolings
 }
