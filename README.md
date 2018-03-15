@@ -36,7 +36,7 @@ func main() {
 	client := api.NewClient(conf, nil)
 	
 	userCtx := api.NewUserContext(context.Background(), "username", "password", 2 * time.Second)
-    defer userCtx.Cancel()
+	defer userCtx.Cancel()
     
 	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(userCtx)
 	
