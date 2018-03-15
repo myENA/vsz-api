@@ -43,9 +43,6 @@ type Client struct {
 	config *Config
 	client *http.Client
 
-	closed     bool
-	closedLock sync.RWMutex
-
 	cookie    *http.Cookie
 	cookieMu  sync.RWMutex
 	cookieCAS uint64
@@ -88,12 +85,6 @@ func NewClient(conf *Config, client *http.Client) *Client {
 	return c
 }
 
-func (c *Client) Close() {
-	c.closedLock.Lock()
-	defer c.closedLock.Unlock()
-	c.closed = true
-}
-
 func (c *Client) Config() Config {
 	return *c.config
 }
@@ -105,15 +96,6 @@ func (c *Client) Config() Config {
 // - body bytes or nil on error
 // - any error
 func (c *Client) doRequest(request *request, successCode int, out interface{}) (*http.Response, []byte, error) {
-	c.closedLock.RLock()
-	defer c.closedLock.RUnlock()
-
-	if c.closed {
-		return nil, nil, fmt.Errorf(
-			"will not process request with path \"%s\", this client has been marked as closed",
-			request.uri)
-	}
-
 	var httpRequest *http.Request
 	var httpResponse *http.Response
 	var cookie *http.Cookie

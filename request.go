@@ -43,6 +43,7 @@ func (r *request) toHTTP() (*http.Request, error) {
 	method := r.method
 	compiledURL := compileRequestURLString(r.config.Scheme, r.config.Address, r.config.PathPrefix, r.uri, r.pathParameters, r.queryParameters)
 
+	// if debug mode is enabled, prepare a big'ol log statement.
 	if debug {
 		logMsg := fmt.Sprintf("Preparing request \"%s %s\"", method, compiledURL)
 
