@@ -3,13 +3,12 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"path"
 	"strings"
 )
 
-func TryExtractSessionCookie(resp *http.Response) *http.Cookie {
+func tryExtractSessionCookie(request *request, resp *http.Response) *http.Cookie {
 	if debug {
-		log.Printf("Attempting to locate \"%s\" cookie in: %+v", SessionCookieName, resp.Cookies())
+		log.Printf("[request-%d] Attempting to locate \"%s\" cookie in: %+v", request.id, SessionCookieName, resp.Cookies())
 	}
 	for _, cookie := range resp.Cookies() {
 		if cookie.Name == SessionCookieName {
@@ -17,30 +16,6 @@ func TryExtractSessionCookie(resp *http.Response) *http.Cookie {
 		}
 	}
 	return nil
-}
-
-func compileRequestURLString(scheme, address, pathPrefix, uri string, pathParams, queryParams map[string]string) string {
-	url := fmt.Sprintf("%s://%s", scheme, path.Join(address, pathPrefix, uri))
-
-	if nil == pathParams && nil == queryParams {
-		return url
-	}
-
-	if nil != pathParams && 0 < len(pathParams) {
-		for name, value := range pathParams {
-			url = strings.Replace(url, fmt.Sprintf("{%s}", name), value, 1)
-		}
-	}
-
-	if nil != queryParams && 0 < len(queryParams) {
-		url = fmt.Sprintf("%s%s", url, buildQueryParamString(queryParams))
-	}
-
-	if debug {
-		log.Printf("Build request URL: %s", url)
-	}
-
-	return url
 }
 
 func buildQueryParamString(queryParams map[string]string) string {

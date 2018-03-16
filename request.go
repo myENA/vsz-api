@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path"
+	"strings"
 	"sync/atomic"
 )
 
@@ -34,6 +36,29 @@ func (c *Client) newRequest(ctx *UserContext, method, uri string) *request {
 	return r
 }
 
+func (r *request) compileURL() string {
+	url := fmt.Sprintf(
+		"%s://%s",
+		r.config.Scheme,
+		path.Join(r.config.Address, r.config.PathPrefix, r.uri))
+
+	if nil == r.pathParameters && nil == r.queryParameters {
+		return url
+	}
+
+	if len(r.pathParameters) > 0 {
+		for name, value := range r.pathParameters {
+			url = strings.Replace(url, fmt.Sprintf("{%s}", name), value, 1)
+		}
+	}
+
+	if len(r.queryParameters) > 0 {
+		url = fmt.Sprintf("%s%s", url, buildQueryParamString(r.queryParameters))
+	}
+
+	return url
+}
+
 // toHTTP will attempt to construct an executable http.request
 func (r *request) toHTTP() (*http.Request, error) {
 	var err error
@@ -41,11 +66,11 @@ func (r *request) toHTTP() (*http.Request, error) {
 
 	body := r.body
 	method := r.method
-	compiledURL := compileRequestURLString(r.config.Scheme, r.config.Address, r.config.PathPrefix, r.uri, r.pathParameters, r.queryParameters)
+	compiledURL := r.compileURL()
 
 	// if debug mode is enabled, prepare a big'ol log statement.
 	if debug {
-		logMsg := fmt.Sprintf("Preparing request \"%s %s\"", method, compiledURL)
+		logMsg := fmt.Sprintf("[request-%d] Preparing request \"%s %s\"", r.id, method, compiledURL)
 
 		if nil == body {
 			logMsg = fmt.Sprintf("%s without body", logMsg)
@@ -82,5 +107,5 @@ func (r *request) toHTTP() (*http.Request, error) {
 
 	httpRequest.Header.Set("Accept", "application/json")
 
-	return httpRequest.WithContext(r.ctx), nil
+	return httpRequest, nil
 }

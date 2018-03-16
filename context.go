@@ -157,7 +157,7 @@ func (c *UserContext) RefreshCookie(client *Client, cas CookieCAS) (CookieCAS, e
 		c.cookieMu.Unlock()
 		return CookieCAS(ncas), err
 	}
-	cookie := TryExtractSessionCookie(resp)
+	cookie := tryExtractSessionCookie(request, resp)
 	if cookie == nil {
 		c.cookie = nil
 		ncas := atomic.AddUint64(&c.cookieCAS, 1)
