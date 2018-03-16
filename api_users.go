@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type UsersAPI struct {
@@ -26,21 +27,24 @@ type (
 // ScgUserDeleteScgUserDelete1: Delete multiple SCG user
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ScgUserDeleteScgUserDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (u *UsersAPI) ScgUserDeleteScgUserDelete1(ctx *UserContext, requestBody *ScgUserDeleteScgUserDelete1Request) (*http.Response, []byte, error) {
+func (u *UsersAPI) ScgUserDeleteScgUserDelete1(ctx context.Context, requestBody *ScgUserDeleteScgUserDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "DELETE", "/v5_0/users")
-	request.body = requestBody
-	request.authenticated = true
-	return u.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/users", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return u.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -72,22 +76,25 @@ type (
 // ScgUserAddScgUserPost: Add SCG user
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ScgUserAddScgUserPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserAddScgUserPost200Response
 // - error: Error seen or nil if none
-func (u *UsersAPI) ScgUserAddScgUserPost(ctx *UserContext, requestBody *ScgUserAddScgUserPostRequest) (*http.Response, *ScgUserAddScgUserPost200Response, error) {
+func (u *UsersAPI) ScgUserAddScgUserPost(ctx context.Context, requestBody *ScgUserAddScgUserPostRequest) (*http.Response, *ScgUserAddScgUserPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "POST", "/v5_0/users")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/users", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ScgUserAddScgUserPost200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -160,22 +167,25 @@ type (
 // ScgUserQueryScgUsersPost: Query SCG users
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ScgUserQueryScgUsersPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserQueryScgUsersPost200Response
 // - error: Error seen or nil if none
-func (u *UsersAPI) ScgUserQueryScgUsersPost(ctx *UserContext, requestBody *ScgUserQueryScgUsersPostRequest) (*http.Response, *ScgUserQueryScgUsersPost200Response, error) {
+func (u *UsersAPI) ScgUserQueryScgUsersPost(ctx context.Context, requestBody *ScgUserQueryScgUsersPostRequest) (*http.Response, *ScgUserQueryScgUsersPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "POST", "/v5_0/users/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/users/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ScgUserQueryScgUsersPost200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -188,14 +198,14 @@ type (
 // ScgUserDeleteScgUserDelete: Delete SCG user
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userId (UUIDv4)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserDeleteScgUserDelete200Response
 // - error: Error seen or nil if none
-func (u *UsersAPI) ScgUserDeleteScgUserDelete(ctx *UserContext, userId string) (*http.Response, *ScgUserDeleteScgUserDelete200Response, error) {
+func (u *UsersAPI) ScgUserDeleteScgUserDelete(ctx context.Context, userId string) (*http.Response, *ScgUserDeleteScgUserDelete200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -204,13 +214,10 @@ func (u *UsersAPI) ScgUserDeleteScgUserDelete(ctx *UserContext, userId string) (
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "DELETE", "/v5_0/users/{userId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userId": userId,
-	}
+	request := NewRequest("DELETE", "/v5_0/users/{userId}", true)
+	request.SetPathParameter("userId", userId)
 	out := &ScgUserDeleteScgUserDelete200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -239,14 +246,14 @@ type (
 // ScgUserGetScgUserGet: Get SCG user
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userId (UUIDv4)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGetScgUserGet200Response
 // - error: Error seen or nil if none
-func (u *UsersAPI) ScgUserGetScgUserGet(ctx *UserContext, userId string) (*http.Response, *ScgUserGetScgUserGet200Response, error) {
+func (u *UsersAPI) ScgUserGetScgUserGet(ctx context.Context, userId string) (*http.Response, *ScgUserGetScgUserGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -255,13 +262,10 @@ func (u *UsersAPI) ScgUserGetScgUserGet(ctx *UserContext, userId string) (*http.
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/users/{userId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userId": userId,
-	}
+	request := NewRequest("GET", "/v5_0/users/{userId}", true)
+	request.SetPathParameter("userId", userId)
 	out := &ScgUserGetScgUserGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -294,7 +298,7 @@ type (
 // ScgUserUpdateScgUserPatch: Update SCG user
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userId (UUIDv4)
 // - requestBody: *ScgUserUpdateScgUserPatchRequest
 //
@@ -302,7 +306,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserUpdateScgUserPatch200Response
 // - error: Error seen or nil if none
-func (u *UsersAPI) ScgUserUpdateScgUserPatch(ctx *UserContext, userId string, requestBody *ScgUserUpdateScgUserPatchRequest) (*http.Response, *ScgUserUpdateScgUserPatch200Response, error) {
+func (u *UsersAPI) ScgUserUpdateScgUserPatch(ctx context.Context, userId string, requestBody *ScgUserUpdateScgUserPatchRequest) (*http.Response, *ScgUserUpdateScgUserPatch200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -311,13 +315,13 @@ func (u *UsersAPI) ScgUserUpdateScgUserPatch(ctx *UserContext, userId string, re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "PATCH", "/v5_0/users/{userId}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userId": userId,
+	request := NewRequest("PATCH", "/v5_0/users/{userId}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("userId", userId)
 	out := &ScgUserUpdateScgUserPatch200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type APRulesAPI struct {
@@ -34,20 +35,19 @@ type (
 // ApRegistrationRulesRetrieveListGet: Use this API command to retrieve a list of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApRegistrationRulesRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesRetrieveListGet(ctx *UserContext) (*http.Response, *ApRegistrationRulesRetrieveListGet200Response, error) {
+func (a *APRulesAPI) ApRegistrationRulesRetrieveListGet(ctx context.Context) (*http.Response, *ApRegistrationRulesRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := a.client.newRequest(ctx, "GET", "/v5_0/apRules")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/apRules", true)
 	out := &ApRegistrationRulesRetrieveListGet200Response{}
-	httpResponse, _, err := a.client.doRequest(request, 200, out)
+	httpResponse, _, err := a.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -91,36 +91,39 @@ type (
 // ApRegistrationRulesCreatePost: Use this API command to create AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ApRegistrationRulesCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApRegistrationRulesCreatePost201Response
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesCreatePost(ctx *UserContext, requestBody *ApRegistrationRulesCreatePostRequest) (*http.Response, *ApRegistrationRulesCreatePost201Response, error) {
+func (a *APRulesAPI) ApRegistrationRulesCreatePost(ctx context.Context, requestBody *ApRegistrationRulesCreatePostRequest) (*http.Response, *ApRegistrationRulesCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := a.client.newRequest(ctx, "POST", "/v5_0/apRules")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/apRules", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ApRegistrationRulesCreatePost201Response{}
-	httpResponse, _, err := a.client.doRequest(request, 201, out)
+	httpResponse, _, err := a.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ApRegistrationRulesMovePriorityDownGet: Use this API command to move Priority Down of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesMovePriorityDownGet(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesMovePriorityDownGet(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -129,25 +132,22 @@ func (a *APRulesAPI) ApRegistrationRulesMovePriorityDownGet(ctx *UserContext, id
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "GET", "/v5_0/apRules/priorityDown/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return a.client.doRequest(request, 204, nil)
+	request := NewRequest("GET", "/v5_0/apRules/priorityDown/{id}", true)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApRegistrationRulesMovePriorityUpGet: Use this API command to move Priority Up of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesMovePriorityUpGet(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesMovePriorityUpGet(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -156,25 +156,22 @@ func (a *APRulesAPI) ApRegistrationRulesMovePriorityUpGet(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "GET", "/v5_0/apRules/priorityUp/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return a.client.doRequest(request, 204, nil)
+	request := NewRequest("GET", "/v5_0/apRules/priorityUp/{id}", true)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApRegistrationRulesDeleteDelete: Use this API command to delete AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -183,12 +180,9 @@ func (a *APRulesAPI) ApRegistrationRulesDeleteDelete(ctx *UserContext, id string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "DELETE", "/v5_0/apRules/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return a.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/apRules/{id}", true)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -229,14 +223,14 @@ type (
 // ApRegistrationRulesRetrieveGet: Use this API command to retrieve AP Registration Rules profile by ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApRegistrationRulesRetrieveGet200Response
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesRetrieveGet(ctx *UserContext, id string) (*http.Response, *ApRegistrationRulesRetrieveGet200Response, error) {
+func (a *APRulesAPI) ApRegistrationRulesRetrieveGet(ctx context.Context, id string) (*http.Response, *ApRegistrationRulesRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -245,13 +239,10 @@ func (a *APRulesAPI) ApRegistrationRulesRetrieveGet(ctx *UserContext, id string)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "GET", "/v5_0/apRules/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/apRules/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &ApRegistrationRulesRetrieveGet200Response{}
-	httpResponse, _, err := a.client.doRequest(request, 200, out)
+	httpResponse, _, err := a.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -266,7 +257,7 @@ type (
 // ApRegistrationRulesModifyBasicPatch: Use this API command to modify the basic information of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 // - requestBody: *ApRegistrationRulesModifyBasicPatchRequest
 //
@@ -274,7 +265,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesModifyBasicPatch(ctx *UserContext, id string, requestBody *ApRegistrationRulesModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesModifyBasicPatch(ctx context.Context, id string, requestBody *ApRegistrationRulesModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -283,13 +274,13 @@ func (a *APRulesAPI) ApRegistrationRulesModifyBasicPatch(ctx *UserContext, id st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PATCH", "/v5_0/apRules/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/apRules/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return a.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -303,7 +294,7 @@ type (
 // ApRegistrationRulesModifyGpscoordinatesPatch: Use this API command to modify GPSCoordinates of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 // - requestBody: *ApRegistrationRulesModifyGpscoordinatesPatchRequest
 //
@@ -311,7 +302,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesModifyGpscoordinatesPatch(ctx *UserContext, id string, requestBody *ApRegistrationRulesModifyGpscoordinatesPatchRequest) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesModifyGpscoordinatesPatch(ctx context.Context, id string, requestBody *ApRegistrationRulesModifyGpscoordinatesPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -320,13 +311,13 @@ func (a *APRulesAPI) ApRegistrationRulesModifyGpscoordinatesPatch(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PATCH", "/v5_0/apRules/{id}/gpsCoordinates")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/apRules/{id}/gpsCoordinates", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return a.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -339,7 +330,7 @@ type (
 // ApRegistrationRulesModifyIpAddressRangePatch: Use this API command to modify IP Address Range of a AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 // - requestBody: *ApRegistrationRulesModifyIpAddressRangePatchRequest
 //
@@ -347,7 +338,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesModifyIpAddressRangePatch(ctx *UserContext, id string, requestBody *ApRegistrationRulesModifyIpAddressRangePatchRequest) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesModifyIpAddressRangePatch(ctx context.Context, id string, requestBody *ApRegistrationRulesModifyIpAddressRangePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -356,13 +347,13 @@ func (a *APRulesAPI) ApRegistrationRulesModifyIpAddressRangePatch(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PATCH", "/v5_0/apRules/{id}/ipAddressRange")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/apRules/{id}/ipAddressRange", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return a.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -375,7 +366,7 @@ type (
 // ApRegistrationRulesModifyMobilityzonePatch: Use this API command to modify  mobilityZone of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 // - requestBody: *ApRegistrationRulesModifyMobilityzonePatchRequest
 //
@@ -383,7 +374,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesModifyMobilityzonePatch(ctx *UserContext, id string, requestBody *ApRegistrationRulesModifyMobilityzonePatchRequest) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesModifyMobilityzonePatch(ctx context.Context, id string, requestBody *ApRegistrationRulesModifyMobilityzonePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -392,13 +383,13 @@ func (a *APRulesAPI) ApRegistrationRulesModifyMobilityzonePatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PATCH", "/v5_0/apRules/{id}/mobilityZone")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/apRules/{id}/mobilityZone", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return a.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -411,7 +402,7 @@ type (
 // ApRegistrationRulesModifySubnetPatch: Use this API command to modify subnet of AP Registration Rules profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): AP Rule ID
 // - requestBody: *ApRegistrationRulesModifySubnetPatchRequest
 //
@@ -419,7 +410,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *APRulesAPI) ApRegistrationRulesModifySubnetPatch(ctx *UserContext, id string, requestBody *ApRegistrationRulesModifySubnetPatchRequest) (*http.Response, []byte, error) {
+func (a *APRulesAPI) ApRegistrationRulesModifySubnetPatch(ctx context.Context, id string, requestBody *ApRegistrationRulesModifySubnetPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -428,11 +419,11 @@ func (a *APRulesAPI) ApRegistrationRulesModifySubnetPatch(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PATCH", "/v5_0/apRules/{id}/subnet")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/apRules/{id}/subnet", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return a.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return a.client.Ensure(ctx, request, 204, nil)
 }

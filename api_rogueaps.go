@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type RogueAPsAPI struct {
@@ -43,7 +44,7 @@ type (
 // AccessPointOperationalRetrieveRogueApListGet: Use this API command to retrieve a list of rogue access points.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -55,7 +56,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccessPointOperationalRetrieveRogueApListGet200Response
 // - error: Error seen or nil if none
-func (r *RogueAPsAPI) AccessPointOperationalRetrieveRogueApListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveRogueApListGet200Response, error) {
+func (r *RogueAPsAPI) AccessPointOperationalRetrieveRogueApListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *AccessPointOperationalRetrieveRogueApListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -92,15 +93,12 @@ func (r *RogueAPsAPI) AccessPointOperationalRetrieveRogueApListGet(ctx *UserCont
 			return nil, nil, fmt.Errorf("parameter \"rogueMac\" failed validation check: %s", err)
 		}
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rogueaps")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-		"type":     xtype,
-		"rogueMac": rogueMac,
-	}
+	request := NewRequest("GET", "/v5_0/rogueaps", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("type", xtype)
+	request.SetQueryParameter("rogueMac", rogueMac)
 	out := &AccessPointOperationalRetrieveRogueApListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }

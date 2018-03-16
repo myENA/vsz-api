@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type MapsAPI struct {
@@ -66,7 +67,7 @@ type (
 // IndoormapGetIndoorMapListGet: Use this API command to get indoor map list.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - groupId (string)
 // - groupType (string)
 //
@@ -74,7 +75,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapGetIndoorMapListGet200Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapGetIndoorMapListGet(ctx *UserContext, groupId string, groupType string) (*http.Response, *IndoormapGetIndoorMapListGet200Response, error) {
+func (m *MapsAPI) IndoormapGetIndoorMapListGet(ctx context.Context, groupId string, groupType string) (*http.Response, *IndoormapGetIndoorMapListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -87,14 +88,11 @@ func (m *MapsAPI) IndoormapGetIndoorMapListGet(ctx *UserContext, groupId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"groupType\" failed validation check: %s", err)
 	}
-	request := m.client.newRequest(ctx, "GET", "/v5_0/maps")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"groupId":   groupId,
-		"groupType": groupType,
-	}
+	request := NewRequest("GET", "/v5_0/maps", true)
+	request.SetQueryParameter("groupId", groupId)
+	request.SetQueryParameter("groupType", groupType)
 	out := &IndoormapGetIndoorMapListGet200Response{}
-	httpResponse, _, err := m.client.doRequest(request, 200, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -145,22 +143,25 @@ type (
 // IndoormapCreateIndoormapPost: Use this API command to create indoorMap
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IndoormapCreateIndoormapPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapCreateIndoormapPost201Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapCreateIndoormapPost(ctx *UserContext, requestBody *IndoormapCreateIndoormapPostRequest) (*http.Response, *IndoormapCreateIndoormapPost201Response, error) {
+func (m *MapsAPI) IndoormapCreateIndoormapPost(ctx context.Context, requestBody *IndoormapCreateIndoormapPostRequest) (*http.Response, *IndoormapCreateIndoormapPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := m.client.newRequest(ctx, "POST", "/v5_0/maps")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/maps", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IndoormapCreateIndoormapPost201Response{}
-	httpResponse, _, err := m.client.doRequest(request, 201, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -249,22 +250,25 @@ type (
 // IndoormapQueryIndoormapPost: Use this API command to query indoorMap
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IndoormapQueryIndoormapPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapQueryIndoormapPost200Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapQueryIndoormapPost(ctx *UserContext, requestBody *IndoormapQueryIndoormapPostRequest) (*http.Response, *IndoormapQueryIndoormapPost200Response, error) {
+func (m *MapsAPI) IndoormapQueryIndoormapPost(ctx context.Context, requestBody *IndoormapQueryIndoormapPostRequest) (*http.Response, *IndoormapQueryIndoormapPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := m.client.newRequest(ctx, "POST", "/v5_0/maps/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/maps/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IndoormapQueryIndoormapPost200Response{}
-	httpResponse, _, err := m.client.doRequest(request, 200, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -278,14 +282,14 @@ type (
 // IndoormapDeleteIndoormapDelete: Use this API command to delete indoor map.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - indoorMapId (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapDeleteIndoormapDelete204Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapDeleteIndoormapDelete(ctx *UserContext, indoorMapId string) (*http.Response, *IndoormapDeleteIndoormapDelete204Response, error) {
+func (m *MapsAPI) IndoormapDeleteIndoormapDelete(ctx context.Context, indoorMapId string) (*http.Response, *IndoormapDeleteIndoormapDelete204Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -294,13 +298,10 @@ func (m *MapsAPI) IndoormapDeleteIndoormapDelete(ctx *UserContext, indoorMapId s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"indoorMapId\" failed validation check: %s", err)
 	}
-	request := m.client.newRequest(ctx, "DELETE", "/v5_0/maps/{indoorMapId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"indoorMapId": indoorMapId,
-	}
+	request := NewRequest("DELETE", "/v5_0/maps/{indoorMapId}", true)
+	request.SetPathParameter("indoorMapId", indoorMapId)
 	out := &IndoormapDeleteIndoormapDelete204Response{}
-	httpResponse, _, err := m.client.doRequest(request, 204, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 204, out)
 	return httpResponse, out, err
 }
 
@@ -346,14 +347,14 @@ type (
 // IndoormapGetIndoormapGet: Use this API command to get indoor maps.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - indoorMapId (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapGetIndoormapGet200Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapGetIndoormapGet(ctx *UserContext, indoorMapId string) (*http.Response, *IndoormapGetIndoormapGet200Response, error) {
+func (m *MapsAPI) IndoormapGetIndoormapGet(ctx context.Context, indoorMapId string) (*http.Response, *IndoormapGetIndoormapGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -362,13 +363,10 @@ func (m *MapsAPI) IndoormapGetIndoormapGet(ctx *UserContext, indoorMapId string)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"indoorMapId\" failed validation check: %s", err)
 	}
-	request := m.client.newRequest(ctx, "GET", "/v5_0/maps/{indoorMapId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"indoorMapId": indoorMapId,
-	}
+	request := NewRequest("GET", "/v5_0/maps/{indoorMapId}", true)
+	request.SetPathParameter("indoorMapId", indoorMapId)
 	out := &IndoormapGetIndoormapGet200Response{}
-	httpResponse, _, err := m.client.doRequest(request, 200, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -399,7 +397,7 @@ type (
 // IndoormapUpdateIndoorMapPatch: Use this API command to update specific indoor map.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - indoorMapId (string)
 // - requestBody: *IndoormapUpdateIndoorMapPatchRequest
 //
@@ -407,7 +405,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapUpdateIndoorMapPatch204Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapUpdateIndoorMapPatch(ctx *UserContext, indoorMapId string, requestBody *IndoormapUpdateIndoorMapPatchRequest) (*http.Response, *IndoormapUpdateIndoorMapPatch204Response, error) {
+func (m *MapsAPI) IndoormapUpdateIndoorMapPatch(ctx context.Context, indoorMapId string, requestBody *IndoormapUpdateIndoorMapPatchRequest) (*http.Response, *IndoormapUpdateIndoorMapPatch204Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -416,14 +414,14 @@ func (m *MapsAPI) IndoormapUpdateIndoorMapPatch(ctx *UserContext, indoorMapId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"indoorMapId\" failed validation check: %s", err)
 	}
-	request := m.client.newRequest(ctx, "PATCH", "/v5_0/maps/{indoorMapId}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"indoorMapId": indoorMapId,
+	request := NewRequest("PATCH", "/v5_0/maps/{indoorMapId}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("indoorMapId", indoorMapId)
 	out := &IndoormapUpdateIndoorMapPatch204Response{}
-	httpResponse, _, err := m.client.doRequest(request, 204, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 204, out)
 	return httpResponse, out, err
 }
 
@@ -449,7 +447,7 @@ type (
 // IndoormapPutApsInIndoorMapPut: Use this API command to put Aps in indoor map.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - indoorMapId (string)
 // - requestBody: *IndoormapPutApsInIndoorMapPutRequestSlice
 //
@@ -457,7 +455,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *IndoormapPutApsInIndoorMapPut204Response
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapPutApsInIndoorMapPut(ctx *UserContext, indoorMapId string, requestBody IndoormapPutApsInIndoorMapPutRequestSlice) (*http.Response, *IndoormapPutApsInIndoorMapPut204Response, error) {
+func (m *MapsAPI) IndoormapPutApsInIndoorMapPut(ctx context.Context, indoorMapId string, requestBody IndoormapPutApsInIndoorMapPutRequestSlice) (*http.Response, *IndoormapPutApsInIndoorMapPut204Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -466,14 +464,14 @@ func (m *MapsAPI) IndoormapPutApsInIndoorMapPut(ctx *UserContext, indoorMapId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"indoorMapId\" failed validation check: %s", err)
 	}
-	request := m.client.newRequest(ctx, "PUT", "/v5_0/maps/{indoorMapId}/aps")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"indoorMapId": indoorMapId,
+	request := NewRequest("PUT", "/v5_0/maps/{indoorMapId}/aps", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("indoorMapId", indoorMapId)
 	out := &IndoormapPutApsInIndoorMapPut204Response{}
-	httpResponse, _, err := m.client.doRequest(request, 204, out)
+	httpResponse, _, err := m.client.Ensure(ctx, request, 204, out)
 	return httpResponse, out, err
 }
 
@@ -499,7 +497,7 @@ type (
 // IndoormapUpdateIndoorMapPatch1: Use this API command to update the scale of specific indoor map.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - indoorMapId (string)
 // - requestBody: *IndoormapUpdateIndoorMapPatch1Request
 //
@@ -507,7 +505,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (m *MapsAPI) IndoormapUpdateIndoorMapPatch1(ctx *UserContext, indoorMapId string, requestBody *IndoormapUpdateIndoorMapPatch1Request) (*http.Response, []byte, error) {
+func (m *MapsAPI) IndoormapUpdateIndoorMapPatch1(ctx context.Context, indoorMapId string, requestBody *IndoormapUpdateIndoorMapPatch1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -516,11 +514,11 @@ func (m *MapsAPI) IndoormapUpdateIndoorMapPatch1(ctx *UserContext, indoorMapId s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"indoorMapId\" failed validation check: %s", err)
 	}
-	request := m.client.newRequest(ctx, "PATCH", "/v5_0/maps/{indoorMapId}/scale")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"indoorMapId": indoorMapId,
+	request := NewRequest("PATCH", "/v5_0/maps/{indoorMapId}/scale", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return m.client.doRequest(request, 204, nil)
+	request.SetPathParameter("indoorMapId", indoorMapId)
+	return m.client.Ensure(ctx, request, 204, nil)
 }

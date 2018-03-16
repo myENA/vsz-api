@@ -1,12 +1,13 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type GlobalSettingsAPI struct {
@@ -32,20 +33,19 @@ type (
 // GlobalReferenceGetFriendlyNameOfUsableLanguageGet: Use this API command to get friendly name of usable language for profile: Hotspot2.0 Identity Provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *GlobalReferenceGetFriendlyNameOfUsableLanguageGet200Response
 // - error: Error seen or nil if none
-func (g *GlobalSettingsAPI) GlobalReferenceGetFriendlyNameOfUsableLanguageGet(ctx *UserContext) (*http.Response, *GlobalReferenceGetFriendlyNameOfUsableLanguageGet200Response, error) {
+func (g *GlobalSettingsAPI) GlobalReferenceGetFriendlyNameOfUsableLanguageGet(ctx context.Context) (*http.Response, *GlobalReferenceGetFriendlyNameOfUsableLanguageGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := g.client.newRequest(ctx, "GET", "/v5_0/globalSettings/friendlyNameLang")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/globalSettings/friendlyNameLang", true)
 	out := &GlobalReferenceGetFriendlyNameOfUsableLanguageGet200Response{}
-	httpResponse, _, err := g.client.doRequest(request, 200, out)
+	httpResponse, _, err := g.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -69,20 +69,19 @@ type (
 // GlobalReferenceGetFriendlyNameOfUsableLanguageGet1: Use this API command to get friendly name of usable language for profile: Guest Access (Language in General Options), Web Auth (Language in General Options).
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *GlobalReferenceGetFriendlyNameOfUsableLanguageGet1200Response
 // - error: Error seen or nil if none
-func (g *GlobalSettingsAPI) GlobalReferenceGetFriendlyNameOfUsableLanguageGet1(ctx *UserContext) (*http.Response, *GlobalReferenceGetFriendlyNameOfUsableLanguageGet1200Response, error) {
+func (g *GlobalSettingsAPI) GlobalReferenceGetFriendlyNameOfUsableLanguageGet1(ctx context.Context) (*http.Response, *GlobalReferenceGetFriendlyNameOfUsableLanguageGet1200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := g.client.newRequest(ctx, "GET", "/v5_0/globalSettings/portalLang")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/globalSettings/portalLang", true)
 	out := &GlobalReferenceGetFriendlyNameOfUsableLanguageGet1200Response{}
-	httpResponse, _, err := g.client.doRequest(request, 200, out)
+	httpResponse, _, err := g.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -97,20 +96,19 @@ type (
 // UploadStatisticsToFtpRetrieveGet: Use this API command to retrieve the uploading statistical data to FTP server setting.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *UploadStatisticsToFtpRetrieveGet200Response
 // - error: Error seen or nil if none
-func (g *GlobalSettingsAPI) UploadStatisticsToFtpRetrieveGet(ctx *UserContext) (*http.Response, *UploadStatisticsToFtpRetrieveGet200Response, error) {
+func (g *GlobalSettingsAPI) UploadStatisticsToFtpRetrieveGet(ctx context.Context) (*http.Response, *UploadStatisticsToFtpRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := g.client.newRequest(ctx, "GET", "/v5_0/globalSettings/statsFtp")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/globalSettings/statsFtp", true)
 	out := &UploadStatisticsToFtpRetrieveGet200Response{}
-	httpResponse, _, err := g.client.doRequest(request, 200, out)
+	httpResponse, _, err := g.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -125,19 +123,22 @@ type (
 // UploadStatisticsToFtpModifyBasicPatch: Use this API command to modify the setting of uploading statistical data to FTP server.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *UploadStatisticsToFtpModifyBasicPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (g *GlobalSettingsAPI) UploadStatisticsToFtpModifyBasicPatch(ctx *UserContext, requestBody *UploadStatisticsToFtpModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (g *GlobalSettingsAPI) UploadStatisticsToFtpModifyBasicPatch(ctx context.Context, requestBody *UploadStatisticsToFtpModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := g.client.newRequest(ctx, "PATCH", "/v5_0/globalSettings/statsFtp")
-	request.body = requestBody
-	request.authenticated = true
-	return g.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/globalSettings/statsFtp", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return g.client.Ensure(ctx, request, 204, nil)
 }

@@ -3,31 +3,31 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
-	"sync"
 	"time"
 )
 
 const (
-	DefaultScheme         = "https"
-	DefaultPathPrefix     = "api/public"
-	DefaultRequestTimeout = 5 * time.Second
+	DefaultScheme     = "https"
+	DefaultPathPrefix = "api/public"
 
 	SessionCookieName = "JSESSIONID"
 )
 
 type Config struct {
-	Address string // REQUIRED address of your VSZ
+	Address       string        // REQUIRED address of your VSZ, including port
+	Authenticator Authenticator // REQUIRED authentication decorator to use with this client
 
 	Scheme     string // OPTIONAL defaults to https
 	PathPrefix string // OPTIONAL defaults to "api/public"
 }
 
-// DefaultConfig creates a new Config object with a non-pooled client
+// DefaultConfig creates a new ClientConfig object with a non-pooled client
 func DefaultConfig(address string) *Config {
 	return defaultConfig(address)
 }
@@ -44,13 +44,13 @@ type Client struct {
 	*bridge
 	config *Config
 	client *http.Client
-
-	cookie    *http.Cookie
-	cookieMu  sync.RWMutex
-	cookieCAS uint64
+	auth   Authenticator
 }
 
-func NewClient(conf *Config, client *http.Client) *Client {
+func NewClient(conf *Config, authenticator Authenticator, client *http.Client) (*Client, error) {
+	if authenticator == nil {
+		return nil, errors.New("authenticator cannot be nil")
+	}
 	def := defaultConfig(conf.Address)
 	if conf != nil {
 		if conf.Scheme != "" {
@@ -82,163 +82,50 @@ func NewClient(conf *Config, client *http.Client) *Client {
 	c := &Client{
 		config: conf,
 		client: client,
+		auth:   authenticator,
 	}
 
 	c.bridge = newBridge(c)
 
-	return c
+	return c, nil
 }
 
-func (c *Client) Config() Config {
+func (c *Client) ClientConfig() Config {
 	return *c.config
 }
 
-// doTest will attempt to execute the http request, testing the response to determine if we saw a malformation
-func (c *Client) doTest(req *http.Request) (*http.Response, bool, error) {
-	resp, err := c.client.Do(req)
-	return resp,
-		resp == nil && err != nil && (err == context.DeadlineExceeded || strings.HasPrefix(err.Error(), "malformed ")),
-		err
-}
-
-func (c *Client) doTry(request *request, tries int) (*http.Response, CookieCAS, error) {
-	var httpRequest *http.Request
+func (c *Client) Do(ctx context.Context, request *Request) (*http.Response, error) {
 	var httpResponse *http.Response
-	var cookie *http.Cookie
-	var malformed bool
-	var cas CookieCAS
-	var ctx context.Context
-	var cancel context.CancelFunc
+	var ctxTTL time.Duration
 	var err error
-
-	if debug {
-		log.Printf("[request-%d] Attempt %d", request.id, tries+1)
+	if ctxTime, ok := ctx.Deadline(); ok && ctx.Err() == nil {
+		ctxTTL = ctxTime.Sub(time.Now())
 	}
-
-	if httpRequest, err = request.toHTTP(); err != nil {
-		if debug {
-			log.Printf("[request-%d] Failed to build *http.Request: %s", request.id, err)
-		}
-		return nil, cas, err
-	}
-
-	// if this api requires an active auth session, try to locate cookie
-	if request.authenticated {
-		if debug {
-			log.Printf("[request-%d] Auth required", request.id)
-		}
-		if cookie, cas = request.ctx.Cookie(); cookie == nil {
-			if debug {
-				log.Printf("[request-%d] Cookie not found, attempting to refresh...", request.id)
-			}
-			// if cookie is not set, attempt to refresh
-			if _, err = request.ctx.RefreshCookie(c, cas); err != nil {
-				if debug {
-					log.Printf("[request-%d] Cookie unable to be refreshed: %s", request.id, err)
-				}
-				// if refresh fails, bail out
-				return nil, cas, err
-			}
-			// attempt to locate cookie one more time after refresh
-			if cookie, cas = request.ctx.Cookie(); cookie == nil {
-				if debug {
-					log.Printf("[request-%d] Unable to refresh cookie")
-				}
-				// if cookie still nil, bail out
-				return nil, cas, fmt.Errorf("unable to locate cookie for user %s", request.ctx.Username())
-			} else if debug {
-				log.Printf("[request-%d] Cookie refreshed", request.id)
-			}
-		}
-		if debug {
-			log.Printf("[request-%d] Adding session cookie to header...", request.id)
-		}
-		// otherwise add cookie to request
-		httpRequest.AddCookie(cookie)
-	}
-
-	if debug {
-		log.Printf("[request-%d] Creating request context....", request.id)
-	}
-	ctx, cancel = request.ctx.RequestContext()
-	defer cancel()
-	httpRequest = httpRequest.WithContext(ctx)
-
-	if debug {
-		log.Printf("[request-%d] Executing...", request.id)
-	}
-	if httpResponse, malformed, err = c.doTest(httpRequest); malformed {
-		if tries < 1 {
-			log.Printf("[request-%d] ERROR: Saw \"%s\", which may indicate a malformed response.  Trying again...", request.id, err)
-			return c.doTry(request, tries+1)
-		}
-		log.Printf("[request-%d] ERROR: Saw \"%s\", which may indicate a malformed response.  We have tried %d times, will not try again", request.id, err, tries)
-	}
-
-	return httpResponse, cas, err
-}
-
-// doRequest will attempt to execute a VSZ API request.
-//
-// Responds with:
-// - http response (with closed body) or nil on error
-// - body bytes or nil on error
-// - any error
-func (c *Client) doRequest(request *request, successCode int, out interface{}) (*http.Response, []byte, error) {
-	var httpResponse *http.Response
-	var cookie *http.Cookie
-	var cas CookieCAS
-	var buff []byte
-	var err error
-
-	if httpResponse, cas, err = c.doTry(request, 0); err != nil {
+	if httpResponse, _, err = c.tryDo(ctx, ctxTTL, request, 0); err != nil {
 		if httpResponse != nil {
 			httpResponse.Body.Close()
 		}
 		if debug {
 			log.Printf("[request-%d] Request failed: %s", request.id, err)
 		}
-		return nil, nil, err
+		return nil, err
 	}
-
 	if debug {
 		log.Printf("[request-%d] Received \"%s\"", request.id, httpResponse.Status)
 	}
+	return httpResponse, err
+}
 
-	// if this endpoint requires authentication and received a 401, try to refresh cookie once.
-	if request.authenticated && httpResponse.StatusCode == 401 {
-		if debug {
-			log.Printf("[request-%d] Saw 401 response, will attempt to refresh cookie...", request.id)
-		}
-		// close previous attempt's body
-		httpResponse.Body.Close()
-		if _, err = request.ctx.RefreshCookie(c, cas); err != nil {
-			log.Printf("[request-%d] Failed to refresh cookie, bailing out: %s", request.id, err)
-			// if fail, bail out
-			return nil, nil, err
-		}
-		// try one more time to locate, this time we don't care about cas as this is the last time we'll try in this routine.
-		if cookie, _ = request.ctx.Cookie(); cookie == nil {
-			if debug {
-				log.Printf("[request-%d] Unable to refresh cookie, bailing out", request.id)
-			}
-			// if cookie still nil, bail out
-			return nil, nil, fmt.Errorf("unable to refresh cookie for user %s", request.ctx.Username())
-		} else if debug {
-			log.Printf("[request-%d] Cookie refreshed successfully, attempting again...", request.id)
-		}
-		// try once final time to execute the request...
-		if httpResponse, _, err = c.doTry(request, 0); err != nil {
-			if httpResponse != nil {
-				httpResponse.Body.Close()
-			}
-			if debug {
-				log.Printf("[request-%d] 2nd request attempt failed, bailing out: %s", request.id, err)
-			}
-			return nil, nil, err
-		} else if debug {
-			log.Printf("[request-%d] 2nd request attempt received \"%s\"", request.id, httpResponse.Status)
-		}
+// Ensure will attempt to execute the request, further attempting to unmarshal the response into a pointer provided
+// to "out" given that the response status code matches that passed as "successCode". Failing that, this method
+// will attempt to unmarshal the seen response into an Error struct
+func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, out interface{}) (*http.Response, []byte, error) {
+	var httpResponse *http.Response
+	var buff []byte
+	var err error
+
+	if httpResponse, err = c.Do(ctx, request); err != nil {
+		return nil, nil, err
 	}
 
 	// read everything out of the body and close it.
@@ -301,4 +188,93 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 	}
 
 	return httpResponse, buff, err
+}
+
+// doTest will attempt to execute the http request, testing the response to determine if we saw a malformation
+func (c *Client) doTest(req *http.Request) (*http.Response, bool, error) {
+	resp, err := c.client.Do(req)
+	return resp,
+		resp == nil && err != nil && (err == context.DeadlineExceeded || strings.HasPrefix(err.Error(), "malformed ")),
+		err
+}
+
+func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Request, tries int) (*http.Response, AuthCAS, error) {
+	var httpRequest *http.Request
+	var httpResponse *http.Response
+	var malformed bool
+	var cas AuthCAS
+	var cancel context.CancelFunc
+	var err error
+
+	// TODO: this is pretty inefficient, think of something better.
+	defer func() {
+		if cancel != nil {
+			cancel()
+		}
+	}()
+
+	if debug {
+		log.Printf("[request-%d] Attempt %d", request.id, tries+1)
+	}
+
+	if ctx == nil {
+		if ctxTTL == 0 {
+			log.Printf("[request-%d] WARNING: Provided context had infinite TTL, using infinite TTL for retry attempt...", request.id)
+			ctx = context.Background()
+		} else {
+			if debug {
+				log.Printf("[request-%d] Using %s ttl on retry attempt", request.id, ctxTTL)
+			}
+			ctx, cancel = context.WithTimeout(context.Background(), ctxTTL)
+		}
+	}
+
+	if httpRequest, err = request.toHTTP(ctx, c.config.Scheme, c.config.Address, c.config.PathPrefix); err != nil {
+		if debug {
+			log.Printf("[request-%d] Failed to build *http.Request: %s", request.id, err)
+		}
+		return nil, cas, err
+	}
+
+	// if this api requires an active auth session, try to locate cookie
+	if request.auth {
+		if debug {
+			log.Printf("[request-%d] Auth required, calling Decorate...", request.id)
+		}
+		if cas, err = c.auth.Decorate(httpRequest); err != nil {
+			if debug {
+				log.Printf("[request-%d] Decorate returned error, will try calling refresh: %s", request.id, err)
+			}
+			if cas, err = c.auth.Refresh(c, cas); err != nil {
+				if debug {
+					log.Printf("[request-%d] Refresh returned error, bailing out: %s", request.id, err)
+				}
+				return nil, cas, err
+			} else if cas, err = c.auth.Decorate(httpRequest); err != nil {
+				if debug {
+					log.Printf("[request-%d] Post-refresh Decorate returned error, bailing out: %s", request.id, err)
+				}
+				return nil, cas, err
+			}
+		} else if debug {
+			log.Printf("[request-%d] Decorate succeeded", request.id)
+		}
+	}
+
+	if debug {
+		log.Printf("[request-%d] Creating request context....", request.id)
+	}
+
+	if debug {
+		log.Printf("[request-%d] Executing...", request.id)
+	}
+	if httpResponse, malformed, err = c.doTest(httpRequest); malformed {
+		if tries < 1 {
+			log.Printf("[request-%d] ERROR: Saw \"%s\", which may indicate a malformed response.  Trying again...", request.id, err)
+			return c.tryDo(nil, ctxTTL, request, tries+1)
+		}
+		log.Printf("[request-%d] ERROR: Saw \"%s\", which may indicate a malformed response.  We have tried %d times, will not try again", request.id, err, tries)
+	}
+
+	return httpResponse, cas, err
 }

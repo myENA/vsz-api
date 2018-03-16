@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type ServicesAPI struct {
@@ -26,21 +27,24 @@ type (
 // AccountingServiceDeleteAListOfAccountingServiceDelete: Use this API command to delete a list of accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingServiceDeleteAListOfAccountingServiceDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceDeleteAListOfAccountingServiceDelete(ctx *UserContext, requestBody *AccountingServiceDeleteAListOfAccountingServiceDeleteRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceDeleteAListOfAccountingServiceDelete(ctx context.Context, requestBody *AccountingServiceDeleteAListOfAccountingServiceDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/acct")
-	request.body = requestBody
-	request.authenticated = true
-	return s.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/services/acct", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -183,22 +187,25 @@ type (
 // AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost: Use this API command to retrieve a list of accounting services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost(ctx *UserContext, requestBody *AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequest) (*http.Response, *AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost(ctx context.Context, requestBody *AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequest) (*http.Response, *AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/acct/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/acct/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -263,20 +270,19 @@ type (
 // AccountingServiceRetrieveListRadiusAccountingServiceGet: Use this API command to retrieve a list of RADIUS accounting services.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingServiceRetrieveListRadiusAccountingServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceRetrieveListRadiusAccountingServiceGet(ctx *UserContext) (*http.Response, *AccountingServiceRetrieveListRadiusAccountingServiceGet200Response, error) {
+func (s *ServicesAPI) AccountingServiceRetrieveListRadiusAccountingServiceGet(ctx context.Context) (*http.Response, *AccountingServiceRetrieveListRadiusAccountingServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/acct/radius")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/services/acct/radius", true)
 	out := &AccountingServiceRetrieveListRadiusAccountingServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -328,22 +334,25 @@ type (
 // AccountingServiceCreateRadiusAccountingServicePost: Use this API command to create a new RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingServiceCreateRadiusAccountingServicePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingServiceCreateRadiusAccountingServicePost201Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceCreateRadiusAccountingServicePost(ctx *UserContext, requestBody *AccountingServiceCreateRadiusAccountingServicePostRequest) (*http.Response, *AccountingServiceCreateRadiusAccountingServicePost201Response, error) {
+func (s *ServicesAPI) AccountingServiceCreateRadiusAccountingServicePost(ctx context.Context, requestBody *AccountingServiceCreateRadiusAccountingServicePostRequest) (*http.Response, *AccountingServiceCreateRadiusAccountingServicePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/acct/radius")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/acct/radius", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AccountingServiceCreateRadiusAccountingServicePost201Response{}
-	httpResponse, _, err := s.client.doRequest(request, 201, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -517,36 +526,39 @@ type (
 // AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost: Use this API command to retrieve a list of Radius accounting services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost(ctx *UserContext, requestBody *AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequest) (*http.Response, *AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost(ctx context.Context, requestBody *AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequest) (*http.Response, *AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/acct/radius/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/acct/radius/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AccountingServiceDeleteRadiusAccountingServiceDelete: Use this API command to delete a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceDeleteRadiusAccountingServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceDeleteRadiusAccountingServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -555,12 +567,9 @@ func (s *ServicesAPI) AccountingServiceDeleteRadiusAccountingServiceDelete(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/acct/radius/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/acct/radius/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -614,14 +623,14 @@ type (
 // AccountingServiceRetrieveRadiusAccountingServiceGet: Use this API command to retrieve a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingServiceRetrieveRadiusAccountingServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceRetrieveRadiusAccountingServiceGet(ctx *UserContext, id string) (*http.Response, *AccountingServiceRetrieveRadiusAccountingServiceGet200Response, error) {
+func (s *ServicesAPI) AccountingServiceRetrieveRadiusAccountingServiceGet(ctx context.Context, id string) (*http.Response, *AccountingServiceRetrieveRadiusAccountingServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -630,13 +639,10 @@ func (s *ServicesAPI) AccountingServiceRetrieveRadiusAccountingServiceGet(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/acct/radius/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/acct/radius/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AccountingServiceRetrieveRadiusAccountingServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -654,7 +660,7 @@ type (
 // AccountingServiceModifyRadiusAccountingServicePatch: Use this API command to modify the basic information of a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingServiceModifyRadiusAccountingServicePatchRequest
 //
@@ -662,7 +668,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceModifyRadiusAccountingServicePatch(ctx *UserContext, id string, requestBody *AccountingServiceModifyRadiusAccountingServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceModifyRadiusAccountingServicePatch(ctx context.Context, id string, requestBody *AccountingServiceModifyRadiusAccountingServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -671,13 +677,13 @@ func (s *ServicesAPI) AccountingServiceModifyRadiusAccountingServicePatch(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/acct/radius/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/acct/radius/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -692,7 +698,7 @@ type (
 // AccountingServiceModifyHealthCheckPolicyOfAccountingServicePatch: Use this API command to modify health check policy of a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingServiceModifyHealthCheckPolicyOfAccountingServicePatchRequest
 //
@@ -700,7 +706,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceModifyHealthCheckPolicyOfAccountingServicePatch(ctx *UserContext, id string, requestBody *AccountingServiceModifyHealthCheckPolicyOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceModifyHealthCheckPolicyOfAccountingServicePatch(ctx context.Context, id string, requestBody *AccountingServiceModifyHealthCheckPolicyOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -709,13 +715,13 @@ func (s *ServicesAPI) AccountingServiceModifyHealthCheckPolicyOfAccountingServic
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/acct/radius/{id}/healthCheckPolicy")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/acct/radius/{id}/healthCheckPolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -729,7 +735,7 @@ type (
 // AccountingServiceModifyPrimaryRadiusServerOfAccountingServicePatch: Use this API command to modify primary RADIUS server of a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingServiceModifyPrimaryRadiusServerOfAccountingServicePatchRequest
 //
@@ -737,7 +743,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceModifyPrimaryRadiusServerOfAccountingServicePatch(ctx *UserContext, id string, requestBody *AccountingServiceModifyPrimaryRadiusServerOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceModifyPrimaryRadiusServerOfAccountingServicePatch(ctx context.Context, id string, requestBody *AccountingServiceModifyPrimaryRadiusServerOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -746,13 +752,13 @@ func (s *ServicesAPI) AccountingServiceModifyPrimaryRadiusServerOfAccountingServ
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/acct/radius/{id}/primary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/acct/radius/{id}/primary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -766,7 +772,7 @@ type (
 // AccountingServiceModifyRateLimitingOfAccountingServicePatch: Use this API command to modify rate limiting of a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingServiceModifyRateLimitingOfAccountingServicePatchRequest
 //
@@ -774,7 +780,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceModifyRateLimitingOfAccountingServicePatch(ctx *UserContext, id string, requestBody *AccountingServiceModifyRateLimitingOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceModifyRateLimitingOfAccountingServicePatch(ctx context.Context, id string, requestBody *AccountingServiceModifyRateLimitingOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -783,26 +789,26 @@ func (s *ServicesAPI) AccountingServiceModifyRateLimitingOfAccountingServicePatc
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/acct/radius/{id}/rateLimiting")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/acct/radius/{id}/rateLimiting", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 // AccountingServiceDisableSecondaryRadiusServerOfAccountingServiceDelete: Use this API command to disable secondary RADIUS server of a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceDisableSecondaryRadiusServerOfAccountingServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceDisableSecondaryRadiusServerOfAccountingServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -811,12 +817,9 @@ func (s *ServicesAPI) AccountingServiceDisableSecondaryRadiusServerOfAccountingS
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/acct/radius/{id}/secondary")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/acct/radius/{id}/secondary", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -831,7 +834,7 @@ type (
 // AccountingServiceModifySecondaryRadiusServerOfAccountingServicePatch: Use this API command to modify secondary RADIUS server of a RADIUS accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingServiceModifySecondaryRadiusServerOfAccountingServicePatchRequest
 //
@@ -839,7 +842,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceModifySecondaryRadiusServerOfAccountingServicePatch(ctx *UserContext, id string, requestBody *AccountingServiceModifySecondaryRadiusServerOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceModifySecondaryRadiusServerOfAccountingServicePatch(ctx context.Context, id string, requestBody *AccountingServiceModifySecondaryRadiusServerOfAccountingServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -848,13 +851,13 @@ func (s *ServicesAPI) AccountingServiceModifySecondaryRadiusServerOfAccountingSe
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/acct/radius/{id}/secondary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/acct/radius/{id}/secondary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -874,7 +877,7 @@ type (
 // AccountingServiceTestSpecificAccountingServicePost: Use this API command to test an accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingServiceTestSpecificAccountingServicePostRequest
 //
@@ -882,7 +885,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceTestSpecificAccountingServicePost(ctx *UserContext, id string, requestBody *AccountingServiceTestSpecificAccountingServicePostRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceTestSpecificAccountingServicePost(ctx context.Context, id string, requestBody *AccountingServiceTestSpecificAccountingServicePostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -891,26 +894,26 @@ func (s *ServicesAPI) AccountingServiceTestSpecificAccountingServicePost(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/acct/test/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("POST", "/v5_0/services/acct/test/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 // AccountingServiceDeleteAccountingServiceDelete: Use this API command to delete an accounting service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AccountingServiceDeleteAccountingServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AccountingServiceDeleteAccountingServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -919,12 +922,9 @@ func (s *ServicesAPI) AccountingServiceDeleteAccountingServiceDelete(ctx *UserCo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/acct/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/acct/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -938,21 +938,24 @@ type (
 // AuthenticationServiceDeleteAListOfAuthenticationServiceDelete: Use this API command to delete a list of authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDeleteAListOfAuthenticationServiceDelete(ctx *UserContext, requestBody *AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDeleteAListOfAuthenticationServiceDelete(ctx context.Context, requestBody *AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth")
-	request.body = requestBody
-	request.authenticated = true
-	return s.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/services/auth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1014,20 +1017,19 @@ type (
 // AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet: Use this API command to retrieve a list of active directory authentication services.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet(ctx *UserContext) (*http.Response, *AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet(ctx context.Context) (*http.Response, *AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/ad")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/services/auth/ad", true)
 	out := &AuthenticationServiceRetrieveListActiveDirectoryAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1069,22 +1071,25 @@ type (
 // AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost: Use this API command to create a new active directory authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceCreateActiveDirectoryAuthenticationServicePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost201Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost(ctx *UserContext, requestBody *AuthenticationServiceCreateActiveDirectoryAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost201Response, error) {
+func (s *ServicesAPI) AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost(ctx context.Context, requestBody *AuthenticationServiceCreateActiveDirectoryAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/ad")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/ad", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceCreateActiveDirectoryAuthenticationServicePost201Response{}
-	httpResponse, _, err := s.client.doRequest(request, 201, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1256,36 +1261,39 @@ type (
 // AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost: Use this API command to retrieve a list of AD Authentication services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost(ctx *UserContext, requestBody *AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost(ctx context.Context, requestBody *AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/ad/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/ad/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AuthenticationServiceDeleteActiveDirectoryAuthenticationServiceDelete: Use this API command to delete an active directory authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Active Directory Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDeleteActiveDirectoryAuthenticationServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDeleteActiveDirectoryAuthenticationServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1294,12 +1302,9 @@ func (s *ServicesAPI) AuthenticationServiceDeleteActiveDirectoryAuthenticationSe
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth/ad/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/auth/ad/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1351,14 +1356,14 @@ type (
 // AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet: Use this API command to retrieve an active directory authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Active Directory Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet(ctx *UserContext, id string) (*http.Response, *AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet(ctx context.Context, id string) (*http.Response, *AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1367,13 +1372,10 @@ func (s *ServicesAPI) AuthenticationServiceRetrieveActiveDirectoryAuthentication
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/ad/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/auth/ad/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationServiceRetrieveActiveDirectoryAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1398,7 +1400,7 @@ type (
 // AuthenticationServiceModifyActiveDirectoryAuthenticationServicePatch: Use this API command to modify the basic information of an active directory authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Active Directory Service ID
 // - requestBody: *AuthenticationServiceModifyActiveDirectoryAuthenticationServicePatchRequest
 //
@@ -1406,7 +1408,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyActiveDirectoryAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyActiveDirectoryAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyActiveDirectoryAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyActiveDirectoryAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1415,13 +1417,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyActiveDirectoryAuthenticationSe
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/ad/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/ad/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1441,7 +1443,7 @@ type (
 // AuthenticationServiceModifyUserTrafficProfileMappingOfActiveDirectoryPatch: Use this API command to modify user traffic profile mapping of an active directory authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Active Directory Service ID
 // - requestBody: *AuthenticationServiceModifyUserTrafficProfileMappingOfActiveDirectoryPatchRequestSlice
 //
@@ -1449,7 +1451,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfActiveDirectoryPatch(ctx *UserContext, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingOfActiveDirectoryPatchRequestSlice) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfActiveDirectoryPatch(ctx context.Context, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingOfActiveDirectoryPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1458,13 +1460,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfActi
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/ad/{id}/mappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/ad/{id}/mappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1509,14 +1511,14 @@ type (
 // AuthenticationServiceRetrieveGuestAuthenticationServiceGet: Use this API command to retrieve a Guest authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveGuestAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveGuestAuthenticationServiceGet(ctx *UserContext, id string) (*http.Response, *AuthenticationServiceRetrieveGuestAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveGuestAuthenticationServiceGet(ctx context.Context, id string) (*http.Response, *AuthenticationServiceRetrieveGuestAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1525,13 +1527,10 @@ func (s *ServicesAPI) AuthenticationServiceRetrieveGuestAuthenticationServiceGet
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/guest/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/auth/guest/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationServiceRetrieveGuestAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1595,20 +1594,19 @@ type (
 // AuthenticationServiceRetrieveListLdapAuthenticationServiceGet: Use this API command to retrieve a list of LDAP authentication services.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListLdapAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListLdapAuthenticationServiceGet(ctx *UserContext) (*http.Response, *AuthenticationServiceRetrieveListLdapAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListLdapAuthenticationServiceGet(ctx context.Context) (*http.Response, *AuthenticationServiceRetrieveListLdapAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/ldap")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/services/auth/ldap", true)
 	out := &AuthenticationServiceRetrieveListLdapAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1651,22 +1649,25 @@ type (
 // AuthenticationServiceCreateLdapAuthenticationServicePost: Use this API command to create a new LDAP authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceCreateLdapAuthenticationServicePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceCreateLdapAuthenticationServicePost201Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceCreateLdapAuthenticationServicePost(ctx *UserContext, requestBody *AuthenticationServiceCreateLdapAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateLdapAuthenticationServicePost201Response, error) {
+func (s *ServicesAPI) AuthenticationServiceCreateLdapAuthenticationServicePost(ctx context.Context, requestBody *AuthenticationServiceCreateLdapAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateLdapAuthenticationServicePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/ldap")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/ldap", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceCreateLdapAuthenticationServicePost201Response{}
-	httpResponse, _, err := s.client.doRequest(request, 201, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1839,36 +1840,39 @@ type (
 // AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost: Use this API command to retrieve a list of LDAP Authentication services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost(ctx *UserContext, requestBody *AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost(ctx context.Context, requestBody *AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/ldap/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/ldap/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AuthenticationServiceDeleteLdapAuthenticationServiceDelete: Use this API command to delete a LDAP authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): LDAP Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDeleteLdapAuthenticationServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDeleteLdapAuthenticationServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1877,12 +1881,9 @@ func (s *ServicesAPI) AuthenticationServiceDeleteLdapAuthenticationServiceDelete
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth/ldap/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/auth/ldap/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1935,14 +1936,14 @@ type (
 // AuthenticationServiceRetrieveLdapAuthenticationServiceGet: Use this API command to retrieve a LDAP authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): LDAP Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveLdapAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveLdapAuthenticationServiceGet(ctx *UserContext, id string) (*http.Response, *AuthenticationServiceRetrieveLdapAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveLdapAuthenticationServiceGet(ctx context.Context, id string) (*http.Response, *AuthenticationServiceRetrieveLdapAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1951,13 +1952,10 @@ func (s *ServicesAPI) AuthenticationServiceRetrieveLdapAuthenticationServiceGet(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/ldap/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/auth/ldap/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationServiceRetrieveLdapAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1983,7 +1981,7 @@ type (
 // AuthenticationServiceModifyLdapAuthenticationServicePatch: Use this API command to modify the basic information of a LDAP authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): LDAP Service ID
 // - requestBody: *AuthenticationServiceModifyLdapAuthenticationServicePatchRequest
 //
@@ -1991,7 +1989,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyLdapAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyLdapAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyLdapAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyLdapAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2000,13 +1998,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyLdapAuthenticationServicePatch(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/ldap/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/ldap/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2026,7 +2024,7 @@ type (
 // AuthenticationServiceModifyUserTrafficProfileMappingOfLdapPatch: Use this API command to modify user traffic profile mapping of a LDAP authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): LDAP Service ID
 // - requestBody: *AuthenticationServiceModifyUserTrafficProfileMappingOfLdapPatchRequestSlice
 //
@@ -2034,7 +2032,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfLdapPatch(ctx *UserContext, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingOfLdapPatchRequestSlice) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfLdapPatch(ctx context.Context, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingOfLdapPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2043,13 +2041,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfLdap
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/ldap/{id}/mappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/ldap/{id}/mappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2094,14 +2092,14 @@ type (
 // AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet: Use this API command to retrieve a LocalDB authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet(ctx *UserContext, id string) (*http.Response, *AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet(ctx context.Context, id string) (*http.Response, *AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2110,13 +2108,10 @@ func (s *ServicesAPI) AuthenticationServiceRetrieveLocaldbAuthenticationServiceG
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/local_db/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/auth/local_db/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationServiceRetrieveLocaldbAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2136,7 +2131,7 @@ type (
 // AuthenticationServiceUpdateLocaldbAuthenticationServicePatch: Use this API command to update LocalDB authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AuthenticationServiceUpdateLocaldbAuthenticationServicePatchRequest
 //
@@ -2144,7 +2139,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceUpdateLocaldbAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceUpdateLocaldbAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceUpdateLocaldbAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceUpdateLocaldbAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2153,13 +2148,13 @@ func (s *ServicesAPI) AuthenticationServiceUpdateLocaldbAuthenticationServicePat
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/local_db/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/local_db/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2179,7 +2174,7 @@ type (
 // AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthenticationServicePatch: Use this API command to update user role mappings of LocalDB authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthenticationServicePatchRequestSlice
 //
@@ -2187,7 +2182,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthenticationServicePatch(ctx *UserContext, id string, requestBody AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthenticationServicePatchRequestSlice) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthenticationServicePatch(ctx context.Context, id string, requestBody AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthenticationServicePatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2196,13 +2191,13 @@ func (s *ServicesAPI) AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthen
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/local_db/{id}/mappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/local_db/{id}/mappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2266,20 +2261,19 @@ type (
 // AuthenticationServiceRetrieveListOauthAuthenticationServiceGet: Use this API command to retrieve a list of OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListOauthAuthenticationServiceGet(ctx *UserContext) (*http.Response, *AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListOauthAuthenticationServiceGet(ctx context.Context) (*http.Response, *AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/oauth")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/services/auth/oauth", true)
 	out := &AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2321,22 +2315,25 @@ type (
 // AuthenticationServiceCreateOauthAuthenticationServicePost: Use this API command to create a new OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceCreateOauthAuthenticationServicePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceCreateOauthAuthenticationServicePost201Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceCreateOauthAuthenticationServicePost(ctx *UserContext, requestBody *AuthenticationServiceCreateOauthAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateOauthAuthenticationServicePost201Response, error) {
+func (s *ServicesAPI) AuthenticationServiceCreateOauthAuthenticationServicePost(ctx context.Context, requestBody *AuthenticationServiceCreateOauthAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateOauthAuthenticationServicePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/oauth")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/oauth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceCreateOauthAuthenticationServicePost201Response{}
-	httpResponse, _, err := s.client.doRequest(request, 201, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -2510,36 +2507,39 @@ type (
 // AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost: Use this API command to retrieve a list of oAuth Authentication services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost(ctx *UserContext, requestBody *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost(ctx context.Context, requestBody *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/oauth/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/oauth/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AuthenticationServiceDeleteOauthAuthenticationServiceDelete: Use this API command to delete an OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): OAUTH Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDeleteOauthAuthenticationServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDeleteOauthAuthenticationServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2548,12 +2548,9 @@ func (s *ServicesAPI) AuthenticationServiceDeleteOauthAuthenticationServiceDelet
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth/oauth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/auth/oauth/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2607,14 +2604,14 @@ type (
 // AuthenticationServiceRetrieveOauthAuthenticationServiceGet: Use this API command to retrieve a OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): OAUTH Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveOauthAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveOauthAuthenticationServiceGet(ctx *UserContext, id string) (*http.Response, *AuthenticationServiceRetrieveOauthAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveOauthAuthenticationServiceGet(ctx context.Context, id string) (*http.Response, *AuthenticationServiceRetrieveOauthAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2623,13 +2620,10 @@ func (s *ServicesAPI) AuthenticationServiceRetrieveOauthAuthenticationServiceGet
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/oauth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/auth/oauth/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationServiceRetrieveOauthAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2651,7 +2645,7 @@ type (
 // AuthenticationServiceModifyOauthAuthenticationServicePatch: Use this API command to modify the basic information of an OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): OAUTH Service ID
 // - requestBody: *AuthenticationServiceModifyOauthAuthenticationServicePatchRequest
 //
@@ -2659,7 +2653,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyOauthAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyOauthAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyOauthAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyOauthAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2668,13 +2662,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyOauthAuthenticationServicePatch
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/oauth/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/oauth/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2694,7 +2688,7 @@ type (
 // AuthenticationServiceModifyUserTrafficProfileMappingOfOauthPatch: Use this API command to modify user traffic profile mapping of an OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): OAUTH Service ID
 // - requestBody: *AuthenticationServiceModifyUserTrafficProfileMappingOfOauthPatchRequestSlice
 //
@@ -2702,7 +2696,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfOauthPatch(ctx *UserContext, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingOfOauthPatchRequestSlice) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfOauthPatch(ctx context.Context, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingOfOauthPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2711,13 +2705,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfOaut
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/oauth/{id}/mappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/oauth/{id}/mappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2727,7 +2721,7 @@ type (
 // AuthenticationServiceModifyWhitelistedDomainsOfOauthPatch: Use this API command to modify whitelisted domains of an OAuth authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): OAUTH Service ID
 // - requestBody: *AuthenticationServiceModifyWhitelistedDomainsOfOauthPatchRequest
 //
@@ -2735,7 +2729,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyWhitelistedDomainsOfOauthPatch(ctx *UserContext, id string, requestBody AuthenticationServiceModifyWhitelistedDomainsOfOauthPatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyWhitelistedDomainsOfOauthPatch(ctx context.Context, id string, requestBody AuthenticationServiceModifyWhitelistedDomainsOfOauthPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2744,13 +2738,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyWhitelistedDomainsOfOauthPatch(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/oauth/{id}/whitelistedDomains")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/oauth/{id}/whitelistedDomains", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2914,22 +2908,25 @@ type (
 // AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost: Use this API command to retrieve a list of Authentication services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost(ctx *UserContext, requestBody *AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost(ctx context.Context, requestBody *AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3016,20 +3013,19 @@ type (
 // AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet: Use this API command to retrieve a list of RADIUS authentication services.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet(ctx *UserContext) (*http.Response, *AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet(ctx context.Context) (*http.Response, *AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/radius")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/services/auth/radius", true)
 	out := &AuthenticationServiceRetrieveListRadiusAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3095,22 +3091,25 @@ type (
 // AuthenticationServiceCreateRadiusAuthenticationServicePost: Use this API command to create a new RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceCreateRadiusAuthenticationServicePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceCreateRadiusAuthenticationServicePost201Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceCreateRadiusAuthenticationServicePost(ctx *UserContext, requestBody *AuthenticationServiceCreateRadiusAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateRadiusAuthenticationServicePost201Response, error) {
+func (s *ServicesAPI) AuthenticationServiceCreateRadiusAuthenticationServicePost(ctx context.Context, requestBody *AuthenticationServiceCreateRadiusAuthenticationServicePostRequest) (*http.Response, *AuthenticationServiceCreateRadiusAuthenticationServicePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/radius")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/radius", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceCreateRadiusAuthenticationServicePost201Response{}
-	httpResponse, _, err := s.client.doRequest(request, 201, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -3306,36 +3305,39 @@ type (
 // AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost: Use this API command to retrieve a list of radius Authentication services by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost(ctx *UserContext, requestBody *AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost(ctx context.Context, requestBody *AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequest) (*http.Response, *AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/radius/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/services/auth/radius/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AuthenticationServiceDeleteRadiusAuthenticationServiceDelete: Use this API command to delete a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDeleteRadiusAuthenticationServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDeleteRadiusAuthenticationServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3344,12 +3346,9 @@ func (s *ServicesAPI) AuthenticationServiceDeleteRadiusAuthenticationServiceDele
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth/radius/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/auth/radius/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3425,14 +3424,14 @@ type (
 // AuthenticationServiceRetrieveRadiusAuthenticationServiceGet: Use this API command to retrieve a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationServiceRetrieveRadiusAuthenticationServiceGet200Response
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceRetrieveRadiusAuthenticationServiceGet(ctx *UserContext, id string) (*http.Response, *AuthenticationServiceRetrieveRadiusAuthenticationServiceGet200Response, error) {
+func (s *ServicesAPI) AuthenticationServiceRetrieveRadiusAuthenticationServiceGet(ctx context.Context, id string) (*http.Response, *AuthenticationServiceRetrieveRadiusAuthenticationServiceGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3441,13 +3440,10 @@ func (s *ServicesAPI) AuthenticationServiceRetrieveRadiusAuthenticationServiceGe
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/services/auth/radius/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/services/auth/radius/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationServiceRetrieveRadiusAuthenticationServiceGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3466,7 +3462,7 @@ type (
 // AuthenticationServiceModifyRadiusAuthenticationServicePatch: Use this API command to modify the basic information of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 // - requestBody: *AuthenticationServiceModifyRadiusAuthenticationServicePatchRequest
 //
@@ -3474,7 +3470,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyRadiusAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyRadiusAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyRadiusAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyRadiusAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3483,13 +3479,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyRadiusAuthenticationServicePatc
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/radius/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/radius/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3504,7 +3500,7 @@ type (
 // AuthenticationServiceModifyHealthCheckPolicyOfAuthenticationServicePatch: Use this API command to modify health check policy of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 // - requestBody: *AuthenticationServiceModifyHealthCheckPolicyOfAuthenticationServicePatchRequest
 //
@@ -3512,7 +3508,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyHealthCheckPolicyOfAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyHealthCheckPolicyOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyHealthCheckPolicyOfAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyHealthCheckPolicyOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3521,13 +3517,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyHealthCheckPolicyOfAuthenticati
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/radius/{id}/healthCheckPolicy")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/radius/{id}/healthCheckPolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3547,7 +3543,7 @@ type (
 // AuthenticationServiceModifyUserTrafficProfileMappingPatch: Use this API command to modify user traffic profile mapping of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 // - requestBody: *AuthenticationServiceModifyUserTrafficProfileMappingPatchRequestSlice
 //
@@ -3555,7 +3551,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingPatch(ctx *UserContext, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingPatchRequestSlice) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingPatch(ctx context.Context, id string, requestBody AuthenticationServiceModifyUserTrafficProfileMappingPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3564,13 +3560,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingPatch(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/radius/{id}/mappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/radius/{id}/mappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3584,7 +3580,7 @@ type (
 // AuthenticationServiceModifyPrimaryRadiusServerOfAuthenticationServicePatch: Use this API command to modify primary RADIUS server of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 // - requestBody: *AuthenticationServiceModifyPrimaryRadiusServerOfAuthenticationServicePatchRequest
 //
@@ -3592,7 +3588,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyPrimaryRadiusServerOfAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyPrimaryRadiusServerOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyPrimaryRadiusServerOfAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyPrimaryRadiusServerOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3601,13 +3597,13 @@ func (s *ServicesAPI) AuthenticationServiceModifyPrimaryRadiusServerOfAuthentica
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/radius/{id}/primary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/radius/{id}/primary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3621,7 +3617,7 @@ type (
 // AuthenticationServiceModifyRateLimitingOfAuthenticationServicePatch: Use this API command to modify rate limiting of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 // - requestBody: *AuthenticationServiceModifyRateLimitingOfAuthenticationServicePatchRequest
 //
@@ -3629,7 +3625,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifyRateLimitingOfAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifyRateLimitingOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifyRateLimitingOfAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifyRateLimitingOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3638,26 +3634,26 @@ func (s *ServicesAPI) AuthenticationServiceModifyRateLimitingOfAuthenticationSer
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/radius/{id}/rateLimiting")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/radius/{id}/rateLimiting", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 // AuthenticationServiceDisableSecondaryRadiusServerOfAuthenticationServiceDelete: Use this API command to disable secondary RADIUS server of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDisableSecondaryRadiusServerOfAuthenticationServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDisableSecondaryRadiusServerOfAuthenticationServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3666,12 +3662,9 @@ func (s *ServicesAPI) AuthenticationServiceDisableSecondaryRadiusServerOfAuthent
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth/radius/{id}/secondary")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/auth/radius/{id}/secondary", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3686,7 +3679,7 @@ type (
 // AuthenticationServiceModifySecondaryRadiusServerOfAuthenticationServicePatch: Use this API command to modify secondary RADIUS server of a RADIUS authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): RADIUS Service ID
 // - requestBody: *AuthenticationServiceModifySecondaryRadiusServerOfAuthenticationServicePatchRequest
 //
@@ -3694,7 +3687,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceModifySecondaryRadiusServerOfAuthenticationServicePatch(ctx *UserContext, id string, requestBody *AuthenticationServiceModifySecondaryRadiusServerOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceModifySecondaryRadiusServerOfAuthenticationServicePatch(ctx context.Context, id string, requestBody *AuthenticationServiceModifySecondaryRadiusServerOfAuthenticationServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3703,13 +3696,13 @@ func (s *ServicesAPI) AuthenticationServiceModifySecondaryRadiusServerOfAuthenti
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/services/auth/radius/{id}/secondary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/services/auth/radius/{id}/secondary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3729,7 +3722,7 @@ type (
 // AuthenticationServiceTestSpecificAuthenticationServicePost: Use this API command to test an authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AuthenticationServiceTestSpecificAuthenticationServicePostRequest
 //
@@ -3737,7 +3730,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceTestSpecificAuthenticationServicePost(ctx *UserContext, id string, requestBody *AuthenticationServiceTestSpecificAuthenticationServicePostRequest) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceTestSpecificAuthenticationServicePost(ctx context.Context, id string, requestBody *AuthenticationServiceTestSpecificAuthenticationServicePostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3746,26 +3739,26 @@ func (s *ServicesAPI) AuthenticationServiceTestSpecificAuthenticationServicePost
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/services/auth/test/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("POST", "/v5_0/services/auth/test/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }
 
 // AuthenticationServiceDeleteAuthenticationServiceDelete: Use this API command to delete an authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *ServicesAPI) AuthenticationServiceDeleteAuthenticationServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *ServicesAPI) AuthenticationServiceDeleteAuthenticationServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3774,10 +3767,7 @@ func (s *ServicesAPI) AuthenticationServiceDeleteAuthenticationServiceDelete(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/services/auth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/services/auth/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 204, nil)
 }

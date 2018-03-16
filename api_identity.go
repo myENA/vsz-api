@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type IdentityAPI struct {
@@ -19,19 +20,18 @@ type IdentityAPI struct {
 // IdentityGuestPassDeleteMultipleIdentityGuestPassesDelete: Use this API command to delete multiple identity guest passes.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassDeleteMultipleIdentityGuestPassesDelete(ctx *UserContext) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityGuestPassDeleteMultipleIdentityGuestPassesDelete(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/guestpass")
-	request.authenticated = true
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/guestpass", true)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -96,7 +96,7 @@ type (
 // IdentityGuestPassRetrieveIdentityGuestPassListGet: Use this API command to retrieve a list of identity guest pass.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -113,7 +113,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityGuestPassRetrieveIdentityGuestPassListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassRetrieveIdentityGuestPassListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *IdentityGuestPassRetrieveIdentityGuestPassListGet200Response, error) {
+func (i *IdentityAPI) IdentityGuestPassRetrieveIdentityGuestPassListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *IdentityGuestPassRetrieveIdentityGuestPassListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -147,21 +147,18 @@ func (i *IdentityAPI) IdentityGuestPassRetrieveIdentityGuestPassListGet(ctx *Use
 			return nil, nil, fmt.Errorf("parameter \"wlan\" failed validation check: %s", err)
 		}
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/guestpass")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":             index,
-		"listSize":          listSize,
-		"timeZone":          timeZone,
-		"wlan":              wlan,
-		"displayName":       optionalParams["displayName"],
-		"expirationFrom":    optionalParams["expirationFrom"],
-		"expirationTo":      optionalParams["expirationTo"],
-		"generatedTimeFrom": optionalParams["generatedTimeFrom"],
-		"generatedTimeTo":   optionalParams["generatedTimeTo"],
-	}
+	request := NewRequest("GET", "/v5_0/identity/guestpass", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("timeZone", timeZone)
+	request.SetQueryParameter("wlan", wlan)
+	request.SetQueryParameter("displayName", optionalParams["displayName"])
+	request.SetQueryParameter("expirationFrom", optionalParams["expirationFrom"])
+	request.SetQueryParameter("expirationTo", optionalParams["expirationTo"])
+	request.SetQueryParameter("generatedTimeFrom", optionalParams["generatedTimeFrom"])
+	request.SetQueryParameter("generatedTimeTo", optionalParams["generatedTimeTo"])
 	out := &IdentityGuestPassRetrieveIdentityGuestPassListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -216,22 +213,25 @@ type (
 // IdentityGuestPassGenerateIdentityGuestPassPost: Use this API command to generate identity guest pass.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityGuestPassGenerateIdentityGuestPassPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityGuestPassGenerateIdentityGuestPassPost201Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassGenerateIdentityGuestPassPost(ctx *UserContext, requestBody *IdentityGuestPassGenerateIdentityGuestPassPostRequest) (*http.Response, *IdentityGuestPassGenerateIdentityGuestPassPost201Response, error) {
+func (i *IdentityAPI) IdentityGuestPassGenerateIdentityGuestPassPost(ctx context.Context, requestBody *IdentityGuestPassGenerateIdentityGuestPassPostRequest) (*http.Response, *IdentityGuestPassGenerateIdentityGuestPassPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/guestpass/generate")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/guestpass/generate", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentityGuestPassGenerateIdentityGuestPassPost201Response{}
-	httpResponse, _, err := i.client.doRequest(request, 201, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -406,41 +406,43 @@ type (
 // IdentityGuestPassRetrieveIdentityGuestPassListPost: Use this API command to retrieve a list of identity guest pass.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityGuestPassRetrieveIdentityGuestPassListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityGuestPassRetrieveIdentityGuestPassListPost200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassRetrieveIdentityGuestPassListPost(ctx *UserContext, requestBody *IdentityGuestPassRetrieveIdentityGuestPassListPostRequest) (*http.Response, *IdentityGuestPassRetrieveIdentityGuestPassListPost200Response, error) {
+func (i *IdentityAPI) IdentityGuestPassRetrieveIdentityGuestPassListPost(ctx context.Context, requestBody *IdentityGuestPassRetrieveIdentityGuestPassListPostRequest) (*http.Response, *IdentityGuestPassRetrieveIdentityGuestPassListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/guestpassList")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/guestpassList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentityGuestPassRetrieveIdentityGuestPassListPost200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // IdentityGuestPassImportIdentityGuestPassPost: Use this API command to upload identity guest pass csv file.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassImportIdentityGuestPassPost(ctx *UserContext) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityGuestPassImportIdentityGuestPassPost(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/guestpass/upload")
-	request.authenticated = true
-	return i.client.doRequest(request, 200, nil)
+	request := NewRequest("POST", "/v5_0/identity/guestpass/upload", true)
+	return i.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -485,34 +487,37 @@ type (
 // IdentityGuestPassCommonIdentityGuestPassSettingsPost: Use this API command to update common identity guest pass settings.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityGuestPassCommonIdentityGuestPassSettingsPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassCommonIdentityGuestPassSettingsPost(ctx *UserContext, requestBody *IdentityGuestPassCommonIdentityGuestPassSettingsPostRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityGuestPassCommonIdentityGuestPassSettingsPost(ctx context.Context, requestBody *IdentityGuestPassCommonIdentityGuestPassSettingsPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/guestpass/upload/common")
-	request.body = requestBody
-	request.authenticated = true
-	return i.client.doRequest(request, 201, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/guestpass/upload/common", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return i.client.Ensure(ctx, request, 201, nil)
 }
 
 // IdentityGuestPassDeleteDelete: Use this API command to delete identity guest pass.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userId (UUIDv4)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityGuestPassDeleteDelete(ctx *UserContext, userId string) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityGuestPassDeleteDelete(ctx context.Context, userId string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -521,12 +526,9 @@ func (i *IdentityAPI) IdentityGuestPassDeleteDelete(ctx *UserContext, userId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userId\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/guestpass/{userId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userId": userId,
-	}
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/guestpass/{userId}", true)
+	request.SetPathParameter("userId", userId)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -662,41 +664,43 @@ type (
 // IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost: Use this API command to retrieve a list of subscription package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost(ctx *UserContext, requestBody *IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequest) (*http.Response, *IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost200Response, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost(ctx context.Context, requestBody *IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequest) (*http.Response, *IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/packageList")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/packageList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentitySubscriptionPackageRetrieveSubscriptionPackageListPost200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // IdentitySubscriptionPackageDeleteDelete1: Use this API command to delete multiple subscription packages.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageDeleteDelete1(ctx *UserContext) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageDeleteDelete1(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/packages")
-	request.authenticated = true
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/packages", true)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -723,20 +727,19 @@ type (
 // IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet: Use this API command to retrieve a list of subscription package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet(ctx *UserContext) (*http.Response, *IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet200Response, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet(ctx context.Context) (*http.Response, *IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/packages")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/identity/packages", true)
 	out := &IdentitySubscriptionPackageRetrieveSubscriptionPackageListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -757,36 +760,39 @@ type (
 // IdentitySubscriptionPackageCreatePost: Use this API command to create subscription package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentitySubscriptionPackageCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentitySubscriptionPackageCreatePost201Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageCreatePost(ctx *UserContext, requestBody *IdentitySubscriptionPackageCreatePostRequest) (*http.Response, *IdentitySubscriptionPackageCreatePost201Response, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageCreatePost(ctx context.Context, requestBody *IdentitySubscriptionPackageCreatePostRequest) (*http.Response, *IdentitySubscriptionPackageCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/packages")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/packages", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentitySubscriptionPackageCreatePost201Response{}
-	httpResponse, _, err := i.client.doRequest(request, 201, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // IdentitySubscriptionPackageDeleteDelete: Use this API command to delete subscription package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity Subscription Package ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -795,12 +801,9 @@ func (i *IdentityAPI) IdentitySubscriptionPackageDeleteDelete(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/packages/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/packages/{id}", true)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -822,14 +825,14 @@ type (
 // IdentitySubscriptionPackageRetrieveGet: Use this API command to retrieve subscription package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity Subscription Package ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentitySubscriptionPackageRetrieveGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveGet(ctx *UserContext, id string) (*http.Response, *IdentitySubscriptionPackageRetrieveGet200Response, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveGet(ctx context.Context, id string) (*http.Response, *IdentitySubscriptionPackageRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -838,13 +841,10 @@ func (i *IdentityAPI) IdentitySubscriptionPackageRetrieveGet(ctx *UserContext, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/packages/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/identity/packages/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &IdentitySubscriptionPackageRetrieveGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -862,7 +862,7 @@ type (
 // IdentitySubscriptionPackageModifyBasicPatch: Use this API command to modify the basic information of subscription package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity Subscription Package ID
 // - requestBody: *IdentitySubscriptionPackageModifyBasicPatchRequest
 //
@@ -870,7 +870,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentitySubscriptionPackageModifyBasicPatch(ctx *UserContext, id string, requestBody *IdentitySubscriptionPackageModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentitySubscriptionPackageModifyBasicPatch(ctx context.Context, id string, requestBody *IdentitySubscriptionPackageModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -879,13 +879,13 @@ func (i *IdentityAPI) IdentitySubscriptionPackageModifyBasicPatch(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/packages/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/packages/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1023,41 +1023,43 @@ type (
 // IdentityUserRetrieveIdentityUserListPost: Use this API command to retrieve a list of identity user.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityUserRetrieveIdentityUserListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRetrieveIdentityUserListPost200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRetrieveIdentityUserListPost(ctx *UserContext, requestBody *IdentityUserRetrieveIdentityUserListPostRequest) (*http.Response, *IdentityUserRetrieveIdentityUserListPost200Response, error) {
+func (i *IdentityAPI) IdentityUserRetrieveIdentityUserListPost(ctx context.Context, requestBody *IdentityUserRetrieveIdentityUserListPostRequest) (*http.Response, *IdentityUserRetrieveIdentityUserListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/userList")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/userList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentityUserRetrieveIdentityUserListPost200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // IdentityUserRoleDeleteMultipleIdentityUserRolesDelete: Use this API command to delete multiple identity user roles.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleDeleteMultipleIdentityUserRolesDelete(ctx *UserContext) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserRoleDeleteMultipleIdentityUserRolesDelete(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/userrole")
-	request.authenticated = true
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/userrole", true)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1107,20 +1109,19 @@ type (
 // IdentityUserRoleRetrieveListGet: Use this API command to retrieve a list of identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRoleRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleRetrieveListGet(ctx *UserContext) (*http.Response, *IdentityUserRoleRetrieveListGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRoleRetrieveListGet(ctx context.Context) (*http.Response, *IdentityUserRoleRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/userrole")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/identity/userrole", true)
 	out := &IdentityUserRoleRetrieveListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1158,22 +1159,25 @@ type (
 // IdentityUserRoleCreatePost: Use this API command to create identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityUserRoleCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRoleCreatePost201Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleCreatePost(ctx *UserContext, requestBody *IdentityUserRoleCreatePostRequest) (*http.Response, *IdentityUserRoleCreatePost201Response, error) {
+func (i *IdentityAPI) IdentityUserRoleCreatePost(ctx context.Context, requestBody *IdentityUserRoleCreatePostRequest) (*http.Response, *IdentityUserRoleCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/userrole")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/userrole", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentityUserRoleCreatePost201Response{}
-	httpResponse, _, err := i.client.doRequest(request, 201, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1333,36 +1337,39 @@ type (
 // IdentityUserRoleRetrieveListPost: Use this API command to retrieve a list of identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityUserRoleRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRoleRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleRetrieveListPost(ctx *UserContext, requestBody *IdentityUserRoleRetrieveListPostRequest) (*http.Response, *IdentityUserRoleRetrieveListPost200Response, error) {
+func (i *IdentityAPI) IdentityUserRoleRetrieveListPost(ctx context.Context, requestBody *IdentityUserRoleRetrieveListPostRequest) (*http.Response, *IdentityUserRoleRetrieveListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/userRoleList")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/userRoleList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentityUserRoleRetrieveListPost200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // IdentityUserRoleDeleteDelete: Use this API command to delete identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Role ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserRoleDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1371,12 +1378,9 @@ func (i *IdentityAPI) IdentityUserRoleDeleteDelete(ctx *UserContext, id string) 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/userrole/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/userrole/{id}", true)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1415,14 +1419,14 @@ type (
 // IdentityUserRoleRetrieveGet: Use this API command to retrieve identity user role by ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Role ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRoleRetrieveGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleRetrieveGet(ctx *UserContext, id string) (*http.Response, *IdentityUserRoleRetrieveGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRoleRetrieveGet(ctx context.Context, id string) (*http.Response, *IdentityUserRoleRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1431,13 +1435,10 @@ func (i *IdentityAPI) IdentityUserRoleRetrieveGet(ctx *UserContext, id string) (
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/userrole/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/identity/userrole/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &IdentityUserRoleRetrieveGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1454,7 +1455,7 @@ type (
 // IdentityUserRoleModifyBasicPatch: Use this API command to modify the basic information of identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Role ID
 // - requestBody: *IdentityUserRoleModifyBasicPatchRequest
 //
@@ -1462,7 +1463,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleModifyBasicPatch(ctx *UserContext, id string, requestBody *IdentityUserRoleModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserRoleModifyBasicPatch(ctx context.Context, id string, requestBody *IdentityUserRoleModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1471,13 +1472,13 @@ func (i *IdentityAPI) IdentityUserRoleModifyBasicPatch(ctx *UserContext, id stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/userrole/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/userrole/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1490,7 +1491,7 @@ type (
 // IdentityUserRoleModifyMaxDevicePatch: Use this API command to modify max device allowed of identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Role ID
 // - requestBody: *IdentityUserRoleModifyMaxDevicePatchRequest
 //
@@ -1498,7 +1499,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleModifyMaxDevicePatch(ctx *UserContext, id string, requestBody *IdentityUserRoleModifyMaxDevicePatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserRoleModifyMaxDevicePatch(ctx context.Context, id string, requestBody *IdentityUserRoleModifyMaxDevicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1507,13 +1508,13 @@ func (i *IdentityAPI) IdentityUserRoleModifyMaxDevicePatch(ctx *UserContext, id 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/userrole/{id}/maxDevices")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/userrole/{id}/maxDevices", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1526,7 +1527,7 @@ type (
 // IdentityUserRoleModifyUserTrafficProfilePatch: Use this API command to modify user traffic profile of identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Role ID
 // - requestBody: *IdentityUserRoleModifyUserTrafficProfilePatchRequest
 //
@@ -1534,7 +1535,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleModifyUserTrafficProfilePatch(ctx *UserContext, id string, requestBody *IdentityUserRoleModifyUserTrafficProfilePatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserRoleModifyUserTrafficProfilePatch(ctx context.Context, id string, requestBody *IdentityUserRoleModifyUserTrafficProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1543,13 +1544,13 @@ func (i *IdentityAPI) IdentityUserRoleModifyUserTrafficProfilePatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/userrole/{id}/userTrafficProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/userrole/{id}/userTrafficProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1562,7 +1563,7 @@ type (
 // IdentityUserRoleModifyVlanPoolingPatch: Use this API command to modify VLAN pooling of identity user role.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Role ID
 // - requestBody: *IdentityUserRoleModifyVlanPoolingPatchRequest
 //
@@ -1570,7 +1571,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRoleModifyVlanPoolingPatch(ctx *UserContext, id string, requestBody *IdentityUserRoleModifyVlanPoolingPatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserRoleModifyVlanPoolingPatch(ctx context.Context, id string, requestBody *IdentityUserRoleModifyVlanPoolingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1579,31 +1580,30 @@ func (i *IdentityAPI) IdentityUserRoleModifyVlanPoolingPatch(ctx *UserContext, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/userrole/{id}/vlanPooling")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/userrole/{id}/vlanPooling", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 // IdentityUserDeleteMultipleIdentityUsersDelete: Use this API command to delete multiple identity users.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserDeleteMultipleIdentityUsersDelete(ctx *UserContext) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserDeleteMultipleIdentityUsersDelete(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/users")
-	request.authenticated = true
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/users", true)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1632,7 +1632,7 @@ type (
 // IdentityUserRetrieveIdentityUserListGet: Use this API command to retrieve a list of identity user.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -1654,7 +1654,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRetrieveIdentityUserListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRetrieveIdentityUserListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *IdentityUserRetrieveIdentityUserListGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRetrieveIdentityUserListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *IdentityUserRetrieveIdentityUserListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1681,26 +1681,23 @@ func (i *IdentityAPI) IdentityUserRetrieveIdentityUserListGet(ctx *UserContext, 
 	if !ok {
 		timeZone = "UTC"
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/users")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":         index,
-		"listSize":      listSize,
-		"timeZone":      timeZone,
-		"userName":      optionalParams["userName"],
-		"displayName":   optionalParams["displayName"],
-		"firstName":     optionalParams["firstName"],
-		"lastName":      optionalParams["lastName"],
-		"email":         optionalParams["email"],
-		"phone":         optionalParams["phone"],
-		"userType":      optionalParams["userType"],
-		"userSource":    optionalParams["userSource"],
-		"isDisabled":    optionalParams["isDisabled"],
-		"createdOnFrom": optionalParams["createdOnFrom"],
-		"createdOnTo":   optionalParams["createdOnTo"],
-	}
+	request := NewRequest("GET", "/v5_0/identity/users", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("timeZone", timeZone)
+	request.SetQueryParameter("userName", optionalParams["userName"])
+	request.SetQueryParameter("displayName", optionalParams["displayName"])
+	request.SetQueryParameter("firstName", optionalParams["firstName"])
+	request.SetQueryParameter("lastName", optionalParams["lastName"])
+	request.SetQueryParameter("email", optionalParams["email"])
+	request.SetQueryParameter("phone", optionalParams["phone"])
+	request.SetQueryParameter("userType", optionalParams["userType"])
+	request.SetQueryParameter("userSource", optionalParams["userSource"])
+	request.SetQueryParameter("isDisabled", optionalParams["isDisabled"])
+	request.SetQueryParameter("createdOnFrom", optionalParams["createdOnFrom"])
+	request.SetQueryParameter("createdOnTo", optionalParams["createdOnTo"])
 	out := &IdentityUserRetrieveIdentityUserListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1737,22 +1734,25 @@ type (
 // IdentityUserCreatePost: Use this API command to create identity user.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IdentityUserCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserCreatePost201Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserCreatePost(ctx *UserContext, requestBody *IdentityUserCreatePostRequest) (*http.Response, *IdentityUserCreatePost201Response, error) {
+func (i *IdentityAPI) IdentityUserCreatePost(ctx context.Context, requestBody *IdentityUserCreatePostRequest) (*http.Response, *IdentityUserCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "POST", "/v5_0/identity/users")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/identity/users", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IdentityUserCreatePost201Response{}
-	httpResponse, _, err := i.client.doRequest(request, 201, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1775,20 +1775,19 @@ type (
 // IdentityUserRetrieveAaaserverListGet: Use this API command to retrieve a list of aaa server.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRetrieveAaaserverListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRetrieveAaaserverListGet(ctx *UserContext) (*http.Response, *IdentityUserRetrieveAaaserverListGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRetrieveAaaserverListGet(ctx context.Context) (*http.Response, *IdentityUserRetrieveAaaserverListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/users/aaaserver")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/identity/users/aaaserver", true)
 	out := &IdentityUserRetrieveAaaserverListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1811,20 +1810,19 @@ type (
 // IdentityUserRetrieveCountryListGet: Use this API command to retrieve a list of countries.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRetrieveCountryListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRetrieveCountryListGet(ctx *UserContext) (*http.Response, *IdentityUserRetrieveCountryListGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRetrieveCountryListGet(ctx context.Context) (*http.Response, *IdentityUserRetrieveCountryListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/users/countries")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/identity/users/countries", true)
 	out := &IdentityUserRetrieveCountryListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1853,34 +1851,33 @@ type (
 // IdentityUserRetrievePackageListGet: Use this API command to retrieve a list of packages.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRetrievePackageListGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRetrievePackageListGet(ctx *UserContext) (*http.Response, *IdentityUserRetrievePackageListGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRetrievePackageListGet(ctx context.Context) (*http.Response, *IdentityUserRetrievePackageListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/users/packages")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/identity/users/packages", true)
 	out := &IdentityUserRetrievePackageListGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // IdentityUserDeleteDelete: Use this API command to delete identity user.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity User ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1889,12 +1886,9 @@ func (i *IdentityAPI) IdentityUserDeleteDelete(ctx *UserContext, id string) (*ht
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "DELETE", "/v5_0/identity/users/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return i.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/identity/users/{id}", true)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1988,14 +1982,14 @@ type (
 // IdentityUserRetrieveGet: Use this API command to retrieve identity user.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity User ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IdentityUserRetrieveGet200Response
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserRetrieveGet(ctx *UserContext, id string) (*http.Response, *IdentityUserRetrieveGet200Response, error) {
+func (i *IdentityAPI) IdentityUserRetrieveGet(ctx context.Context, id string) (*http.Response, *IdentityUserRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2004,13 +1998,10 @@ func (i *IdentityAPI) IdentityUserRetrieveGet(ctx *UserContext, id string) (*htt
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "GET", "/v5_0/identity/users/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/identity/users/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &IdentityUserRetrieveGet200Response{}
-	httpResponse, _, err := i.client.doRequest(request, 200, out)
+	httpResponse, _, err := i.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2037,7 +2028,7 @@ type (
 // IdentityUserModifyBasicPatch: Use this API command to modify the basic information of identity user.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity User ID
 // - requestBody: *IdentityUserModifyBasicPatchRequest
 //
@@ -2045,7 +2036,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserModifyBasicPatch(ctx *UserContext, id string, requestBody *IdentityUserModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserModifyBasicPatch(ctx context.Context, id string, requestBody *IdentityUserModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2054,13 +2045,13 @@ func (i *IdentityAPI) IdentityUserModifyBasicPatch(ctx *UserContext, id string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/users/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/users/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2073,7 +2064,7 @@ type (
 // IdentityUserModifySubscriberPackagePatch: Use this API command to modify subscriber package.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Identity User ID
 // - requestBody: *IdentityUserModifySubscriberPackagePatchRequest
 //
@@ -2081,7 +2072,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (i *IdentityAPI) IdentityUserModifySubscriberPackagePatch(ctx *UserContext, id string, requestBody *IdentityUserModifySubscriberPackagePatchRequest) (*http.Response, []byte, error) {
+func (i *IdentityAPI) IdentityUserModifySubscriberPackagePatch(ctx context.Context, id string, requestBody *IdentityUserModifySubscriberPackagePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2090,11 +2081,11 @@ func (i *IdentityAPI) IdentityUserModifySubscriberPackagePatch(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := i.client.newRequest(ctx, "PATCH", "/v5_0/identity/users/{id}/subscriberPackage")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/identity/users/{id}/subscriberPackage", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return i.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return i.client.Ensure(ctx, request, 204, nil)
 }

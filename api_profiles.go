@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type ProfilesAPI struct {
@@ -26,21 +27,24 @@ type (
 // AccountingProfileDeleteDelete1: Use this API command to delete a list of accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileDeleteDelete1(ctx *UserContext, requestBody *AccountingProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AccountingProfileDeleteDelete1(ctx context.Context, requestBody *AccountingProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/acct")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/acct", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -82,20 +86,19 @@ type (
 // AccountingProfileRetrieveListGet: Use this API command to retrieve a list of accounting profiles.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileRetrieveListGet(ctx *UserContext) (*http.Response, *AccountingProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) AccountingProfileRetrieveListGet(ctx context.Context) (*http.Response, *AccountingProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/acct")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/acct", true)
 	out := &AccountingProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -125,22 +128,25 @@ type (
 // AccountingProfileCreatePost: Use this API command to create a new accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingProfileCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileCreatePost(ctx *UserContext, requestBody *AccountingProfileCreatePostRequest) (*http.Response, *AccountingProfileCreatePost201Response, error) {
+func (p *ProfilesAPI) AccountingProfileCreatePost(ctx context.Context, requestBody *AccountingProfileCreatePostRequest) (*http.Response, *AccountingProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/acct")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/acct", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AccountingProfileCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -163,7 +169,7 @@ type (
 // AccountingProfileClonePost: Use this API command to clone an accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AccountingProfileClonePostRequest
 //
@@ -171,7 +177,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingProfileClonePost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileClonePost(ctx *UserContext, id string, requestBody *AccountingProfileClonePostRequest) (*http.Response, *AccountingProfileClonePost200Response, error) {
+func (p *ProfilesAPI) AccountingProfileClonePost(ctx context.Context, id string, requestBody *AccountingProfileClonePostRequest) (*http.Response, *AccountingProfileClonePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -180,14 +186,14 @@ func (p *ProfilesAPI) AccountingProfileClonePost(ctx *UserContext, id string, re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/acct/clone/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("POST", "/v5_0/profiles/acct/clone/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("id", id)
 	out := &AccountingProfileClonePost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -339,36 +345,39 @@ type (
 // AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost: Use this API command to retrieve a list of accounting profiles by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost(ctx *UserContext, requestBody *AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequest) (*http.Response, *AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost200Response, error) {
+func (p *ProfilesAPI) AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost(ctx context.Context, requestBody *AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequest) (*http.Response, *AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/acct/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/acct/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AccountingProfileDeleteDelete: Use this API command to delete an accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Accounting Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AccountingProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -377,12 +386,9 @@ func (p *ProfilesAPI) AccountingProfileDeleteDelete(ctx *UserContext, id string)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/acct/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/acct/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -414,14 +420,14 @@ type (
 // AccountingProfileRetrieveGet: Use this API command to retrieve an accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Accounting Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AccountingProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *AccountingProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) AccountingProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *AccountingProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -430,13 +436,10 @@ func (p *ProfilesAPI) AccountingProfileRetrieveGet(ctx *UserContext, id string) 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/acct/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/acct/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AccountingProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -453,7 +456,7 @@ type (
 // AccountingProfileModifyBasicPatch: Use this API command to modify the basic information of an accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Accounting Profile ID
 // - requestBody: *AccountingProfileModifyBasicPatchRequest
 //
@@ -461,7 +464,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *AccountingProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AccountingProfileModifyBasicPatch(ctx context.Context, id string, requestBody *AccountingProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -470,13 +473,13 @@ func (p *ProfilesAPI) AccountingProfileModifyBasicPatch(ctx *UserContext, id str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/acct/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/acct/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -493,7 +496,7 @@ type (
 // AccountingProfileModifyRealmMappingsPatch: Use this API command to modify accounting service per realm mappings of an accounting profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Accounting Profile ID
 // - requestBody: *AccountingProfileModifyRealmMappingsPatchRequestSlice
 //
@@ -501,7 +504,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AccountingProfileModifyRealmMappingsPatch(ctx *UserContext, id string, requestBody AccountingProfileModifyRealmMappingsPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AccountingProfileModifyRealmMappingsPatch(ctx context.Context, id string, requestBody AccountingProfileModifyRealmMappingsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -510,13 +513,13 @@ func (p *ProfilesAPI) AccountingProfileModifyRealmMappingsPatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/acct/{id}/realmMappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/acct/{id}/realmMappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -530,21 +533,24 @@ type (
 // AuthenticationProfileDeleteDelete1: Use this API command to delete a list of authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileDeleteDelete1(ctx *UserContext, requestBody *AuthenticationProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AuthenticationProfileDeleteDelete1(ctx context.Context, requestBody *AuthenticationProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/auth")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/auth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -601,20 +607,19 @@ type (
 // AuthenticationProfileRetrieveListGet: Use this API command to retrieve a list of authentication profiles.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileRetrieveListGet(ctx *UserContext) (*http.Response, *AuthenticationProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileRetrieveListGet(ctx context.Context) (*http.Response, *AuthenticationProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/auth")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/auth", true)
 	out := &AuthenticationProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -659,22 +664,25 @@ type (
 // AuthenticationProfileCreatePost: Use this API command to create a new authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationProfileCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileCreatePost(ctx *UserContext, requestBody *AuthenticationProfileCreatePostRequest) (*http.Response, *AuthenticationProfileCreatePost201Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileCreatePost(ctx context.Context, requestBody *AuthenticationProfileCreatePostRequest) (*http.Response, *AuthenticationProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/auth")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/auth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationProfileCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -699,14 +707,14 @@ type (
 // AuthenticationProfileRetrieveListAuthorizationProfileGet: Use this API command to retrieve a list of authorization profiles.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - xtype (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileRetrieveListAuthorizationProfileGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthorizationProfileGet(ctx *UserContext, xtype string) (*http.Response, *AuthenticationProfileRetrieveListAuthorizationProfileGet200Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthorizationProfileGet(ctx context.Context, xtype string) (*http.Response, *AuthenticationProfileRetrieveListAuthorizationProfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -715,13 +723,10 @@ func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthorizationProfileGet(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"type\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/auth/authorizationList")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"type": xtype,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/auth/authorizationList", true)
+	request.SetQueryParameter("type", xtype)
 	out := &AuthenticationProfileRetrieveListAuthorizationProfileGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -855,22 +860,25 @@ type (
 // AuthenticationProfileRetrieveListAuthenticationServiceInfoPost: Use this API command to retrieve a list of authentication service.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileRetrieveListAuthenticationServiceInfoPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthenticationServiceInfoPost(ctx *UserContext, requestBody *AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequest) (*http.Response, *AuthenticationProfileRetrieveListAuthenticationServiceInfoPost200Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthenticationServiceInfoPost(ctx context.Context, requestBody *AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequest) (*http.Response, *AuthenticationProfileRetrieveListAuthenticationServiceInfoPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/auth/authServiceList/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/auth/authServiceList/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationProfileRetrieveListAuthenticationServiceInfoPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -893,7 +901,7 @@ type (
 // AuthenticationProfileClonePost: Use this API command to clone an authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *AuthenticationProfileClonePostRequest
 //
@@ -901,7 +909,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileClonePost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileClonePost(ctx *UserContext, id string, requestBody *AuthenticationProfileClonePostRequest) (*http.Response, *AuthenticationProfileClonePost200Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileClonePost(ctx context.Context, id string, requestBody *AuthenticationProfileClonePostRequest) (*http.Response, *AuthenticationProfileClonePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -910,14 +918,14 @@ func (p *ProfilesAPI) AuthenticationProfileClonePost(ctx *UserContext, id string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/auth/clone/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("POST", "/v5_0/profiles/auth/clone/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("id", id)
 	out := &AuthenticationProfileClonePost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1084,36 +1092,39 @@ type (
 // AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost: Use this API command to retrieve a list of authentication profiles by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost(ctx *UserContext, requestBody *AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequest) (*http.Response, *AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost200Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost(ctx context.Context, requestBody *AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequest) (*http.Response, *AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/auth/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/auth/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // AuthenticationProfileDeleteDelete: Use this API command to delete an authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Authentication Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AuthenticationProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1122,12 +1133,9 @@ func (p *ProfilesAPI) AuthenticationProfileDeleteDelete(ctx *UserContext, id str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/auth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/auth/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1174,14 +1182,14 @@ type (
 // AuthenticationProfileRetrieveGet: Use this API command to retrieve an authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Authentication Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *AuthenticationProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *AuthenticationProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) AuthenticationProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *AuthenticationProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1190,13 +1198,10 @@ func (p *ProfilesAPI) AuthenticationProfileRetrieveGet(ctx *UserContext, id stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/auth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/auth/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &AuthenticationProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1216,7 +1221,7 @@ type (
 // AuthenticationProfileModifyBasicPatch: Use this API command to modify the basic information of an authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Authentication Profile ID
 // - requestBody: *AuthenticationProfileModifyBasicPatchRequest
 //
@@ -1224,7 +1229,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *AuthenticationProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AuthenticationProfileModifyBasicPatch(ctx context.Context, id string, requestBody *AuthenticationProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1233,13 +1238,13 @@ func (p *ProfilesAPI) AuthenticationProfileModifyBasicPatch(ctx *UserContext, id
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/auth/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/auth/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1259,7 +1264,7 @@ type (
 // AuthenticationProfileModifyRealmMappingsPatch: Use this API command to modify realm based authentication service mappings of an authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Authentication Profile ID
 // - requestBody: *AuthenticationProfileModifyRealmMappingsPatchRequestSlice
 //
@@ -1267,7 +1272,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileModifyRealmMappingsPatch(ctx *UserContext, id string, requestBody AuthenticationProfileModifyRealmMappingsPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AuthenticationProfileModifyRealmMappingsPatch(ctx context.Context, id string, requestBody AuthenticationProfileModifyRealmMappingsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1276,13 +1281,13 @@ func (p *ProfilesAPI) AuthenticationProfileModifyRealmMappingsPatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/auth/{id}/realmMappings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/auth/{id}/realmMappings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1298,7 +1303,7 @@ type (
 // AuthenticationProfileModify3gppCommonSettingsPatch: Use this API command to modify 3GPP common settings of an authentication profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Authentication Profile ID
 // - requestBody: *AuthenticationProfileModify3gppCommonSettingsPatchRequest
 //
@@ -1306,7 +1311,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) AuthenticationProfileModify3gppCommonSettingsPatch(ctx *UserContext, id string, requestBody *AuthenticationProfileModify3gppCommonSettingsPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) AuthenticationProfileModify3gppCommonSettingsPatch(ctx context.Context, id string, requestBody *AuthenticationProfileModify3gppCommonSettingsPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1315,13 +1320,13 @@ func (p *ProfilesAPI) AuthenticationProfileModify3gppCommonSettingsPatch(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/auth/{id}/ttgCommonSetting")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/auth/{id}/ttgCommonSetting", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1335,21 +1340,24 @@ type (
 // BridgeDeleteDelete1: Use this API command to delete multiple bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *BridgeDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeDeleteDelete1(ctx *UserContext, requestBody *BridgeDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) BridgeDeleteDelete1(ctx context.Context, requestBody *BridgeDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/bridge")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/bridge", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1378,20 +1386,19 @@ type (
 // BridgeRetrieveListGet: Use this API command to retrieve a list of Bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BridgeRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeRetrieveListGet(ctx *UserContext) (*http.Response, *BridgeRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) BridgeRetrieveListGet(ctx context.Context) (*http.Response, *BridgeRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/bridge")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/bridge", true)
 	out := &BridgeRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1432,22 +1439,25 @@ type (
 // BridgeCreatePost: Use this API command to create Bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *BridgeCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BridgeCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeCreatePost(ctx *UserContext, requestBody *BridgeCreatePostRequest) (*http.Response, *BridgeCreatePost201Response, error) {
+func (p *ProfilesAPI) BridgeCreatePost(ctx context.Context, requestBody *BridgeCreatePostRequest) (*http.Response, *BridgeCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/bridge")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/bridge", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &BridgeCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1534,36 +1544,39 @@ type (
 // BridgeQueryListPost: Use this API command to query a list of Bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *BridgeQueryListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BridgeQueryListPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeQueryListPost(ctx *UserContext, requestBody *BridgeQueryListPostRequest) (*http.Response, *BridgeQueryListPost200Response, error) {
+func (p *ProfilesAPI) BridgeQueryListPost(ctx context.Context, requestBody *BridgeQueryListPostRequest) (*http.Response, *BridgeQueryListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/bridge/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/bridge/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &BridgeQueryListPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // BridgeDeleteDelete: Use this API command to delete Bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Bridge ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) BridgeDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1572,12 +1585,9 @@ func (p *ProfilesAPI) BridgeDeleteDelete(ctx *UserContext, id string) (*http.Res
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/bridge/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/bridge/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1619,14 +1629,14 @@ type (
 // BridgeRetrieveGet: Use this API command to retrieve Bridge profile by ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Bridge ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BridgeRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeRetrieveGet(ctx *UserContext, id string) (*http.Response, *BridgeRetrieveGet200Response, error) {
+func (p *ProfilesAPI) BridgeRetrieveGet(ctx context.Context, id string) (*http.Response, *BridgeRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1635,13 +1645,10 @@ func (p *ProfilesAPI) BridgeRetrieveGet(ctx *UserContext, id string) (*http.Resp
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/bridge/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/bridge/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &BridgeRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1657,7 +1664,7 @@ type (
 // BridgeModifyBasicPatch: Use this API command to modify the basic information of Bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Bridge ID
 // - requestBody: *BridgeModifyBasicPatchRequest
 //
@@ -1665,7 +1672,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeModifyBasicPatch(ctx *UserContext, id string, requestBody *BridgeModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) BridgeModifyBasicPatch(ctx context.Context, id string, requestBody *BridgeModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1674,13 +1681,13 @@ func (p *ProfilesAPI) BridgeModifyBasicPatch(ctx *UserContext, id string, reques
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/bridge/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/bridge/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1708,7 +1715,7 @@ type (
 // BridgeModifyDhcpRelayPatch: Use this API command to modify DHCP Relay of Bridge profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Bridge ID
 // - requestBody: *BridgeModifyDhcpRelayPatchRequest
 //
@@ -1716,7 +1723,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) BridgeModifyDhcpRelayPatch(ctx *UserContext, id string, requestBody *BridgeModifyDhcpRelayPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) BridgeModifyDhcpRelayPatch(ctx context.Context, id string, requestBody *BridgeModifyDhcpRelayPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1725,13 +1732,13 @@ func (p *ProfilesAPI) BridgeModifyDhcpRelayPatch(ctx *UserContext, id string, re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/bridge/{id}/dhcpRelay")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/bridge/{id}/dhcpRelay", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1745,21 +1752,24 @@ type (
 // DnsServerManagementDeleteAListOfDnsServerProfileDelete: Use this API command to delete a list of DNS server profile .
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementDeleteAListOfDnsServerProfileDelete(ctx *UserContext, requestBody *DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) DnsServerManagementDeleteAListOfDnsServerProfileDelete(ctx context.Context, requestBody *DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/dnsserver")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/dnsserver", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1781,22 +1791,25 @@ type (
 // DnsServerManagementCreatePost: Use this API command to create DNS server profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *DnsServerManagementCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DnsServerManagementCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementCreatePost(ctx *UserContext, requestBody *DnsServerManagementCreatePostRequest) (*http.Response, *DnsServerManagementCreatePost201Response, error) {
+func (p *ProfilesAPI) DnsServerManagementCreatePost(ctx context.Context, requestBody *DnsServerManagementCreatePostRequest) (*http.Response, *DnsServerManagementCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/dnsserver")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/dnsserver", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &DnsServerManagementCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1819,7 +1832,7 @@ type (
 // DnsServerManagementClonePost: Use this API command to clone an DNS server profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *DnsServerManagementClonePostRequest
 //
@@ -1827,7 +1840,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DnsServerManagementClonePost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementClonePost(ctx *UserContext, id string, requestBody *DnsServerManagementClonePostRequest) (*http.Response, *DnsServerManagementClonePost200Response, error) {
+func (p *ProfilesAPI) DnsServerManagementClonePost(ctx context.Context, id string, requestBody *DnsServerManagementClonePostRequest) (*http.Response, *DnsServerManagementClonePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1836,14 +1849,14 @@ func (p *ProfilesAPI) DnsServerManagementClonePost(ctx *UserContext, id string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/dnsserver/clone/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("POST", "/v5_0/profiles/dnsserver/clone/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("id", id)
 	out := &DnsServerManagementClonePost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1988,36 +2001,39 @@ type (
 // DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost: Use this API command to retrieve a list of DNS server profile  by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost(ctx *UserContext, requestBody *DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequest) (*http.Response, *DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost200Response, error) {
+func (p *ProfilesAPI) DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost(ctx context.Context, requestBody *DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequest) (*http.Response, *DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/dnsserver/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/dnsserver/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // DnsServerManagementDeleteDelete: Use this API command to delete DNS server profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) DnsServerManagementDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2026,12 +2042,9 @@ func (p *ProfilesAPI) DnsServerManagementDeleteDelete(ctx *UserContext, id strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/dnsserver/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/dnsserver/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2056,14 +2069,14 @@ type (
 // DnsServerManagementRetrieveGet: Use this API command to retrieve DNS server profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DnsServerManagementRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementRetrieveGet(ctx *UserContext, id string) (*http.Response, *DnsServerManagementRetrieveGet200Response, error) {
+func (p *ProfilesAPI) DnsServerManagementRetrieveGet(ctx context.Context, id string) (*http.Response, *DnsServerManagementRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2072,13 +2085,10 @@ func (p *ProfilesAPI) DnsServerManagementRetrieveGet(ctx *UserContext, id string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/dnsserver/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/dnsserver/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &DnsServerManagementRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2098,7 +2108,7 @@ type (
 // DnsServerManagementModifyBasicPatch: Use this API command to modify the basic information of DNS server profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *DnsServerManagementModifyBasicPatchRequest
 //
@@ -2106,7 +2116,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) DnsServerManagementModifyBasicPatch(ctx *UserContext, id string, requestBody *DnsServerManagementModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) DnsServerManagementModifyBasicPatch(ctx context.Context, id string, requestBody *DnsServerManagementModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2115,13 +2125,13 @@ func (p *ProfilesAPI) DnsServerManagementModifyBasicPatch(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/dnsserver/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/dnsserver/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2135,21 +2145,24 @@ type (
 // Hotspot20IdentityProviderProfileDeleteDelete1: Use this API command to delete multiple Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *Hotspot20IdentityProviderProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDeleteDelete1(ctx *UserContext, requestBody *Hotspot20IdentityProviderProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDeleteDelete1(ctx context.Context, requestBody *Hotspot20IdentityProviderProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/identityproviders")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/identityproviders", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2322,7 +2335,7 @@ type (
 // Hotspot20IdentityProviderProfileRetrieveListGet: Use this API command to retrieve list of Hotspot 2.0 identity providers.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -2332,7 +2345,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20IdentityProviderProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *Hotspot20IdentityProviderProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *Hotspot20IdentityProviderProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2355,14 +2368,11 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileRetrieveListGet(ctx *UserC
 	} else {
 		listSize = "100"
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/hs20/identityproviders")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/hs20/identityproviders", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &Hotspot20IdentityProviderProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2535,22 +2545,25 @@ type (
 // Hotspot20IdentityProviderProfileCreatePost: Use this API command to create a new Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *Hotspot20IdentityProviderProfileCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20IdentityProviderProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileCreatePost(ctx *UserContext, requestBody *Hotspot20IdentityProviderProfileCreatePostRequest) (*http.Response, *Hotspot20IdentityProviderProfileCreatePost201Response, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileCreatePost(ctx context.Context, requestBody *Hotspot20IdentityProviderProfileCreatePostRequest) (*http.Response, *Hotspot20IdentityProviderProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/hs20/identityproviders")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/hs20/identityproviders", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &Hotspot20IdentityProviderProfileCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -2833,36 +2846,39 @@ type (
 // Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost: Query hotspot 2.0 identity providers
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost(ctx *UserContext, requestBody *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequest) (*http.Response, *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200Response, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost(ctx context.Context, requestBody *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequest) (*http.Response, *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/hs20/identityproviders/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/hs20/identityproviders/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // Hotspot20IdentityProviderProfileDeleteDelete: Use this API command to delete a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2871,12 +2887,9 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDeleteDelete(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/identityproviders/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/identityproviders/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3044,14 +3057,14 @@ type (
 // Hotspot20IdentityProviderProfileRetrieveGet: Use this API command to retrieve a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20IdentityProviderProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *Hotspot20IdentityProviderProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *Hotspot20IdentityProviderProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3060,13 +3073,10 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileRetrieveGet(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/hs20/identityproviders/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/hs20/identityproviders/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &Hotspot20IdentityProviderProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3088,7 +3098,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyBasicPatch: Use this API command to modify the basic information of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyBasicPatchRequest
 //
@@ -3096,7 +3106,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *Hotspot20IdentityProviderProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyBasicPatch(ctx context.Context, id string, requestBody *Hotspot20IdentityProviderProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3105,26 +3115,26 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyBasicPatch(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 // Hotspot20IdentityProviderProfileDisableAccountingsDelete: Use this API command to disable accountings of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableAccountingsDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableAccountingsDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3133,12 +3143,9 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableAccountingsDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/identityproviders/{id}/accountings")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/identityproviders/{id}/accountings", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3156,7 +3163,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyAccountingsPatch: Use this API command to modify accountings of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyAccountingsPatchRequestSlice
 //
@@ -3164,7 +3171,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyAccountingsPatch(ctx *UserContext, id string, requestBody Hotspot20IdentityProviderProfileModifyAccountingsPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyAccountingsPatch(ctx context.Context, id string, requestBody Hotspot20IdentityProviderProfileModifyAccountingsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3173,13 +3180,13 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyAccountingsPatch(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/accountings")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/accountings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3198,7 +3205,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyAuthenticationsPatch: Use this API command to modify authentications of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyAuthenticationsPatchRequestSlice
 //
@@ -3206,7 +3213,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyAuthenticationsPatch(ctx *UserContext, id string, requestBody Hotspot20IdentityProviderProfileModifyAuthenticationsPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyAuthenticationsPatch(ctx context.Context, id string, requestBody Hotspot20IdentityProviderProfileModifyAuthenticationsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3215,13 +3222,13 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyAuthenticationsPatch
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/authentications")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/authentications", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3236,7 +3243,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyHomeOisPatch: Use this API command to modify home OIs of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyHomeOisPatchRequestSlice
 //
@@ -3244,7 +3251,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyHomeOisPatch(ctx *UserContext, id string, requestBody Hotspot20IdentityProviderProfileModifyHomeOisPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyHomeOisPatch(ctx context.Context, id string, requestBody Hotspot20IdentityProviderProfileModifyHomeOisPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3253,26 +3260,26 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyHomeOisPatch(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/homeOis")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/homeOis", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 // Hotspot20IdentityProviderProfileDisableOnlineSignupProvisioningDelete: Use this API command to disable online signup & provisioning of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableOnlineSignupProvisioningDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableOnlineSignupProvisioningDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3281,12 +3288,9 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableOnlineSignupProvisi
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/identityproviders/{id}/osu")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/identityproviders/{id}/osu", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3375,7 +3379,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatch: Use this API command to modify online signup & provisioning of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequest
 //
@@ -3383,7 +3387,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatch(ctx *UserContext, id string, requestBody *Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatch(ctx context.Context, id string, requestBody *Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3392,13 +3396,13 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyOnlineSignupProvisio
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/osu")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/osu", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3413,7 +3417,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyPlmnsPatch: Use this API command to modify PLMNs of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyPlmnsPatchRequestSlice
 //
@@ -3421,7 +3425,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyPlmnsPatch(ctx *UserContext, id string, requestBody Hotspot20IdentityProviderProfileModifyPlmnsPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyPlmnsPatch(ctx context.Context, id string, requestBody Hotspot20IdentityProviderProfileModifyPlmnsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3430,13 +3434,13 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyPlmnsPatch(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/plmns")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/plmns", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3468,7 +3472,7 @@ type (
 // Hotspot20IdentityProviderProfileModifyRealmsPatch: Use this API command to modify realms of a Hotspot 2.0 identity provider.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Identity Provider ID
 // - requestBody: *Hotspot20IdentityProviderProfileModifyRealmsPatchRequestSlice
 //
@@ -3476,7 +3480,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyRealmsPatch(ctx *UserContext, id string, requestBody Hotspot20IdentityProviderProfileModifyRealmsPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyRealmsPatch(ctx context.Context, id string, requestBody Hotspot20IdentityProviderProfileModifyRealmsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3485,13 +3489,13 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyRealmsPatch(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/realms")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/identityproviders/{id}/realms", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3505,21 +3509,24 @@ type (
 // Hotspot20WiFiOperatorProfileDeleteDelete1: Use this API command to delete multiple Hotspot 2.0 Wi-Fi operators.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *Hotspot20WiFiOperatorProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDeleteDelete1(ctx *UserContext, requestBody *Hotspot20WiFiOperatorProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDeleteDelete1(ctx context.Context, requestBody *Hotspot20WiFiOperatorProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/operators")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/operators", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3567,7 +3574,7 @@ type (
 // Hotspot20WiFiOperatorProfileRetrieveListGet: Use this API command to retrieve list of Hotspot 2.0 Wi-Fi Operators.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -3577,7 +3584,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WiFiOperatorProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *Hotspot20WiFiOperatorProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *Hotspot20WiFiOperatorProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3600,14 +3607,11 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileRetrieveListGet(ctx *UserConte
 	} else {
 		listSize = "100"
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/hs20/operators")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/hs20/operators", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &Hotspot20WiFiOperatorProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3650,22 +3654,25 @@ type (
 // Hotspot20WiFiOperatorProfileCreatePost: Use this API command to create a new Hotspot 2.0 Wi-Fi operator,
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *Hotspot20WiFiOperatorProfileCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WiFiOperatorProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileCreatePost(ctx *UserContext, requestBody *Hotspot20WiFiOperatorProfileCreatePostRequest) (*http.Response, *Hotspot20WiFiOperatorProfileCreatePost201Response, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileCreatePost(ctx context.Context, requestBody *Hotspot20WiFiOperatorProfileCreatePostRequest) (*http.Response, *Hotspot20WiFiOperatorProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/hs20/operators")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/hs20/operators", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &Hotspot20WiFiOperatorProfileCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -3823,36 +3830,39 @@ type (
 // Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost: Query hotspot 2.0 Wi-Fi operators
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost(ctx *UserContext, requestBody *Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequest) (*http.Response, *Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200Response, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost(ctx context.Context, requestBody *Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequest) (*http.Response, *Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/hs20/operators/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/hs20/operators/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // Hotspot20WiFiOperatorProfileDeleteDelete: Use this API command to delete a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3861,12 +3871,9 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDeleteDelete(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/operators/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/operators/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3904,14 +3911,14 @@ type (
 // Hotspot20WiFiOperatorProfileRetrieveGet: Use this API command to retrieve a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WiFiOperatorProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *Hotspot20WiFiOperatorProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *Hotspot20WiFiOperatorProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3920,13 +3927,10 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileRetrieveGet(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/hs20/operators/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/hs20/operators/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &Hotspot20WiFiOperatorProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3942,7 +3946,7 @@ type (
 // Hotspot20WiFiOperatorProfileModifyBasicPatch: Use this API command to modify the basic information of a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 // - requestBody: *Hotspot20WiFiOperatorProfileModifyBasicPatchRequest
 //
@@ -3950,7 +3954,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *Hotspot20WiFiOperatorProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyBasicPatch(ctx context.Context, id string, requestBody *Hotspot20WiFiOperatorProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3959,26 +3963,26 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyBasicPatch(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/operators/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/operators/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 // Hotspot20WiFiOperatorProfileDisableCertificateDelete: Use this API command to disable certificate of a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDisableCertificateDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDisableCertificateDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3987,12 +3991,9 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileDisableCertificateDelete(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/hs20/operators/{id}/certificate")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/hs20/operators/{id}/certificate", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4005,7 +4006,7 @@ type (
 // Hotspot20WiFiOperatorProfileModifyCertificatePatch: Use this API command to enable or modify certificate of a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 // - requestBody: *Hotspot20WiFiOperatorProfileModifyCertificatePatchRequest
 //
@@ -4013,7 +4014,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyCertificatePatch(ctx *UserContext, id string, requestBody *Hotspot20WiFiOperatorProfileModifyCertificatePatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyCertificatePatch(ctx context.Context, id string, requestBody *Hotspot20WiFiOperatorProfileModifyCertificatePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4022,13 +4023,13 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyCertificatePatch(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/operators/{id}/certificate")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/operators/{id}/certificate", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4038,7 +4039,7 @@ type (
 // Hotspot20WiFiOperatorProfileModifyDomainNamesPatch: Use this API command to modify domain names of a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 // - requestBody: *Hotspot20WiFiOperatorProfileModifyDomainNamesPatchRequest
 //
@@ -4046,7 +4047,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyDomainNamesPatch(ctx *UserContext, id string, requestBody Hotspot20WiFiOperatorProfileModifyDomainNamesPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyDomainNamesPatch(ctx context.Context, id string, requestBody Hotspot20WiFiOperatorProfileModifyDomainNamesPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4055,13 +4056,13 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyDomainNamesPatch(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/operators/{id}/domainNames")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/operators/{id}/domainNames", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4076,7 +4077,7 @@ type (
 // Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatch: Use this API command to modify friendly names of a Hotspot 2.0 Wi-Fi operator.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): HotSpot 2.0 Wi-Fi Operator Profile ID
 // - requestBody: *Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatchRequestSlice
 //
@@ -4084,7 +4085,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatch(ctx *UserContext, id string, requestBody Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatch(ctx context.Context, id string, requestBody Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4093,13 +4094,13 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatch(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/hs20/operators/{id}/friendlyNames")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/hs20/operators/{id}/friendlyNames", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4113,21 +4114,24 @@ type (
 // L2ogreDeleteDelete1: Use this API command to delete multiple L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *L2ogreDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreDeleteDelete1(ctx *UserContext, requestBody *L2ogreDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L2ogreDeleteDelete1(ctx context.Context, requestBody *L2ogreDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/l2ogre")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/l2ogre", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4156,20 +4160,19 @@ type (
 // L2ogreRetrieveListGet: Use this API command to retrieve a list of L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *L2ogreRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreRetrieveListGet(ctx *UserContext) (*http.Response, *L2ogreRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) L2ogreRetrieveListGet(ctx context.Context) (*http.Response, *L2ogreRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/l2ogre")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/l2ogre", true)
 	out := &L2ogreRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4220,22 +4223,25 @@ type (
 // L2ogreCreatePost: Use this API command to create L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *L2ogreCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *L2ogreCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreCreatePost(ctx *UserContext, requestBody *L2ogreCreatePostRequest) (*http.Response, *L2ogreCreatePost201Response, error) {
+func (p *ProfilesAPI) L2ogreCreatePost(ctx context.Context, requestBody *L2ogreCreatePostRequest) (*http.Response, *L2ogreCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/l2ogre")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/l2ogre", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &L2ogreCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -4332,36 +4338,39 @@ type (
 // L2ogreQueryListPost: Use this API command to query a list of L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *L2ogreQueryListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *L2ogreQueryListPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreQueryListPost(ctx *UserContext, requestBody *L2ogreQueryListPostRequest) (*http.Response, *L2ogreQueryListPost200Response, error) {
+func (p *ProfilesAPI) L2ogreQueryListPost(ctx context.Context, requestBody *L2ogreQueryListPostRequest) (*http.Response, *L2ogreQueryListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/l2ogre/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/l2ogre/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &L2ogreQueryListPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // L2ogreDeleteDelete: Use this API command to delete L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L2ogreDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4370,12 +4379,9 @@ func (p *ProfilesAPI) L2ogreDeleteDelete(ctx *UserContext, id string) (*http.Res
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/l2ogre/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/l2ogre/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4427,14 +4433,14 @@ type (
 // L2ogreRetrieveGet: Use this API command to retrieve L2oGRE profile by ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *L2ogreRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreRetrieveGet(ctx *UserContext, id string) (*http.Response, *L2ogreRetrieveGet200Response, error) {
+func (p *ProfilesAPI) L2ogreRetrieveGet(ctx context.Context, id string) (*http.Response, *L2ogreRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4443,13 +4449,10 @@ func (p *ProfilesAPI) L2ogreRetrieveGet(ctx *UserContext, id string) (*http.Resp
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/l2ogre/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/l2ogre/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &L2ogreRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4465,7 +4468,7 @@ type (
 // L2ogreModifyBasicPatch: Use this API command to modify the basic information of L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *L2ogreModifyBasicPatchRequest
 //
@@ -4473,7 +4476,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreModifyBasicPatch(ctx *UserContext, id string, requestBody *L2ogreModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L2ogreModifyBasicPatch(ctx context.Context, id string, requestBody *L2ogreModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4482,13 +4485,13 @@ func (p *ProfilesAPI) L2ogreModifyBasicPatch(ctx *UserContext, id string, reques
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/l2ogre/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/l2ogre/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4505,7 +4508,7 @@ type (
 // L2ogreModifyCoreNetworkGatewayPatch: Use this API command to modify Core Network Gateway of a L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *L2ogreModifyCoreNetworkGatewayPatchRequest
 //
@@ -4513,7 +4516,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreModifyCoreNetworkGatewayPatch(ctx *UserContext, id string, requestBody *L2ogreModifyCoreNetworkGatewayPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L2ogreModifyCoreNetworkGatewayPatch(ctx context.Context, id string, requestBody *L2ogreModifyCoreNetworkGatewayPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4522,13 +4525,13 @@ func (p *ProfilesAPI) L2ogreModifyCoreNetworkGatewayPatch(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/l2ogre/{id}/coreNetworkGateway")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/l2ogre/{id}/coreNetworkGateway", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4556,7 +4559,7 @@ type (
 // L2ogreModifyDhcpRelayPatch: Use this API command to modify DHCP Relay of L2oGRE profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *L2ogreModifyDhcpRelayPatchRequest
 //
@@ -4564,7 +4567,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L2ogreModifyDhcpRelayPatch(ctx *UserContext, id string, requestBody *L2ogreModifyDhcpRelayPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L2ogreModifyDhcpRelayPatch(ctx context.Context, id string, requestBody *L2ogreModifyDhcpRelayPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4573,13 +4576,13 @@ func (p *ProfilesAPI) L2ogreModifyDhcpRelayPatch(ctx *UserContext, id string, re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/l2ogre/{id}/dhcpRelay")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/l2ogre/{id}/dhcpRelay", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4593,21 +4596,24 @@ type (
 // LbsProfileDeleteMultipleLbsProfileDelete: Delete multiple LBS profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *LbsProfileDeleteMultipleLbsProfileDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) LbsProfileDeleteMultipleLbsProfileDelete(ctx *UserContext, requestBody *LbsProfileDeleteMultipleLbsProfileDeleteRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) LbsProfileDeleteMultipleLbsProfileDelete(ctx context.Context, requestBody *LbsProfileDeleteMultipleLbsProfileDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/lbs")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/lbs", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -4636,22 +4642,25 @@ type (
 // LbsProfileCreateLbsProfilePost: Create LBS profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *LbsProfileCreateLbsProfilePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *LbsProfileCreateLbsProfilePost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) LbsProfileCreateLbsProfilePost(ctx *UserContext, requestBody *LbsProfileCreateLbsProfilePostRequest) (*http.Response, *LbsProfileCreateLbsProfilePost200Response, error) {
+func (p *ProfilesAPI) LbsProfileCreateLbsProfilePost(ctx context.Context, requestBody *LbsProfileCreateLbsProfilePostRequest) (*http.Response, *LbsProfileCreateLbsProfilePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/lbs")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/lbs", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &LbsProfileCreateLbsProfilePost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4721,36 +4730,39 @@ type (
 // LbsProfileQueryLbsProfilesPost: Query LBS profiles
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *LbsProfileQueryLbsProfilesPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *LbsProfileQueryLbsProfilesPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) LbsProfileQueryLbsProfilesPost(ctx *UserContext, requestBody *LbsProfileQueryLbsProfilesPostRequest) (*http.Response, *LbsProfileQueryLbsProfilesPost200Response, error) {
+func (p *ProfilesAPI) LbsProfileQueryLbsProfilesPost(ctx context.Context, requestBody *LbsProfileQueryLbsProfilesPostRequest) (*http.Response, *LbsProfileQueryLbsProfilesPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/lbs/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/lbs/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &LbsProfileQueryLbsProfilesPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // LbsProfileDeleteLbsProfileDelete: Delete LBS profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) LbsProfileDeleteLbsProfileDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) LbsProfileDeleteLbsProfileDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4759,12 +4771,9 @@ func (p *ProfilesAPI) LbsProfileDeleteLbsProfileDelete(ctx *UserContext, id stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/lbs/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 200, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/lbs/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -4789,14 +4798,14 @@ type (
 // LbsProfileCreateLbsProfileGet: Retrieve LBS profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *LbsProfileCreateLbsProfileGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) LbsProfileCreateLbsProfileGet(ctx *UserContext, id string) (*http.Response, *LbsProfileCreateLbsProfileGet200Response, error) {
+func (p *ProfilesAPI) LbsProfileCreateLbsProfileGet(ctx context.Context, id string) (*http.Response, *LbsProfileCreateLbsProfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4805,13 +4814,10 @@ func (p *ProfilesAPI) LbsProfileCreateLbsProfileGet(ctx *UserContext, id string)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/lbs/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/lbs/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &LbsProfileCreateLbsProfileGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4837,7 +4843,7 @@ type (
 // LbsProfileUpdateLbsProfilePatch: Update LBS profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *LbsProfileUpdateLbsProfilePatchRequest
 //
@@ -4845,7 +4851,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) LbsProfileUpdateLbsProfilePatch(ctx *UserContext, id string, requestBody *LbsProfileUpdateLbsProfilePatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) LbsProfileUpdateLbsProfilePatch(ctx context.Context, id string, requestBody *LbsProfileUpdateLbsProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4854,13 +4860,13 @@ func (p *ProfilesAPI) LbsProfileUpdateLbsProfilePatch(ctx *UserContext, id strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/lbs/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/lbs/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 200, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -4874,21 +4880,24 @@ type (
 // IpsecProfileDeleteDelete1: Delete multiple ipsec
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IpsecProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileDeleteDelete1(ctx *UserContext, requestBody *IpsecProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileDeleteDelete1(ctx context.Context, requestBody *IpsecProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/tunnel/ipsec")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/tunnel/ipsec", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4917,7 +4926,7 @@ type (
 // IpsecProfileRetrieveListGet: Retrieve a list of IPSEC
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -4927,7 +4936,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *IpsecProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *IpsecProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) IpsecProfileRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *IpsecProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4950,14 +4959,11 @@ func (p *ProfilesAPI) IpsecProfileRetrieveListGet(ctx *UserContext, optionalPara
 	} else {
 		listSize = "100"
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/tunnel/ipsec")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/tunnel/ipsec", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &IpsecProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -5038,22 +5044,25 @@ type (
 // IpsecProfileCreateIpsecPost: Create a new ipsec
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IpsecProfileCreateIpsecPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IpsecProfileCreateIpsecPost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileCreateIpsecPost(ctx *UserContext, requestBody *IpsecProfileCreateIpsecPostRequest) (*http.Response, *IpsecProfileCreateIpsecPost201Response, error) {
+func (p *ProfilesAPI) IpsecProfileCreateIpsecPost(ctx context.Context, requestBody *IpsecProfileCreateIpsecPostRequest) (*http.Response, *IpsecProfileCreateIpsecPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/ipsec")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/ipsec", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IpsecProfileCreateIpsecPost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -5255,36 +5264,39 @@ type (
 // IpsecProfileQueryListPost: Query a list of IPSEC
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *IpsecProfileQueryListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IpsecProfileQueryListPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileQueryListPost(ctx *UserContext, requestBody *IpsecProfileQueryListPostRequest) (*http.Response, *IpsecProfileQueryListPost200Response, error) {
+func (p *ProfilesAPI) IpsecProfileQueryListPost(ctx context.Context, requestBody *IpsecProfileQueryListPostRequest) (*http.Response, *IpsecProfileQueryListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/ipsec/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/ipsec/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &IpsecProfileQueryListPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // IpsecProfileDeleteDelete: Delete a ipsec
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5293,12 +5305,9 @@ func (p *ProfilesAPI) IpsecProfileDeleteDelete(ctx *UserContext, id string) (*ht
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/tunnel/ipsec/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/tunnel/ipsec/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5380,14 +5389,14 @@ type (
 // IpsecProfileRetrieveGet: Retrieve a IPSEC
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *IpsecProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *IpsecProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) IpsecProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *IpsecProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5396,13 +5405,10 @@ func (p *ProfilesAPI) IpsecProfileRetrieveGet(ctx *UserContext, id string) (*htt
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/tunnel/ipsec/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/tunnel/ipsec/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &IpsecProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -5426,7 +5432,7 @@ type (
 // IpsecProfileModifyBasicPatch: Modify a specific ipsec basic
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 // - requestBody: *IpsecProfileModifyBasicPatchRequest
 //
@@ -5434,7 +5440,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *IpsecProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileModifyBasicPatch(ctx context.Context, id string, requestBody *IpsecProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5443,13 +5449,13 @@ func (p *ProfilesAPI) IpsecProfileModifyBasicPatch(ctx *UserContext, id string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/ipsec/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/ipsec/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5471,7 +5477,7 @@ type (
 // IpsecProfileModifyAdvancedoptionPatch: Modify a specific ipsec advancedOption
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 // - requestBody: *IpsecProfileModifyAdvancedoptionPatchRequest
 //
@@ -5479,7 +5485,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileModifyAdvancedoptionPatch(ctx *UserContext, id string, requestBody *IpsecProfileModifyAdvancedoptionPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileModifyAdvancedoptionPatch(ctx context.Context, id string, requestBody *IpsecProfileModifyAdvancedoptionPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5488,13 +5494,13 @@ func (p *ProfilesAPI) IpsecProfileModifyAdvancedoptionPatch(ctx *UserContext, id
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/advancedOption")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/advancedOption", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5510,7 +5516,7 @@ type (
 // IpsecProfileModifyCmprotocoloptionPatch: Modify a specific ipsec cmProtocolOption
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 // - requestBody: *IpsecProfileModifyCmprotocoloptionPatchRequest
 //
@@ -5518,7 +5524,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileModifyCmprotocoloptionPatch(ctx *UserContext, id string, requestBody *IpsecProfileModifyCmprotocoloptionPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileModifyCmprotocoloptionPatch(ctx context.Context, id string, requestBody *IpsecProfileModifyCmprotocoloptionPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5527,13 +5533,13 @@ func (p *ProfilesAPI) IpsecProfileModifyCmprotocoloptionPatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/cmProtocolOption")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/cmProtocolOption", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5554,7 +5560,7 @@ type (
 // IpsecProfileModifyEspsecurityassociationPatch: Modify a specific ipsec espSecurityAssociation
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 // - requestBody: *IpsecProfileModifyEspsecurityassociationPatchRequest
 //
@@ -5562,7 +5568,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileModifyEspsecurityassociationPatch(ctx *UserContext, id string, requestBody *IpsecProfileModifyEspsecurityassociationPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileModifyEspsecurityassociationPatch(ctx context.Context, id string, requestBody *IpsecProfileModifyEspsecurityassociationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5571,13 +5577,13 @@ func (p *ProfilesAPI) IpsecProfileModifyEspsecurityassociationPatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/espSecurityAssociation")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/espSecurityAssociation", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5599,7 +5605,7 @@ type (
 // IpsecProfileModifyIkesecurityassociationPatch: Modify a specific ipsec ikeSecurityAssociation
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): IPSec Tunnel ID
 // - requestBody: *IpsecProfileModifyIkesecurityassociationPatchRequest
 //
@@ -5607,7 +5613,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) IpsecProfileModifyIkesecurityassociationPatch(ctx *UserContext, id string, requestBody *IpsecProfileModifyIkesecurityassociationPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) IpsecProfileModifyIkesecurityassociationPatch(ctx context.Context, id string, requestBody *IpsecProfileModifyIkesecurityassociationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5616,13 +5622,13 @@ func (p *ProfilesAPI) IpsecProfileModifyIkesecurityassociationPatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/ikeSecurityAssociation")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/ipsec/{id}/ikeSecurityAssociation", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5635,21 +5641,24 @@ type (
 // L3RoamingModifyL3RoamingBasicConfigurationPatch: Use this API command to modify L3 Roaming basic configuration.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *L3RoamingModifyL3RoamingBasicConfigurationPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L3RoamingModifyL3RoamingBasicConfigurationPatch(ctx *UserContext, requestBody *L3RoamingModifyL3RoamingBasicConfigurationPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L3RoamingModifyL3RoamingBasicConfigurationPatch(ctx context.Context, requestBody *L3RoamingModifyL3RoamingBasicConfigurationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/l3Roaming")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/l3Roaming", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5667,21 +5676,24 @@ type (
 // L3RoamingModifyL3RoamingBasicConfigurationPatch1: Use this API command to modify L3 Roaming basic configuration.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *L3RoamingModifyL3RoamingBasicConfigurationPatch1RequestSlice
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L3RoamingModifyL3RoamingBasicConfigurationPatch1(ctx *UserContext, requestBody L3RoamingModifyL3RoamingBasicConfigurationPatch1RequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) L3RoamingModifyL3RoamingBasicConfigurationPatch1(ctx context.Context, requestBody L3RoamingModifyL3RoamingBasicConfigurationPatch1RequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/l3Roaming/dataPlanes")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/l3Roaming/dataPlanes", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5705,20 +5717,19 @@ type (
 // L3RoamingRetriveL3RoamingConfigurationPost: Use this API command to retrieve L3 Roaming configuration.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *L3RoamingRetriveL3RoamingConfigurationPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) L3RoamingRetriveL3RoamingConfigurationPost(ctx *UserContext) (*http.Response, *L3RoamingRetriveL3RoamingConfigurationPost200Response, error) {
+func (p *ProfilesAPI) L3RoamingRetriveL3RoamingConfigurationPost(ctx context.Context) (*http.Response, *L3RoamingRetriveL3RoamingConfigurationPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/l3Roaming/query")
-	request.authenticated = true
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/l3Roaming/query", true)
 	out := &L3RoamingRetriveL3RoamingConfigurationPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -5733,21 +5744,24 @@ type (
 // RuckusgreTunnelProfileDeleteDelete1: Use this API command to delete multiple RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusgreTunnelProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileDeleteDelete1(ctx *UserContext, requestBody *RuckusgreTunnelProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileDeleteDelete1(ctx context.Context, requestBody *RuckusgreTunnelProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/tunnel/ruckusgre")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/tunnel/ruckusgre", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5776,20 +5790,19 @@ type (
 // RuckusgreTunnelProfileRetrieveListGet: Use this API command to retrieve a list of RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusgreTunnelProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileRetrieveListGet(ctx *UserContext) (*http.Response, *RuckusgreTunnelProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileRetrieveListGet(ctx context.Context) (*http.Response, *RuckusgreTunnelProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/tunnel/ruckusgre")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/tunnel/ruckusgre", true)
 	out := &RuckusgreTunnelProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -5813,22 +5826,25 @@ type (
 // RuckusgreTunnelProfileCreatePost: Use this API command to create RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusgreTunnelProfileCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusgreTunnelProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileCreatePost(ctx *UserContext, requestBody *RuckusgreTunnelProfileCreatePostRequest) (*http.Response, *RuckusgreTunnelProfileCreatePost201Response, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileCreatePost(ctx context.Context, requestBody *RuckusgreTunnelProfileCreatePostRequest) (*http.Response, *RuckusgreTunnelProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/ruckusgre")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/ruckusgre", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &RuckusgreTunnelProfileCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -5973,36 +5989,39 @@ type (
 // RuckusgreTunnelProfileQueryListPost: Use this API command to query a list of RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusgreTunnelProfileQueryListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusgreTunnelProfileQueryListPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileQueryListPost(ctx *UserContext, requestBody *RuckusgreTunnelProfileQueryListPostRequest) (*http.Response, *RuckusgreTunnelProfileQueryListPost200Response, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileQueryListPost(ctx context.Context, requestBody *RuckusgreTunnelProfileQueryListPostRequest) (*http.Response, *RuckusgreTunnelProfileQueryListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/ruckusgre/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/ruckusgre/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &RuckusgreTunnelProfileQueryListPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // RuckusgreTunnelProfileDeleteDelete: Use this API command to delete RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Ruckus GRE Tunnel ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6011,12 +6030,9 @@ func (p *ProfilesAPI) RuckusgreTunnelProfileDeleteDelete(ctx *UserContext, id st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/tunnel/ruckusgre/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/tunnel/ruckusgre/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6041,14 +6057,14 @@ type (
 // RuckusgreTunnelProfileRetrieveGet: Use this API command to retrieve RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Ruckus GRE Tunnel ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusgreTunnelProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *RuckusgreTunnelProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *RuckusgreTunnelProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6057,13 +6073,10 @@ func (p *ProfilesAPI) RuckusgreTunnelProfileRetrieveGet(ctx *UserContext, id str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/tunnel/ruckusgre/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/tunnel/ruckusgre/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &RuckusgreTunnelProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -6083,7 +6096,7 @@ type (
 // RuckusgreTunnelProfileModifyBasicPatch: Use this API command to modify the basic information of RuckusGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Ruckus GRE Tunnel ID
 // - requestBody: *RuckusgreTunnelProfileModifyBasicPatchRequest
 //
@@ -6091,7 +6104,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) RuckusgreTunnelProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *RuckusgreTunnelProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) RuckusgreTunnelProfileModifyBasicPatch(ctx context.Context, id string, requestBody *RuckusgreTunnelProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6100,13 +6113,13 @@ func (p *ProfilesAPI) RuckusgreTunnelProfileModifyBasicPatch(ctx *UserContext, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/ruckusgre/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/ruckusgre/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6120,21 +6133,24 @@ type (
 // SoftgreTunnelProfileDeleteDelete1: Use this API command to delete multiple SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SoftgreTunnelProfileDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileDeleteDelete1(ctx *UserContext, requestBody *SoftgreTunnelProfileDeleteDelete1Request) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileDeleteDelete1(ctx context.Context, requestBody *SoftgreTunnelProfileDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/tunnel/softgre")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/tunnel/softgre", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6163,20 +6179,19 @@ type (
 // SoftgreTunnelProfileRetrieveListGet: Use this API command to retrieve a list of SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SoftgreTunnelProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileRetrieveListGet(ctx *UserContext) (*http.Response, *SoftgreTunnelProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileRetrieveListGet(ctx context.Context) (*http.Response, *SoftgreTunnelProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/tunnel/softgre")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/tunnel/softgre", true)
 	out := &SoftgreTunnelProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -6204,22 +6219,25 @@ type (
 // SoftgreTunnelProfileCreatePost: Use this API command to create SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SoftgreTunnelProfileCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SoftgreTunnelProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileCreatePost(ctx *UserContext, requestBody *SoftgreTunnelProfileCreatePostRequest) (*http.Response, *SoftgreTunnelProfileCreatePost201Response, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileCreatePost(ctx context.Context, requestBody *SoftgreTunnelProfileCreatePostRequest) (*http.Response, *SoftgreTunnelProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/softgre")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/softgre", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &SoftgreTunnelProfileCreatePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -6368,36 +6386,39 @@ type (
 // SoftgreTunnelProfileQueryListPost: Use this API command to query a list of SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SoftgreTunnelProfileQueryListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SoftgreTunnelProfileQueryListPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileQueryListPost(ctx *UserContext, requestBody *SoftgreTunnelProfileQueryListPostRequest) (*http.Response, *SoftgreTunnelProfileQueryListPost200Response, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileQueryListPost(ctx context.Context, requestBody *SoftgreTunnelProfileQueryListPostRequest) (*http.Response, *SoftgreTunnelProfileQueryListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/tunnel/softgre/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/tunnel/softgre/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &SoftgreTunnelProfileQueryListPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // SoftgreTunnelProfileDeleteDelete: Use this API command to delete SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Soft GRE Tunnel ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6406,12 +6427,9 @@ func (p *ProfilesAPI) SoftgreTunnelProfileDeleteDelete(ctx *UserContext, id stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/tunnel/softgre/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/tunnel/softgre/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6440,14 +6458,14 @@ type (
 // SoftgreTunnelProfileRetrieveGet: Use this API command to retrieve SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Soft GRE Tunnel ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SoftgreTunnelProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *SoftgreTunnelProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *SoftgreTunnelProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6456,13 +6474,10 @@ func (p *ProfilesAPI) SoftgreTunnelProfileRetrieveGet(ctx *UserContext, id strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/tunnel/softgre/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/tunnel/softgre/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &SoftgreTunnelProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -6485,7 +6500,7 @@ type (
 // SoftgreTunnelProfileModifyBasicPatch: Use this API command to modify the basic information of SoftGRE tunnel profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Soft GRE Tunnel ID
 // - requestBody: *SoftgreTunnelProfileModifyBasicPatchRequest
 //
@@ -6493,7 +6508,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) SoftgreTunnelProfileModifyBasicPatch(ctx *UserContext, id string, requestBody *SoftgreTunnelProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) SoftgreTunnelProfileModifyBasicPatch(ctx context.Context, id string, requestBody *SoftgreTunnelProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6502,13 +6517,13 @@ func (p *ProfilesAPI) SoftgreTunnelProfileModifyBasicPatch(ctx *UserContext, id 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/tunnel/softgre/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/tunnel/softgre/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6522,21 +6537,24 @@ type (
 // UserTrafficProfileDeleteDelete: Use this API command to delete a list of traffic profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *UserTrafficProfileDeleteDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileDeleteDelete(ctx *UserContext, requestBody *UserTrafficProfileDeleteDeleteRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileDeleteDelete(ctx context.Context, requestBody *UserTrafficProfileDeleteDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/utp")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/profiles/utp", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6565,7 +6583,7 @@ type (
 // UserTrafficProfileRetrieveListUserTrafficProfileGet: Use this API command to retrieve a list of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -6575,7 +6593,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *UserTrafficProfileRetrieveListUserTrafficProfileGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileRetrieveListUserTrafficProfileGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *UserTrafficProfileRetrieveListUserTrafficProfileGet200Response, error) {
+func (p *ProfilesAPI) UserTrafficProfileRetrieveListUserTrafficProfileGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *UserTrafficProfileRetrieveListUserTrafficProfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6598,14 +6616,11 @@ func (p *ProfilesAPI) UserTrafficProfileRetrieveListUserTrafficProfileGet(ctx *U
 	} else {
 		listSize = "100"
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/utp")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/utp", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &UserTrafficProfileRetrieveListUserTrafficProfileGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -6666,22 +6681,25 @@ type (
 // UserTrafficProfileCreateUserTrafficProfilePost: Use this API command to create a new user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *UserTrafficProfileCreateUserTrafficProfilePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *UserTrafficProfileCreateUserTrafficProfilePost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileCreateUserTrafficProfilePost(ctx *UserContext, requestBody *UserTrafficProfileCreateUserTrafficProfilePostRequest) (*http.Response, *UserTrafficProfileCreateUserTrafficProfilePost201Response, error) {
+func (p *ProfilesAPI) UserTrafficProfileCreateUserTrafficProfilePost(ctx context.Context, requestBody *UserTrafficProfileCreateUserTrafficProfilePostRequest) (*http.Response, *UserTrafficProfileCreateUserTrafficProfilePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/utp")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/utp", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &UserTrafficProfileCreateUserTrafficProfilePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -6704,7 +6722,7 @@ type (
 // UserTrafficProfileClonePost: Use this API command to copy a traffic profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *UserTrafficProfileClonePostRequest
 //
@@ -6712,7 +6730,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *UserTrafficProfileClonePost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileClonePost(ctx *UserContext, id string, requestBody *UserTrafficProfileClonePostRequest) (*http.Response, *UserTrafficProfileClonePost200Response, error) {
+func (p *ProfilesAPI) UserTrafficProfileClonePost(ctx context.Context, id string, requestBody *UserTrafficProfileClonePostRequest) (*http.Response, *UserTrafficProfileClonePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6721,14 +6739,14 @@ func (p *ProfilesAPI) UserTrafficProfileClonePost(ctx *UserContext, id string, r
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/utp/clone/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("POST", "/v5_0/profiles/utp/clone/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("id", id)
 	out := &UserTrafficProfileClonePost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -6912,36 +6930,39 @@ type (
 // UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost: Use this API command to retrieve a list of User Traffic Profile by query criteria.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost(ctx *UserContext, requestBody *UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequest) (*http.Response, *UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost200Response, error) {
+func (p *ProfilesAPI) UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost(ctx context.Context, requestBody *UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequest) (*http.Response, *UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/utp/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/utp/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // UserTrafficProfileDeleteUserTrafficProfileDelete: Use this API command to delete an user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileDeleteUserTrafficProfileDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileDeleteUserTrafficProfileDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6950,12 +6971,9 @@ func (p *ProfilesAPI) UserTrafficProfileDeleteUserTrafficProfileDelete(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/utp/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/utp/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7031,14 +7049,14 @@ type (
 // UserTrafficProfileRetrieveUserTrafficProfileGet: Use this API command to retrieve an user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *UserTrafficProfileRetrieveUserTrafficProfileGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileRetrieveUserTrafficProfileGet(ctx *UserContext, id string) (*http.Response, *UserTrafficProfileRetrieveUserTrafficProfileGet200Response, error) {
+func (p *ProfilesAPI) UserTrafficProfileRetrieveUserTrafficProfileGet(ctx context.Context, id string) (*http.Response, *UserTrafficProfileRetrieveUserTrafficProfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7047,13 +7065,10 @@ func (p *ProfilesAPI) UserTrafficProfileRetrieveUserTrafficProfileGet(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/utp/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/utp/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &UserTrafficProfileRetrieveUserTrafficProfileGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7072,7 +7087,7 @@ type (
 // UserTrafficProfileModifyUserTrafficProfilePatch: Use this API command to modify the basic information of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 // - requestBody: *UserTrafficProfileModifyUserTrafficProfilePatchRequest
 //
@@ -7080,7 +7095,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileModifyUserTrafficProfilePatch(ctx *UserContext, id string, requestBody *UserTrafficProfileModifyUserTrafficProfilePatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileModifyUserTrafficProfilePatch(ctx context.Context, id string, requestBody *UserTrafficProfileModifyUserTrafficProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7089,26 +7104,26 @@ func (p *ProfilesAPI) UserTrafficProfileModifyUserTrafficProfilePatch(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/utp/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/utp/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 // UserTrafficProfileDisableDownlinkratelimitingDelete: Use this API command to disable downlink rate limiting of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileDisableDownlinkratelimitingDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileDisableDownlinkratelimitingDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7117,12 +7132,9 @@ func (p *ProfilesAPI) UserTrafficProfileDisableDownlinkratelimitingDelete(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/utp/{id}/downlinkRateLimiting")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/utp/{id}/downlinkRateLimiting", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7135,7 +7147,7 @@ type (
 // UserTrafficProfileModifyDownlinkratelimitingPatch: Use this API command to modify downlink rate limiting of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 // - requestBody: *UserTrafficProfileModifyDownlinkratelimitingPatchRequest
 //
@@ -7143,7 +7155,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileModifyDownlinkratelimitingPatch(ctx *UserContext, id string, requestBody *UserTrafficProfileModifyDownlinkratelimitingPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileModifyDownlinkratelimitingPatch(ctx context.Context, id string, requestBody *UserTrafficProfileModifyDownlinkratelimitingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7152,13 +7164,13 @@ func (p *ProfilesAPI) UserTrafficProfileModifyDownlinkratelimitingPatch(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/utp/{id}/downlinkRateLimiting")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/utp/{id}/downlinkRateLimiting", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7204,7 +7216,7 @@ type (
 // UserTrafficProfileModifyIpaclrulesPatch: Use this API command to modify IP ACL rules of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 // - requestBody: *UserTrafficProfileModifyIpaclrulesPatchRequestSlice
 //
@@ -7212,7 +7224,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileModifyIpaclrulesPatch(ctx *UserContext, id string, requestBody UserTrafficProfileModifyIpaclrulesPatchRequestSlice) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileModifyIpaclrulesPatch(ctx context.Context, id string, requestBody UserTrafficProfileModifyIpaclrulesPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7221,26 +7233,26 @@ func (p *ProfilesAPI) UserTrafficProfileModifyIpaclrulesPatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/utp/{id}/ipAclRules")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/utp/{id}/ipAclRules", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 // UserTrafficProfileDisableUplinkratelimitingDelete: Use this API command to disable uplink rateLimiting of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileDisableUplinkratelimitingDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileDisableUplinkratelimitingDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7249,12 +7261,9 @@ func (p *ProfilesAPI) UserTrafficProfileDisableUplinkratelimitingDelete(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/utp/{id}/uplinkRateLimiting")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/utp/{id}/uplinkRateLimiting", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7267,7 +7276,7 @@ type (
 // UserTrafficProfileModifyUplinkratelimitingPatch: Use this API command to modify uplink rate limiting of user traffic profile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): User Traffic Profile ID
 // - requestBody: *UserTrafficProfileModifyUplinkratelimitingPatchRequest
 //
@@ -7275,7 +7284,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) UserTrafficProfileModifyUplinkratelimitingPatch(ctx *UserContext, id string, requestBody *UserTrafficProfileModifyUplinkratelimitingPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) UserTrafficProfileModifyUplinkratelimitingPatch(ctx context.Context, id string, requestBody *UserTrafficProfileModifyUplinkratelimitingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7284,13 +7293,13 @@ func (p *ProfilesAPI) UserTrafficProfileModifyUplinkratelimitingPatch(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/utp/{id}/uplinkRateLimiting")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/utp/{id}/uplinkRateLimiting", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7319,7 +7328,7 @@ type (
 // VdpProfileRetrieveListGet: Use this API command to retrieve a list of vdp.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -7329,7 +7338,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *VdpProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) VdpProfileRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *VdpProfileRetrieveListGet200Response, error) {
+func (p *ProfilesAPI) VdpProfileRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *VdpProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7352,28 +7361,25 @@ func (p *ProfilesAPI) VdpProfileRetrieveListGet(ctx *UserContext, optionalParams
 	} else {
 		listSize = "100"
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/vdp")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/vdp", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &VdpProfileRetrieveListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // VdpProfileDeleteDelete: Use this API command to delete an vdp.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) VdpProfileDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) VdpProfileDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7382,12 +7388,9 @@ func (p *ProfilesAPI) VdpProfileDeleteDelete(ctx *UserContext, id string) (*http
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/vdp/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/vdp/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7422,14 +7425,14 @@ type (
 // VdpProfileRetrieveGet: Use this API command to retrieve an vdp.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *VdpProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) VdpProfileRetrieveGet(ctx *UserContext, id string) (*http.Response, *VdpProfileRetrieveGet200Response, error) {
+func (p *ProfilesAPI) VdpProfileRetrieveGet(ctx context.Context, id string) (*http.Response, *VdpProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7438,27 +7441,24 @@ func (p *ProfilesAPI) VdpProfileRetrieveGet(ctx *UserContext, id string) (*http.
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/vdp/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/vdp/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &VdpProfileRetrieveGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // VdpProfileApprovePut: Use this API command to approve vdp.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) VdpProfileApprovePut(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) VdpProfileApprovePut(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7467,12 +7467,9 @@ func (p *ProfilesAPI) VdpProfileApprovePut(ctx *UserContext, id string) (*http.R
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PUT", "/v5_0/profiles/vdp/{id}/approve")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("PUT", "/v5_0/profiles/vdp/{id}/approve", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7501,20 +7498,19 @@ type (
 // ZoneAffinityProfileGetAllZoneAffinityProfilesGet: Use this API command to get all zone affinity profiles.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAffinityProfileGetAllZoneAffinityProfilesGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) ZoneAffinityProfileGetAllZoneAffinityProfilesGet(ctx *UserContext) (*http.Response, *ZoneAffinityProfileGetAllZoneAffinityProfilesGet200Response, error) {
+func (p *ProfilesAPI) ZoneAffinityProfileGetAllZoneAffinityProfilesGet(ctx context.Context) (*http.Response, *ZoneAffinityProfileGetAllZoneAffinityProfilesGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/zoneAffinity")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/profiles/zoneAffinity", true)
 	out := &ZoneAffinityProfileGetAllZoneAffinityProfilesGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7535,36 +7531,39 @@ type (
 // ZoneAffinityProfileCreateZoneAffinityProfileSettingPost: Use this API command to create zone affinity profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ZoneAffinityProfileCreateZoneAffinityProfileSettingPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAffinityProfileCreateZoneAffinityProfileSettingPost201Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) ZoneAffinityProfileCreateZoneAffinityProfileSettingPost(ctx *UserContext, requestBody *ZoneAffinityProfileCreateZoneAffinityProfileSettingPostRequest) (*http.Response, *ZoneAffinityProfileCreateZoneAffinityProfileSettingPost201Response, error) {
+func (p *ProfilesAPI) ZoneAffinityProfileCreateZoneAffinityProfileSettingPost(ctx context.Context, requestBody *ZoneAffinityProfileCreateZoneAffinityProfileSettingPostRequest) (*http.Response, *ZoneAffinityProfileCreateZoneAffinityProfileSettingPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/profiles/zoneAffinity")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/profiles/zoneAffinity", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ZoneAffinityProfileCreateZoneAffinityProfileSettingPost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ZoneAffinityProfileDeleteZoneAffinityProfileSettingDelete: Use this API command to delete zone affinity profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) ZoneAffinityProfileDeleteZoneAffinityProfileSettingDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) ZoneAffinityProfileDeleteZoneAffinityProfileSettingDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7573,12 +7572,9 @@ func (p *ProfilesAPI) ZoneAffinityProfileDeleteZoneAffinityProfileSettingDelete(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/profiles/zoneAffinity/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/profiles/zoneAffinity/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7601,14 +7597,14 @@ type (
 // ZoneAffinityProfileGetOneZoneAffinityProfileGet: Use this API command to get one zone affinity profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAffinityProfileGetOneZoneAffinityProfileGet200Response
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) ZoneAffinityProfileGetOneZoneAffinityProfileGet(ctx *UserContext, id string) (*http.Response, *ZoneAffinityProfileGetOneZoneAffinityProfileGet200Response, error) {
+func (p *ProfilesAPI) ZoneAffinityProfileGetOneZoneAffinityProfileGet(ctx context.Context, id string) (*http.Response, *ZoneAffinityProfileGetOneZoneAffinityProfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7617,13 +7613,10 @@ func (p *ProfilesAPI) ZoneAffinityProfileGetOneZoneAffinityProfileGet(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/profiles/zoneAffinity/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/profiles/zoneAffinity/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &ZoneAffinityProfileGetOneZoneAffinityProfileGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7636,7 +7629,7 @@ type (
 // ZoneAffinityProfileModifyZoneAffinityProfileSettingPatch: Use this API command to modify zone affinity profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *ZoneAffinityProfileModifyZoneAffinityProfileSettingPatchRequest
 //
@@ -7644,7 +7637,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *ProfilesAPI) ZoneAffinityProfileModifyZoneAffinityProfileSettingPatch(ctx *UserContext, id string, requestBody *ZoneAffinityProfileModifyZoneAffinityProfileSettingPatchRequest) (*http.Response, []byte, error) {
+func (p *ProfilesAPI) ZoneAffinityProfileModifyZoneAffinityProfileSettingPatch(ctx context.Context, id string, requestBody *ZoneAffinityProfileModifyZoneAffinityProfileSettingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7653,11 +7646,11 @@ func (p *ProfilesAPI) ZoneAffinityProfileModifyZoneAffinityProfileSettingPatch(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/profiles/zoneAffinity/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/profiles/zoneAffinity/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }

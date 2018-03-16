@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type CertStoreAPI struct {
@@ -34,7 +35,7 @@ type (
 // CertificateRetrieveCertificateListGet: Use this API command to retrieve list of installed certificates.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -44,7 +45,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveCertificateListGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveCertificateListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *CertificateRetrieveCertificateListGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveCertificateListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *CertificateRetrieveCertificateListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -67,14 +68,11 @@ func (c *CertStoreAPI) CertificateRetrieveCertificateListGet(ctx *UserContext, o
 	} else {
 		listSize = "100"
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/certificate")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/certstore/certificate", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &CertificateRetrieveCertificateListGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -105,36 +103,39 @@ type (
 // CertificateCreateCertificatePost: Use this API command to create an installed certificate.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *CertificateCreateCertificatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateCreateCertificatePost201Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateCreateCertificatePost(ctx *UserContext, requestBody *CertificateCreateCertificatePostRequest) (*http.Response, *CertificateCreateCertificatePost201Response, error) {
+func (c *CertStoreAPI) CertificateCreateCertificatePost(ctx context.Context, requestBody *CertificateCreateCertificatePostRequest) (*http.Response, *CertificateCreateCertificatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/certstore/certificate")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/certstore/certificate", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &CertificateCreateCertificatePost201Response{}
-	httpResponse, _, err := c.client.doRequest(request, 201, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // CertificateDeleteCertificateDelete: Use this API command to delete an installed certificate.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateDeleteCertificateDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (c *CertStoreAPI) CertificateDeleteCertificateDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -143,12 +144,9 @@ func (c *CertStoreAPI) CertificateDeleteCertificateDelete(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "DELETE", "/v5_0/certstore/certificate/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return c.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/certstore/certificate/{id}", true)
+	request.SetPathParameter("id", id)
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -176,14 +174,14 @@ type (
 // CertificateRetrieveCertificateGet: Use this API command to retrieve an installed certificate.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveCertificateGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveCertificateGet(ctx *UserContext, id string) (*http.Response, *CertificateRetrieveCertificateGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveCertificateGet(ctx context.Context, id string) (*http.Response, *CertificateRetrieveCertificateGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -192,13 +190,10 @@ func (c *CertStoreAPI) CertificateRetrieveCertificateGet(ctx *UserContext, id st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/certificate/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/certstore/certificate/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &CertificateRetrieveCertificateGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -222,7 +217,7 @@ type (
 // CertificateRetrieveCsrListGet: Use this API command to retrieve list of certificates signing request.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -232,7 +227,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveCsrListGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveCsrListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *CertificateRetrieveCsrListGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveCsrListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *CertificateRetrieveCsrListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -255,14 +250,11 @@ func (c *CertStoreAPI) CertificateRetrieveCsrListGet(ctx *UserContext, optionalP
 	} else {
 		listSize = "100"
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/csr")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/certstore/csr", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &CertificateRetrieveCsrListGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -287,36 +279,39 @@ type (
 // CertificateCreateCsrPost: Use this API command to create a certificates signing request.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *CertificateCreateCsrPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateCreateCsrPost201Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateCreateCsrPost(ctx *UserContext, requestBody *CertificateCreateCsrPostRequest) (*http.Response, *CertificateCreateCsrPost201Response, error) {
+func (c *CertStoreAPI) CertificateCreateCsrPost(ctx context.Context, requestBody *CertificateCreateCsrPostRequest) (*http.Response, *CertificateCreateCsrPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/certstore/csr")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/certstore/csr", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &CertificateCreateCsrPost201Response{}
-	httpResponse, _, err := c.client.doRequest(request, 201, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // CertificateDeleteCsrDelete: Use this API command to delete a certificates signing request.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateDeleteCsrDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (c *CertStoreAPI) CertificateDeleteCsrDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -325,12 +320,9 @@ func (c *CertStoreAPI) CertificateDeleteCsrDelete(ctx *UserContext, id string) (
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "DELETE", "/v5_0/certstore/csr/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return c.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/certstore/csr/{id}", true)
+	request.SetPathParameter("id", id)
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -351,14 +343,14 @@ type (
 // CertificateRetrieveCsrGet: Use this API command to retrieve a certificates signing request.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveCsrGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveCsrGet(ctx *UserContext, id string) (*http.Response, *CertificateRetrieveCsrGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveCsrGet(ctx context.Context, id string) (*http.Response, *CertificateRetrieveCsrGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -367,13 +359,10 @@ func (c *CertStoreAPI) CertificateRetrieveCsrGet(ctx *UserContext, id string) (*
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/csr/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/certstore/csr/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &CertificateRetrieveCsrGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -398,20 +387,19 @@ type (
 // CertificateRetrieveCertificateSettingGet: Use this API command to retrieve certificate setting.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveCertificateSettingGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveCertificateSettingGet(ctx *UserContext) (*http.Response, *CertificateRetrieveCertificateSettingGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveCertificateSettingGet(ctx context.Context) (*http.Response, *CertificateRetrieveCertificateSettingGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/setting")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/certstore/setting", true)
 	out := &CertificateRetrieveCertificateSettingGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -432,21 +420,24 @@ type (
 // CertificateModifyServicecertificatesPatch: Use this API command to Modify serviceCertificates of the Certificate Setting.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *CertificateModifyServicecertificatesPatchRequestSlice
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateModifyServicecertificatesPatch(ctx *UserContext, requestBody CertificateModifyServicecertificatesPatchRequestSlice) (*http.Response, []byte, error) {
+func (c *CertStoreAPI) CertificateModifyServicecertificatesPatch(ctx context.Context, requestBody CertificateModifyServicecertificatesPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "PATCH", "/v5_0/certstore/setting/serviceCertificates")
-	request.body = requestBody
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/certstore/setting/serviceCertificates", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -460,21 +451,24 @@ type (
 // CertificateDeleteBulkTrustedCaChainCertificatesDelete: Use this API command to delete bulk trusted CA chain certificates.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateDeleteBulkTrustedCaChainCertificatesDelete(ctx *UserContext, requestBody *CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequest) (*http.Response, []byte, error) {
+func (c *CertStoreAPI) CertificateDeleteBulkTrustedCaChainCertificatesDelete(ctx context.Context, requestBody *CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "DELETE", "/v5_0/certstore/trustedCAChainCert")
-	request.body = requestBody
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/certstore/trustedCAChainCert", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -504,7 +498,7 @@ type (
 // CertificateRetrieveTrustedCaChainCertificatesListGet: Use this API command to retrieve list of installed trusted CA chain certificates.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -514,7 +508,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveTrustedCaChainCertificatesListGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *CertificateRetrieveTrustedCaChainCertificatesListGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *CertificateRetrieveTrustedCaChainCertificatesListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -537,14 +531,11 @@ func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesListGet(ctx 
 	} else {
 		listSize = "100"
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/trustedCAChainCert")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/certstore/trustedCAChainCert", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &CertificateRetrieveTrustedCaChainCertificatesListGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -566,36 +557,39 @@ type (
 // CertificateCreateTrustedCaChainCertificatesPost: Use this API command to create trusted CA chain certificates.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *CertificateCreateTrustedCaChainCertificatesPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateCreateTrustedCaChainCertificatesPost201Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateCreateTrustedCaChainCertificatesPost(ctx *UserContext, requestBody *CertificateCreateTrustedCaChainCertificatesPostRequest) (*http.Response, *CertificateCreateTrustedCaChainCertificatesPost201Response, error) {
+func (c *CertStoreAPI) CertificateCreateTrustedCaChainCertificatesPost(ctx context.Context, requestBody *CertificateCreateTrustedCaChainCertificatesPostRequest) (*http.Response, *CertificateCreateTrustedCaChainCertificatesPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/certstore/trustedCAChainCert")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/certstore/trustedCAChainCert", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &CertificateCreateTrustedCaChainCertificatesPost201Response{}
-	httpResponse, _, err := c.client.doRequest(request, 201, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // CertificateDeleteTrustedCaChainCertificatesDelete: Use this API command to delete a trusted CA chain certificate.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateDeleteTrustedCaChainCertificatesDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (c *CertStoreAPI) CertificateDeleteTrustedCaChainCertificatesDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -604,12 +598,9 @@ func (c *CertStoreAPI) CertificateDeleteTrustedCaChainCertificatesDelete(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "DELETE", "/v5_0/certstore/trustedCAChainCert/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return c.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/certstore/trustedCAChainCert/{id}", true)
+	request.SetPathParameter("id", id)
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -627,14 +618,14 @@ type (
 // CertificateRetrieveTrustedCaChainCertificatesGet: Use this API command to retrieve an installed trusted CA chain certificates.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *CertificateRetrieveTrustedCaChainCertificatesGet200Response
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesGet(ctx *UserContext, id string) (*http.Response, *CertificateRetrieveTrustedCaChainCertificatesGet200Response, error) {
+func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesGet(ctx context.Context, id string) (*http.Response, *CertificateRetrieveTrustedCaChainCertificatesGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -643,13 +634,10 @@ func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesGet(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/certstore/trustedCAChainCert/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/certstore/trustedCAChainCert/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &CertificateRetrieveTrustedCaChainCertificatesGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -665,7 +653,7 @@ type (
 // CertificatePatchTrustedCaChainCertificatesPatch: Use this API command to patch a trusted CA chain certificates.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *CertificatePatchTrustedCaChainCertificatesPatchRequest
 //
@@ -673,7 +661,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *CertStoreAPI) CertificatePatchTrustedCaChainCertificatesPatch(ctx *UserContext, id string, requestBody *CertificatePatchTrustedCaChainCertificatesPatchRequest) (*http.Response, []byte, error) {
+func (c *CertStoreAPI) CertificatePatchTrustedCaChainCertificatesPatch(ctx context.Context, id string, requestBody *CertificatePatchTrustedCaChainCertificatesPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -682,11 +670,11 @@ func (c *CertStoreAPI) CertificatePatchTrustedCaChainCertificatesPatch(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "PATCH", "/v5_0/certstore/trustedCAChainCert/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/certstore/trustedCAChainCert/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return c.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return c.client.Ensure(ctx, request, 204, nil)
 }

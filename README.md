@@ -12,7 +12,7 @@ your VSZ version.  We currently will not guarantee any degree of backwards compa
 
 |VSZ Version|Package Version|
 |---|---|
-|3.5.0|0.1-0.2|
+|3.5.0|0.1-0.3|
 
 ## Basic Usage
 
@@ -32,14 +32,22 @@ import (
 func main() {
 	conf := api.DefaultConfig("yourhost.whatever")
 	
-	// nil as a 2nd argument will use a default non-pooled http client
-	client := api.NewClient(conf, nil)
+	// create authenticator
+	auth := api.NewPasswordAuthenticator("username", "password", 30 * time.Minute, 2 * time.Second)
 	
-	userCtx := api.NewUserContext(context.Background(), "username", "password", 2 * time.Second)
-	defer userCtx.Cancel()
-    
-	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(userCtx)
+	// nil as a 3rd argument will use a default non-pooled http client
+	client, err := api.NewClient(conf, auth, nil)
+	if err != nil {
+		log.Printf("Error: %s", err)
+		os.Exit(1)
+	}
 	
+	// create context for this request
+	ctx, cancel := context.WithTimeout(context.Background(), 2 * time.Second)
+	defer cancel()
+	
+	// execute
+	httpResponse, responseData, err := client.Session().LoginSessionRetrieveGet(ctx)
 	if err != nil {
 		log.Printf("Unable to retrieve current login session: %s", err)
 		os.Exit(1)

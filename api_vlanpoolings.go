@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type VLANPoolingsAPI struct {
@@ -26,21 +27,24 @@ type (
 // VlanpoolingBulkDeleteVlanPoolingDelete: Use this API command to bulk delete VLAN pooling.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *VlanpoolingBulkDeleteVlanPoolingDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (v *VLANPoolingsAPI) VlanpoolingBulkDeleteVlanPoolingDelete(ctx *UserContext, requestBody *VlanpoolingBulkDeleteVlanPoolingDeleteRequest) (*http.Response, []byte, error) {
+func (v *VLANPoolingsAPI) VlanpoolingBulkDeleteVlanPoolingDelete(ctx context.Context, requestBody *VlanpoolingBulkDeleteVlanPoolingDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := v.client.newRequest(ctx, "DELETE", "/v5_0/vlanpoolings")
-	request.body = requestBody
-	request.authenticated = true
-	return v.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/vlanpoolings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return v.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -60,22 +64,25 @@ type (
 // VlanpoolingCreatePost: Use this API command to create new VLAN pooling.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *VlanpoolingCreatePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *VlanpoolingCreatePost201Response
 // - error: Error seen or nil if none
-func (v *VLANPoolingsAPI) VlanpoolingCreatePost(ctx *UserContext, requestBody *VlanpoolingCreatePostRequest) (*http.Response, *VlanpoolingCreatePost201Response, error) {
+func (v *VLANPoolingsAPI) VlanpoolingCreatePost(ctx context.Context, requestBody *VlanpoolingCreatePostRequest) (*http.Response, *VlanpoolingCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := v.client.newRequest(ctx, "POST", "/v5_0/vlanpoolings")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/vlanpoolings", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &VlanpoolingCreatePost201Response{}
-	httpResponse, _, err := v.client.doRequest(request, 201, out)
+	httpResponse, _, err := v.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -212,36 +219,39 @@ type (
 // VlanpoolingRetrieveListPost: Use this API command to retrieve a list of VLAN poolings.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *VlanpoolingRetrieveListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *VlanpoolingRetrieveListPost200Response
 // - error: Error seen or nil if none
-func (v *VLANPoolingsAPI) VlanpoolingRetrieveListPost(ctx *UserContext, requestBody *VlanpoolingRetrieveListPostRequest) (*http.Response, *VlanpoolingRetrieveListPost200Response, error) {
+func (v *VLANPoolingsAPI) VlanpoolingRetrieveListPost(ctx context.Context, requestBody *VlanpoolingRetrieveListPostRequest) (*http.Response, *VlanpoolingRetrieveListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := v.client.newRequest(ctx, "POST", "/v5_0/vlanpoolings/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/vlanpoolings/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &VlanpoolingRetrieveListPost200Response{}
-	httpResponse, _, err := v.client.doRequest(request, 200, out)
+	httpResponse, _, err := v.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // VlanpoolingDeleteDelete: Use this API command to delete VLAN pooling
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (v *VLANPoolingsAPI) VlanpoolingDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (v *VLANPoolingsAPI) VlanpoolingDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -250,12 +260,9 @@ func (v *VLANPoolingsAPI) VlanpoolingDeleteDelete(ctx *UserContext, id string) (
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := v.client.newRequest(ctx, "DELETE", "/v5_0/vlanpoolings/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return v.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/vlanpoolings/{id}", true)
+	request.SetPathParameter("id", id)
+	return v.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -272,14 +279,14 @@ type (
 // VlanpoolingRetrieveGet: Use this API command to retrieve VLAN pooling.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *VlanpoolingRetrieveGet200Response
 // - error: Error seen or nil if none
-func (v *VLANPoolingsAPI) VlanpoolingRetrieveGet(ctx *UserContext, id string) (*http.Response, *VlanpoolingRetrieveGet200Response, error) {
+func (v *VLANPoolingsAPI) VlanpoolingRetrieveGet(ctx context.Context, id string) (*http.Response, *VlanpoolingRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -288,13 +295,10 @@ func (v *VLANPoolingsAPI) VlanpoolingRetrieveGet(ctx *UserContext, id string) (*
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := v.client.newRequest(ctx, "GET", "/v5_0/vlanpoolings/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/vlanpoolings/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &VlanpoolingRetrieveGet200Response{}
-	httpResponse, _, err := v.client.doRequest(request, 200, out)
+	httpResponse, _, err := v.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -311,7 +315,7 @@ type (
 // VlanpoolingModifyBasicPatch: Use this API command to modify the basic information on VLAN pooling
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *VlanpoolingModifyBasicPatchRequest
 //
@@ -319,7 +323,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (v *VLANPoolingsAPI) VlanpoolingModifyBasicPatch(ctx *UserContext, id string, requestBody *VlanpoolingModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (v *VLANPoolingsAPI) VlanpoolingModifyBasicPatch(ctx context.Context, id string, requestBody *VlanpoolingModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -328,11 +332,11 @@ func (v *VLANPoolingsAPI) VlanpoolingModifyBasicPatch(ctx *UserContext, id strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := v.client.newRequest(ctx, "PATCH", "/v5_0/vlanpoolings/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/vlanpoolings/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return v.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return v.client.Ensure(ctx, request, 204, nil)
 }

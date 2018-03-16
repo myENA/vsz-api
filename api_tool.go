@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type ToolAPI struct {
@@ -18,7 +19,7 @@ type ToolAPI struct {
 // ConnectivityToolsPingGet: Use this API command to run the PING test on an AP.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - apMac (MAC): MAC address of the AP running the PING test
 // - targetIP (MAC): the IP address to PING
 //
@@ -26,7 +27,7 @@ type ToolAPI struct {
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (t *ToolAPI) ConnectivityToolsPingGet(ctx *UserContext, apMac string, targetIP string) (*http.Response, []byte, error) {
+func (t *ToolAPI) ConnectivityToolsPingGet(ctx context.Context, apMac string, targetIP string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -39,13 +40,10 @@ func (t *ToolAPI) ConnectivityToolsPingGet(ctx *UserContext, apMac string, targe
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"targetIP\" failed validation check: %s", err)
 	}
-	request := t.client.newRequest(ctx, "GET", "/v5_0/tool/ping")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"apMac":    apMac,
-		"targetIP": targetIP,
-	}
-	return t.client.doRequest(request, 200, nil)
+	request := NewRequest("GET", "/v5_0/tool/ping", true)
+	request.SetQueryParameter("apMac", apMac)
+	request.SetQueryParameter("targetIP", targetIP)
+	return t.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -74,22 +72,25 @@ type (
 // ConnectivityToolsSpeedflexPost: Use this API command to start the SpeedFlex test.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ConnectivityToolsSpeedflexPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ConnectivityToolsSpeedflexPost200Response
 // - error: Error seen or nil if none
-func (t *ToolAPI) ConnectivityToolsSpeedflexPost(ctx *UserContext, requestBody *ConnectivityToolsSpeedflexPostRequest) (*http.Response, *ConnectivityToolsSpeedflexPost200Response, error) {
+func (t *ToolAPI) ConnectivityToolsSpeedflexPost(ctx context.Context, requestBody *ConnectivityToolsSpeedflexPostRequest) (*http.Response, *ConnectivityToolsSpeedflexPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := t.client.newRequest(ctx, "POST", "/v5_0/tool/speedflex")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/tool/speedflex", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ConnectivityToolsSpeedflexPost200Response{}
-	httpResponse, _, err := t.client.doRequest(request, 200, out)
+	httpResponse, _, err := t.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -108,14 +109,14 @@ type (
 // ConnectivityToolsRetrieveSppedflexResultsGet: Use this API command to retrieve existing SpeedFlex test results.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - wcid (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ConnectivityToolsRetrieveSppedflexResultsGet200Response
 // - error: Error seen or nil if none
-func (t *ToolAPI) ConnectivityToolsRetrieveSppedflexResultsGet(ctx *UserContext, wcid string) (*http.Response, *ConnectivityToolsRetrieveSppedflexResultsGet200Response, error) {
+func (t *ToolAPI) ConnectivityToolsRetrieveSppedflexResultsGet(ctx context.Context, wcid string) (*http.Response, *ConnectivityToolsRetrieveSppedflexResultsGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -124,20 +125,17 @@ func (t *ToolAPI) ConnectivityToolsRetrieveSppedflexResultsGet(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"wcid\" failed validation check: %s", err)
 	}
-	request := t.client.newRequest(ctx, "GET", "/v5_0/tool/speedflex/{wcid}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"wcid": wcid,
-	}
+	request := NewRequest("GET", "/v5_0/tool/speedflex/{wcid}", true)
+	request.SetPathParameter("wcid", wcid)
 	out := &ConnectivityToolsRetrieveSppedflexResultsGet200Response{}
-	httpResponse, _, err := t.client.doRequest(request, 200, out)
+	httpResponse, _, err := t.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // ConnectivityToolsTraceRouteGet: Use this API command to run the traceroute test on an AP.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - apMac (MAC): MAC address of the AP running the traceRoute test
 // - targetIP (MAC): the target IP address to traceRoute
 //
@@ -148,7 +146,7 @@ func (t *ToolAPI) ConnectivityToolsRetrieveSppedflexResultsGet(ctx *UserContext,
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (t *ToolAPI) ConnectivityToolsTraceRouteGet(ctx *UserContext, apMac string, targetIP string, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (t *ToolAPI) ConnectivityToolsTraceRouteGet(ctx context.Context, apMac string, targetIP string, optionalParams map[string]string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -170,12 +168,9 @@ func (t *ToolAPI) ConnectivityToolsTraceRouteGet(ctx *UserContext, apMac string,
 	} else {
 		timeoutInSec = "30"
 	}
-	request := t.client.newRequest(ctx, "GET", "/v5_0/tool/traceRoute")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"apMac":        apMac,
-		"targetIP":     targetIP,
-		"timeoutInSec": timeoutInSec,
-	}
-	return t.client.doRequest(request, 200, nil)
+	request := NewRequest("GET", "/v5_0/tool/traceRoute", true)
+	request.SetQueryParameter("apMac", apMac)
+	request.SetQueryParameter("targetIP", targetIP)
+	request.SetQueryParameter("timeoutInSec", timeoutInSec)
+	return t.client.Ensure(ctx, request, 200, nil)
 }

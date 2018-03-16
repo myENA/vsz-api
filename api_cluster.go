@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type ClusterAPI struct {
@@ -35,7 +36,7 @@ type (
 // ClusterBackupAndRestoreRetrieveListGet: Retrive cluster backup list
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -46,7 +47,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ClusterBackupAndRestoreRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (c *ClusterAPI) ClusterBackupAndRestoreRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *ClusterBackupAndRestoreRetrieveListGet200Response, error) {
+func (c *ClusterAPI) ClusterBackupAndRestoreRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *ClusterBackupAndRestoreRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -69,68 +70,62 @@ func (c *ClusterAPI) ClusterBackupAndRestoreRetrieveListGet(ctx *UserContext, op
 	} else {
 		listSize = "100"
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/cluster")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-		"timezone": optionalParams["timezone"],
-	}
+	request := NewRequest("GET", "/v5_0/cluster", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("timezone", optionalParams["timezone"])
 	out := &ClusterBackupAndRestoreRetrieveListGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // ClusterBackupAndRestoreClusterBackupPost: Backup cluster
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClusterAPI) ClusterBackupAndRestoreClusterBackupPost(ctx *UserContext) (*http.Response, []byte, error) {
+func (c *ClusterAPI) ClusterBackupAndRestoreClusterBackupPost(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/cluster/backup")
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	request := NewRequest("POST", "/v5_0/cluster/backup", true)
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 // ClusterBackupAndRestoreClusterRestorePost: Restore cluster backup by ID
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClusterAPI) ClusterBackupAndRestoreClusterRestorePost(ctx *UserContext) (*http.Response, []byte, error) {
+func (c *ClusterAPI) ClusterBackupAndRestoreClusterRestorePost(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/cluster/restore/{id:.+}")
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	request := NewRequest("POST", "/v5_0/cluster/restore/{id:.+}", true)
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 // ClusterBackupAndRestoreDeleteDelete: Delete cluster backup by ID
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClusterAPI) ClusterBackupAndRestoreDeleteDelete(ctx *UserContext) (*http.Response, []byte, error) {
+func (c *ClusterAPI) ClusterBackupAndRestoreDeleteDelete(ctx context.Context) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "DELETE", "/v5_0/cluster/{id:.+}")
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/cluster/{id:.+}", true)
+	return c.client.Ensure(ctx, request, 204, nil)
 }

@@ -1,12 +1,13 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type LWAPP2SCGAPI struct {
@@ -24,21 +25,24 @@ type (
 // LwappToScgModifyBasicPatch: Use this API command to modify the basic information of the Lwapp Config.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *LwappToScgModifyBasicPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (l *LWAPP2SCGAPI) LwappToScgModifyBasicPatch(ctx *UserContext, requestBody *LwappToScgModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (l *LWAPP2SCGAPI) LwappToScgModifyBasicPatch(ctx context.Context, requestBody *LwappToScgModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := l.client.newRequest(ctx, "PATCH", "/v5_0/lwapp2scg")
-	request.body = requestBody
-	request.authenticated = true
-	return l.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/lwapp2scg", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return l.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -48,19 +52,22 @@ type (
 // LwappToScgModifyAplistPatch: Use this API command to modify the apList of the Lwapp Config.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *LwappToScgModifyAplistPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (l *LWAPP2SCGAPI) LwappToScgModifyAplistPatch(ctx *UserContext, requestBody LwappToScgModifyAplistPatchRequest) (*http.Response, []byte, error) {
+func (l *LWAPP2SCGAPI) LwappToScgModifyAplistPatch(ctx context.Context, requestBody LwappToScgModifyAplistPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := l.client.newRequest(ctx, "PATCH", "/v5_0/lwapp2scg/apList")
-	request.body = requestBody
-	request.authenticated = true
-	return l.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/lwapp2scg/apList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return l.client.Ensure(ctx, request, 204, nil)
 }

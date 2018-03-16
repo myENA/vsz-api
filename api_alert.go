@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type AlertAPI struct {
@@ -26,21 +27,24 @@ type (
 // EventAndAlarmAcknowledgeAlarmsPut: Acknowledge multiple Alarms with provided alarmIDs.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *EventAndAlarmAcknowledgeAlarmsPutRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AlertAPI) EventAndAlarmAcknowledgeAlarmsPut(ctx *UserContext, requestBody *EventAndAlarmAcknowledgeAlarmsPutRequest) (*http.Response, []byte, error) {
+func (a *AlertAPI) EventAndAlarmAcknowledgeAlarmsPut(ctx context.Context, requestBody *EventAndAlarmAcknowledgeAlarmsPutRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := a.client.newRequest(ctx, "PUT", "/v5_0/alert/alarm/ack")
-	request.body = requestBody
-	request.authenticated = true
-	return a.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PUT", "/v5_0/alert/alarm/ack", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -55,21 +59,24 @@ type (
 // EventAndAlarmClearAlarmsPut: Clear multiple Alarms with provided alarmIDs.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *EventAndAlarmClearAlarmsPutRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AlertAPI) EventAndAlarmClearAlarmsPut(ctx *UserContext, requestBody *EventAndAlarmClearAlarmsPutRequest) (*http.Response, []byte, error) {
+func (a *AlertAPI) EventAndAlarmClearAlarmsPut(ctx context.Context, requestBody *EventAndAlarmClearAlarmsPutRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := a.client.newRequest(ctx, "PUT", "/v5_0/alert/alarm/clear")
-	request.body = requestBody
-	request.authenticated = true
-	return a.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("PUT", "/v5_0/alert/alarm/clear", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return a.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -214,36 +221,39 @@ type (
 // EventAndAlarmRetrieveAlarmListPost: Query Alarms with specified filters.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *EventAndAlarmRetrieveAlarmListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *EventAndAlarmRetrieveAlarmListPost200Response
 // - error: Error seen or nil if none
-func (a *AlertAPI) EventAndAlarmRetrieveAlarmListPost(ctx *UserContext, requestBody *EventAndAlarmRetrieveAlarmListPostRequest) (*http.Response, *EventAndAlarmRetrieveAlarmListPost200Response, error) {
+func (a *AlertAPI) EventAndAlarmRetrieveAlarmListPost(ctx context.Context, requestBody *EventAndAlarmRetrieveAlarmListPostRequest) (*http.Response, *EventAndAlarmRetrieveAlarmListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := a.client.newRequest(ctx, "POST", "/v5_0/alert/alarm/list")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/alert/alarm/list", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &EventAndAlarmRetrieveAlarmListPost200Response{}
-	httpResponse, _, err := a.client.doRequest(request, 200, out)
+	httpResponse, _, err := a.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // EventAndAlarmAcknowledgeAlarmPut: Acknowledge a single Alarm with provided alarmID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - alarmID (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AlertAPI) EventAndAlarmAcknowledgeAlarmPut(ctx *UserContext, alarmID string) (*http.Response, []byte, error) {
+func (a *AlertAPI) EventAndAlarmAcknowledgeAlarmPut(ctx context.Context, alarmID string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -252,25 +262,22 @@ func (a *AlertAPI) EventAndAlarmAcknowledgeAlarmPut(ctx *UserContext, alarmID st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"alarmID\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PUT", "/v5_0/alert/alarm/{alarmID}/ack")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"alarmID": alarmID,
-	}
-	return a.client.doRequest(request, 200, nil)
+	request := NewRequest("PUT", "/v5_0/alert/alarm/{alarmID}/ack", true)
+	request.SetPathParameter("alarmID", alarmID)
+	return a.client.Ensure(ctx, request, 200, nil)
 }
 
 // EventAndAlarmClearAlarmPut: Clear a single Alarm with provided alarmID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - alarmID (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (a *AlertAPI) EventAndAlarmClearAlarmPut(ctx *UserContext, alarmID string) (*http.Response, []byte, error) {
+func (a *AlertAPI) EventAndAlarmClearAlarmPut(ctx context.Context, alarmID string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -279,12 +286,9 @@ func (a *AlertAPI) EventAndAlarmClearAlarmPut(ctx *UserContext, alarmID string) 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"alarmID\" failed validation check: %s", err)
 	}
-	request := a.client.newRequest(ctx, "PUT", "/v5_0/alert/alarm/{alarmID}/clear")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"alarmID": alarmID,
-	}
-	return a.client.doRequest(request, 200, nil)
+	request := NewRequest("PUT", "/v5_0/alert/alarm/{alarmID}/clear", true)
+	request.SetPathParameter("alarmID", alarmID)
+	return a.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -422,21 +426,24 @@ type (
 // EventAndAlarmRetrieveEventListPost: Query Events with specified filters.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *EventAndAlarmRetrieveEventListPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *EventAndAlarmRetrieveEventListPost200Response
 // - error: Error seen or nil if none
-func (a *AlertAPI) EventAndAlarmRetrieveEventListPost(ctx *UserContext, requestBody *EventAndAlarmRetrieveEventListPostRequest) (*http.Response, *EventAndAlarmRetrieveEventListPost200Response, error) {
+func (a *AlertAPI) EventAndAlarmRetrieveEventListPost(ctx context.Context, requestBody *EventAndAlarmRetrieveEventListPostRequest) (*http.Response, *EventAndAlarmRetrieveEventListPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := a.client.newRequest(ctx, "POST", "/v5_0/alert/event/list")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/alert/event/list", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &EventAndAlarmRetrieveEventListPost200Response{}
-	httpResponse, _, err := a.client.doRequest(request, 200, out)
+	httpResponse, _, err := a.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }

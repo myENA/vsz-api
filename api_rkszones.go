@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type RuckusZonesAPI struct {
@@ -34,7 +35,7 @@ type (
 // RuckusWirelessApZoneRetrieveListGet: Use this API command to retrieve the list of Ruckus Wireless AP zones that belong to a domain.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -45,7 +46,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *RuckusWirelessApZoneRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *RuckusWirelessApZoneRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -75,15 +76,12 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveListGet(ctx *UserContext, o
 			return nil, nil, fmt.Errorf("parameter \"domainId\" failed validation check: %s", err)
 		}
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-		"domainId": domainId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("domainId", domainId)
 	out := &RuckusWirelessApZoneRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -110,22 +108,25 @@ type (
 // RuckusWirelessApZoneCreateZonePost: Use this API command to create a new Ruckus Wireless AP zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusWirelessApZoneCreateZonePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneCreateZonePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZonePost(ctx *UserContext, requestBody *RuckusWirelessApZoneCreateZonePostRequest) (*http.Response, *RuckusWirelessApZoneCreateZonePost201Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZonePost(ctx context.Context, requestBody *RuckusWirelessApZoneCreateZonePostRequest) (*http.Response, *RuckusWirelessApZoneCreateZonePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/rkszones", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &RuckusWirelessApZoneCreateZonePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -140,34 +141,37 @@ type (
 // BonjourFencingPolicyDeleteDelete1: Use this API command to delete Bulk Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *BonjourFencingPolicyDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyDeleteDelete1(ctx *UserContext, requestBody *BonjourFencingPolicyDeleteDelete1Request) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyDeleteDelete1(ctx context.Context, requestBody *BonjourFencingPolicyDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/bonjourFencingPolicy")
-	request.body = requestBody
-	request.authenticated = true
-	return r.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/rkszones/bonjourFencingPolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // BonjourFencingPolicyDeleteDelete: Use this API command to delete Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -176,12 +180,9 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyDeleteDelete(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/bonjourFencingPolicy/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/bonjourFencingPolicy/{id}", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -195,34 +196,37 @@ type (
 // ClientIsolationWhitelistDeleteDelete1: Use this API command to delete Bulk Client Isolation Whitelist
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ClientIsolationWhitelistDeleteDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistDeleteDelete1(ctx *UserContext, requestBody *ClientIsolationWhitelistDeleteDelete1Request) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistDeleteDelete1(ctx context.Context, requestBody *ClientIsolationWhitelistDeleteDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/clientIsolationWhitelist")
-	request.body = requestBody
-	request.authenticated = true
-	return r.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/rkszones/clientIsolationWhitelist", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ClientIsolationWhitelistDeleteDelete: Delete a Client Isolation Whitelist
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -231,12 +235,9 @@ func (r *RuckusZonesAPI) ClientIsolationWhitelistDeleteDelete(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/clientIsolationWhitelist/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/clientIsolationWhitelist/{id}", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -298,7 +299,7 @@ type (
 // DomainRetrieveListGet: Use this API command to retrieve a list of domain under Administration Domain.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -311,7 +312,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DomainRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DomainRetrieveListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *DomainRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) DomainRetrieveListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *DomainRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -348,17 +349,14 @@ func (r *RuckusZonesAPI) DomainRetrieveListGet(ctx *UserContext, optionalParams 
 			return nil, nil, fmt.Errorf("parameter \"includeSelf\" failed validation check: %s", err)
 		}
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/domains")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":                index,
-		"listSize":             listSize,
-		"recursively":          recursively,
-		"includeSelf":          includeSelf,
-		"excludeRegularDomain": optionalParams["excludeRegularDomain"],
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/domains", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("recursively", recursively)
+	request.SetQueryParameter("includeSelf", includeSelf)
+	request.SetQueryParameter("excludeRegularDomain", optionalParams["excludeRegularDomain"])
 	out := &DomainRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -411,7 +409,7 @@ type (
 // DomainCreatePost: Use this API command to create new domain.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *DomainCreatePostRequest
 //
 // Optional Parameter Map:
@@ -421,7 +419,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DomainCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DomainCreatePost(ctx *UserContext, requestBody *DomainCreatePostRequest, optionalParams map[string]string) (*http.Response, *DomainCreatePost201Response, error) {
+func (r *RuckusZonesAPI) DomainCreatePost(ctx context.Context, requestBody *DomainCreatePostRequest, optionalParams map[string]string) (*http.Response, *DomainCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -433,28 +431,28 @@ func (r *RuckusZonesAPI) DomainCreatePost(ctx *UserContext, requestBody *DomainC
 			return nil, nil, fmt.Errorf("parameter \"parentDomainId\" failed validation check: %s", err)
 		}
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/domains")
-	request.body = requestBody
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"parentDomainId": parentDomainId,
+	request := NewRequest("POST", "/v5_0/rkszones/domains", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetQueryParameter("parentDomainId", parentDomainId)
 	out := &DomainCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // DomainDeleteDelete: Use this API command to delete domain.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Domain ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DomainDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DomainDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -463,12 +461,9 @@ func (r *RuckusZonesAPI) DomainDeleteDelete(ctx *UserContext, id string) (*http.
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/domains/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/domains/{id}", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -556,7 +551,7 @@ type (
 // DomainRetrieveGet: Use this API command to retrieve domain by specified Domain ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Domain ID
 //
 // Optional Parameter Map:
@@ -566,7 +561,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DomainRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DomainRetrieveGet(ctx *UserContext, id string, optionalParams map[string]string) (*http.Response, *DomainRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) DomainRetrieveGet(ctx context.Context, id string, optionalParams map[string]string) (*http.Response, *DomainRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -582,16 +577,11 @@ func (r *RuckusZonesAPI) DomainRetrieveGet(ctx *UserContext, id string, optional
 			return nil, nil, fmt.Errorf("parameter \"recursively\" failed validation check: %s", err)
 		}
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/domains/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	request.queryParameters = map[string]string{
-		"recursively": recursively,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/domains/{id}", true)
+	request.SetPathParameter("id", id)
+	request.SetQueryParameter("recursively", recursively)
 	out := &DomainRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -607,7 +597,7 @@ type (
 // DomainModifyBasicPatch: Use this API command to modify the basic information of domain.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Domain ID
 // - requestBody: *DomainModifyBasicPatchRequest
 //
@@ -615,7 +605,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DomainModifyBasicPatch(ctx *UserContext, id string, requestBody *DomainModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DomainModifyBasicPatch(ctx context.Context, id string, requestBody *DomainModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -624,13 +614,13 @@ func (r *RuckusZonesAPI) DomainModifyBasicPatch(ctx *UserContext, id string, req
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/domains/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/domains/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -692,7 +682,7 @@ type (
 // DomainRetrieveSubdomainListGet: Use this API command to retrieve a list of subdomain by specified Domain ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Domain ID
 //
 // Optional Parameter Map:
@@ -706,7 +696,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DomainRetrieveSubdomainListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DomainRetrieveSubdomainListGet(ctx *UserContext, id string, optionalParams map[string]string) (*http.Response, *DomainRetrieveSubdomainListGet200Response, error) {
+func (r *RuckusZonesAPI) DomainRetrieveSubdomainListGet(ctx context.Context, id string, optionalParams map[string]string) (*http.Response, *DomainRetrieveSubdomainListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -747,27 +737,22 @@ func (r *RuckusZonesAPI) DomainRetrieveSubdomainListGet(ctx *UserContext, id str
 			return nil, nil, fmt.Errorf("parameter \"includeSelf\" failed validation check: %s", err)
 		}
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/domains/{id}/subdomain")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	request.queryParameters = map[string]string{
-		"index":                index,
-		"listSize":             listSize,
-		"recursively":          recursively,
-		"includeSelf":          includeSelf,
-		"excludeRegularDomain": optionalParams["excludeRegularDomain"],
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/domains/{id}/subdomain", true)
+	request.SetPathParameter("id", id)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("recursively", recursively)
+	request.SetQueryParameter("includeSelf", includeSelf)
+	request.SetQueryParameter("excludeRegularDomain", optionalParams["excludeRegularDomain"])
 	out := &DomainRetrieveSubdomainListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // DynamicPskDownloadDpskCsvSampleGet: Use this API command to download DPSK CSV sample.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - type (string): DPSK CSV sample type. Valid value is PHASE1 or PHASE2.
@@ -776,7 +761,7 @@ func (r *RuckusZonesAPI) DomainRetrieveSubdomainListGet(ctx *UserContext, id str
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskDownloadDpskCsvSampleGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DynamicPskDownloadDpskCsvSampleGet(ctx context.Context, optionalParams map[string]string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -784,12 +769,9 @@ func (r *RuckusZonesAPI) DynamicPskDownloadDpskCsvSampleGet(ctx *UserContext, op
 	if !ok {
 		xtype = "PHASE2"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/downloadDpskCsvSample")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"type": xtype,
-	}
-	return r.client.doRequest(request, 200, nil)
+	request := NewRequest("GET", "/v5_0/rkszones/downloadDpskCsvSample", true)
+	request.SetQueryParameter("type", xtype)
+	return r.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -815,22 +797,25 @@ type (
 // RuckusWirelessApZoneCreateZoneOfDualPost: Use this API command to create a new Ruckus Wireless AP zone of IPv4/IPv6.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusWirelessApZoneCreateZoneOfDualPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneCreateZoneOfDualPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZoneOfDualPost(ctx *UserContext, requestBody *RuckusWirelessApZoneCreateZoneOfDualPostRequest) (*http.Response, *RuckusWirelessApZoneCreateZoneOfDualPost201Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZoneOfDualPost(ctx context.Context, requestBody *RuckusWirelessApZoneCreateZoneOfDualPostRequest) (*http.Response, *RuckusWirelessApZoneCreateZoneOfDualPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/dual")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/rkszones/dual", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &RuckusWirelessApZoneCreateZoneOfDualPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -857,22 +842,25 @@ type (
 // RuckusWirelessApZoneCreateZoneOfIpv6Post: Use this API command to create a new Ruckus Wireless AP zone of IPv6.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusWirelessApZoneCreateZoneOfIpv6PostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneCreateZoneOfIpv6Post201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZoneOfIpv6Post(ctx *UserContext, requestBody *RuckusWirelessApZoneCreateZoneOfIpv6PostRequest) (*http.Response, *RuckusWirelessApZoneCreateZoneOfIpv6Post201Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZoneOfIpv6Post(ctx context.Context, requestBody *RuckusWirelessApZoneCreateZoneOfIpv6PostRequest) (*http.Response, *RuckusWirelessApZoneCreateZoneOfIpv6Post201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/ipv6")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/rkszones/ipv6", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &RuckusWirelessApZoneCreateZoneOfIpv6Post201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -1038,36 +1026,39 @@ type (
 // RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost: Use this API command to modify DHCP/NAT service configuration of Domain.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost(ctx *UserContext, requestBody *RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequest) (*http.Response, *RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost(ctx context.Context, requestBody *RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequest) (*http.Response, *RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/services/dhcpSiteConfig/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/rkszones/services/dhcpSiteConfig/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPost200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // RuckusWirelessApZoneDeleteDelete: Use this API command to delete a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDeleteDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDeleteDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1076,12 +1067,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDeleteDelete(ctx *UserContext, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1409,14 +1397,14 @@ type (
 // RuckusWirelessApZoneRetrieveGet: Use this API command to retrieve Ruckus Wireless AP zones configuration.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveGet(ctx *UserContext, id string) (*http.Response, *RuckusWirelessApZoneRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveGet(ctx context.Context, id string) (*http.Response, *RuckusWirelessApZoneRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1425,13 +1413,10 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveGet(ctx *UserContext, id st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &RuckusWirelessApZoneRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -1464,7 +1449,7 @@ type (
 // RuckusWirelessApZoneModifyBasicPatch: Use this API command to modify the basic information of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyBasicPatchRequest
 //
@@ -1472,7 +1457,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBasicPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBasicPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1481,26 +1466,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBasicPatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableAltitudeDelete: Use this API command to disable altitude configuration of zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableAltitudeDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableAltitudeDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1509,12 +1494,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableAltitudeDelete(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/altitude")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/altitude", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1527,7 +1509,7 @@ type (
 // RuckusWirelessApZoneModifyAltitudePatch: Use this API command to modify the altitude configuration of zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyAltitudePatchRequest
 //
@@ -1535,7 +1517,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyAltitudePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyAltitudePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyAltitudePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyAltitudePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1544,13 +1526,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyAltitudePatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/altitude")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/altitude", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1563,7 +1545,7 @@ type (
 // RuckusWirelessApZoneModifyApManagementVlanPatch: Modify AP Management Vlan of a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyApManagementVlanPatchRequest
 //
@@ -1571,7 +1553,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApManagementVlanPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyApManagementVlanPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApManagementVlanPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyApManagementVlanPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1580,13 +1562,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApManagementVlanPatch(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/apMgmtVlan")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/apMgmtVlan", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1599,7 +1581,7 @@ type (
 // RuckusWirelessApZoneModifyApRebootTimeoutPatch: Use this API command to modify AP reboot timeout for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyApRebootTimeoutPatchRequest
 //
@@ -1607,7 +1589,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApRebootTimeoutPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyApRebootTimeoutPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApRebootTimeoutPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyApRebootTimeoutPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1616,13 +1598,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApRebootTimeoutPatch(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/apRebootTimeout")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/apRebootTimeout", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1635,7 +1617,7 @@ type (
 // RuckusWirelessApZoneModifyRadio24gAutoChannelselectmodePatch: Modify Radio 2.4G Auto ChannelSelectMode and ChannelFly MTBC of a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyRadio24gAutoChannelselectmodePatchRequest
 //
@@ -1643,7 +1625,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gAutoChannelselectmodePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyRadio24gAutoChannelselectmodePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gAutoChannelselectmodePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyRadio24gAutoChannelselectmodePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1652,13 +1634,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gAutoChannelselectmode
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/autoChannelSelection24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/autoChannelSelection24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1671,7 +1653,7 @@ type (
 // RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodePatch: Modify Radio 5G Auto ChannelSelectMode and ChannelFly MTBC of a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodePatchRequest
 //
@@ -1679,7 +1661,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1688,26 +1670,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio5gAutoChannelselectmodeP
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/autoChannelSelection50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/autoChannelSelection50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableBackgroundScanning24gDelete: Use this API command to disable background scanning 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBackgroundScanning24gDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBackgroundScanning24gDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1716,12 +1698,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBackgroundScanning24gDelete(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/backgroundScanning24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/backgroundScanning24", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1733,7 +1712,7 @@ type (
 // RuckusWirelessApZoneModifyBackgroundScanning24gPatch: Use this API command to modify the background scanning 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyBackgroundScanning24gPatchRequest
 //
@@ -1741,7 +1720,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBackgroundScanning24gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyBackgroundScanning24gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBackgroundScanning24gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyBackgroundScanning24gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1750,26 +1729,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBackgroundScanning24gPatch(ct
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/backgroundScanning24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/backgroundScanning24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableBackgroundScanning5gDelete: Use this API command to disable background scanning 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBackgroundScanning5gDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBackgroundScanning5gDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1778,12 +1757,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBackgroundScanning5gDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/backgroundScanning50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/backgroundScanning50", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1795,7 +1771,7 @@ type (
 // RuckusWirelessApZoneModifyBackgroundScanning5gPatch: Use this API command to modify the background scanning 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyBackgroundScanning5gPatchRequest
 //
@@ -1803,7 +1779,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBackgroundScanning5gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyBackgroundScanning5gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBackgroundScanning5gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyBackgroundScanning5gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1812,26 +1788,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBackgroundScanning5gPatch(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/backgroundScanning50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/backgroundScanning50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableBandBalancingDelete: Use this API command to disable band balancing for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBandBalancingDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBandBalancingDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1840,12 +1816,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableBandBalancingDelete(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/bandBalancing")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/bandBalancing", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1857,7 +1830,7 @@ type (
 // RuckusWirelessApZoneModifyBandBalancingPatch: Use this API command to modify band balancing for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyBandBalancingPatchRequest
 //
@@ -1865,7 +1838,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBandBalancingPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyBandBalancingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBandBalancingPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyBandBalancingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1874,13 +1847,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBandBalancingPatch(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/bandBalancing")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/bandBalancing", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1893,7 +1866,7 @@ type (
 // RuckusWirelessApZoneModifyBonjourFencingPolicyConfigurationPatch: Use this API command to modify Bonjour Fencing Policy configuration of Zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyBonjourFencingPolicyConfigurationPatchRequest
 //
@@ -1901,7 +1874,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBonjourFencingPolicyConfigurationPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyBonjourFencingPolicyConfigurationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBonjourFencingPolicyConfigurationPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyBonjourFencingPolicyConfigurationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1910,26 +1883,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyBonjourFencingPolicyConfigura
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/bonjourFencingPolicy")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/bonjourFencingPolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableClientAdmissionControl24gDelete: Use this API command to disable client admission control 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientAdmissionControl24gDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientAdmissionControl24gDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1938,12 +1911,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientAdmissionControl24gDel
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/clientAdmissionControl24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/clientAdmissionControl24", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -1957,7 +1927,7 @@ type (
 // RuckusWirelessApZoneModifyClientAdmissionControl24gPatch: Use this API command to modify the client admission control 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyClientAdmissionControl24gPatchRequest
 //
@@ -1965,7 +1935,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientAdmissionControl24gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyClientAdmissionControl24gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientAdmissionControl24gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyClientAdmissionControl24gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -1974,26 +1944,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientAdmissionControl24gPatc
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/clientAdmissionControl24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/clientAdmissionControl24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableClientAdmissionControl5gDelete: Use this API command to disable client admission control 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientAdmissionControl5gDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientAdmissionControl5gDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2002,12 +1972,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientAdmissionControl5gDele
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/clientAdmissionControl50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/clientAdmissionControl50", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2021,7 +1988,7 @@ type (
 // RuckusWirelessApZoneModifyClientAdmissionControl5gPatch: Use this API command to modify the client admission control 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyClientAdmissionControl5gPatchRequest
 //
@@ -2029,7 +1996,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientAdmissionControl5gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyClientAdmissionControl5gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientAdmissionControl5gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyClientAdmissionControl5gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2038,26 +2005,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientAdmissionControl5gPatch
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/clientAdmissionControl50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/clientAdmissionControl50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableClientLoadBalancing24gDelete: Use this API command to disable client load balancing 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientLoadBalancing24gDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientLoadBalancing24gDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2066,12 +2033,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientLoadBalancing24gDelete
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/clientLoadBalancing24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/clientLoadBalancing24", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2083,7 +2047,7 @@ type (
 // RuckusWirelessApZoneModifyClientLoadBalancing24gPatch: Use this API command to modify the client load balancing 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyClientLoadBalancing24gPatchRequest
 //
@@ -2091,7 +2055,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientLoadBalancing24gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyClientLoadBalancing24gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientLoadBalancing24gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyClientLoadBalancing24gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2100,26 +2064,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientLoadBalancing24gPatch(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/clientLoadBalancing24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/clientLoadBalancing24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableClientLoadBalancing5gDelete: Use this API command to disable client load balancing 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientLoadBalancing5gDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientLoadBalancing5gDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2128,12 +2092,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableClientLoadBalancing5gDelete(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/clientLoadBalancing50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/clientLoadBalancing50", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2145,7 +2106,7 @@ type (
 // RuckusWirelessApZoneModifyClientLoadBalancing5gPatch: Use this API command to modify the client load balancing 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyClientLoadBalancing5gPatchRequest
 //
@@ -2153,7 +2114,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientLoadBalancing5gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyClientLoadBalancing5gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientLoadBalancing5gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyClientLoadBalancing5gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2162,13 +2123,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyClientLoadBalancing5gPatch(ct
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/clientLoadBalancing50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/clientLoadBalancing50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2198,7 +2159,7 @@ type (
 // RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatch: Use this API command to modify DHCP/NAT service configuration of Zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatchRequest
 //
@@ -2206,7 +2167,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2215,13 +2176,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPa
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/dhcpSiteConfig")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/dhcpSiteConfig", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2234,7 +2195,7 @@ type (
 // RuckusWirelessApZoneModifyIpsecProfilePatch: Modify IPsec Profile of a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyIpsecProfilePatchRequest
 //
@@ -2242,7 +2203,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyIpsecProfilePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyIpsecProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyIpsecProfilePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyIpsecProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2251,26 +2212,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyIpsecProfilePatch(ctx *UserCo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/ipsecProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/ipsecProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableLocationBasedServiceDelete: Use this API command to disable location based service for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableLocationBasedServiceDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableLocationBasedServiceDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2279,12 +2240,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableLocationBasedServiceDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/locationBasedService")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/locationBasedService", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2297,7 +2255,7 @@ type (
 // RuckusWirelessApZoneModifyLocationBasedServicePatch: Use this API command to modify location based service for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyLocationBasedServicePatchRequest
 //
@@ -2305,7 +2263,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyLocationBasedServicePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyLocationBasedServicePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyLocationBasedServicePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyLocationBasedServicePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2314,13 +2272,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyLocationBasedServicePatch(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/locationBasedService")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/locationBasedService", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2333,7 +2291,7 @@ type (
 // RuckusWirelessApZoneModifyApLogonPatch: Use this API command to modify the AP logon information for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyApLogonPatchRequest
 //
@@ -2341,7 +2299,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApLogonPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyApLogonPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApLogonPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyApLogonPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2350,26 +2308,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApLogonPatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/login")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/login", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneClearMeshConfigurationDelete: Use this API command to disable mesh networking.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneClearMeshConfigurationDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneClearMeshConfigurationDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2378,12 +2336,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneClearMeshConfigurationDelete(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/mesh")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/mesh", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2396,14 +2351,14 @@ type (
 // RuckusWirelessApZoneRetrieveMeshConfigurationGet: Use this API command to retrieve the mesh configuration of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveMeshConfigurationGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveMeshConfigurationGet(ctx *UserContext, id string) (*http.Response, *RuckusWirelessApZoneRetrieveMeshConfigurationGet200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveMeshConfigurationGet(ctx context.Context, id string) (*http.Response, *RuckusWirelessApZoneRetrieveMeshConfigurationGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2412,13 +2367,10 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveMeshConfigurationGet(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{id}/mesh")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{id}/mesh", true)
+	request.SetPathParameter("id", id)
 	out := &RuckusWirelessApZoneRetrieveMeshConfigurationGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -2432,7 +2384,7 @@ type (
 // RuckusWirelessApZoneModifyMeshConfigurationPatch: Use this API command to enable mesh networking or update the mesh configuration.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyMeshConfigurationPatchRequest
 //
@@ -2440,7 +2392,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyMeshConfigurationPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyMeshConfigurationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyMeshConfigurationPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyMeshConfigurationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2449,13 +2401,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyMeshConfigurationPatch(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/mesh")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/mesh", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2468,7 +2420,7 @@ type (
 // RuckusWirelessApZoneModifyNodeAffinityProfilePatch: Use this API command to modify node affinity profile for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyNodeAffinityProfilePatchRequest
 //
@@ -2476,7 +2428,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyNodeAffinityProfilePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyNodeAffinityProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyNodeAffinityProfilePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyNodeAffinityProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2485,26 +2437,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyNodeAffinityProfilePatch(ctx 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/nodeAffinityProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/nodeAffinityProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableZoneRecoverySsidDelete: Disable recovery ssid setting of a zone(setup a password, or enable/disable)
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableZoneRecoverySsidDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableZoneRecoverySsidDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2513,12 +2465,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableZoneRecoverySsidDelete(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/recoverySsid")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/recoverySsid", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2531,7 +2480,7 @@ type (
 // RuckusWirelessApZoneModifyZoneRecoverySsidPatch: Modify recovery ssid setting of a zone(setup a password, or enable/disable)
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyZoneRecoverySsidPatchRequest
 //
@@ -2539,7 +2488,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyZoneRecoverySsidPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyZoneRecoverySsidPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyZoneRecoverySsidPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyZoneRecoverySsidPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2548,26 +2497,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyZoneRecoverySsidPatch(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/recoverySsid")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/recoverySsid", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableRogueDelete: Use this API command to disable rogue AP detection for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableRogueDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableRogueDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2576,12 +2525,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableRogueDelete(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/rogue")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/rogue", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2597,7 +2543,7 @@ type (
 // RuckusWirelessApZoneModifyRoguePatch: Use this API command to modify the rogue AP detection for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyRoguePatchRequest
 //
@@ -2605,7 +2551,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRoguePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyRoguePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRoguePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyRoguePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2614,26 +2560,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRoguePatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/rogue")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/rogue", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableSmartMonitorDelete: Use this API command to disable smart monitor for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableSmartMonitorDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableSmartMonitorDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2642,12 +2588,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableSmartMonitorDelete(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/smartMonitor")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/smartMonitor", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2660,7 +2603,7 @@ type (
 // RuckusWirelessApZoneModifySmartMonitorPatch: Use this API command to modify the smart monitor for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifySmartMonitorPatchRequest
 //
@@ -2668,7 +2611,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifySmartMonitorPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifySmartMonitorPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifySmartMonitorPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifySmartMonitorPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2677,26 +2620,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifySmartMonitorPatch(ctx *UserCo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/smartMonitor")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/smartMonitor", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneClearApSnmpOptionsDelete: Use this API command to clear SNMPv2 and SNMPv3 agent that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneClearApSnmpOptionsDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneClearApSnmpOptionsDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2705,12 +2648,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneClearApSnmpOptionsDelete(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/snmpAgent")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/snmpAgent", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2764,7 +2704,7 @@ type (
 // RuckusWirelessApZoneModifyApSnmpOptionsPatch: Use this API command to modify SNMPv2 and SNMPv3 agent that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyApSnmpOptionsPatchRequest
 //
@@ -2772,7 +2712,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApSnmpOptionsPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyApSnmpOptionsPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApSnmpOptionsPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyApSnmpOptionsPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2781,26 +2721,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApSnmpOptionsPatch(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/snmpAgent")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/snmpAgent", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableSyslogDelete: Use this API command to disable syslog configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableSyslogDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableSyslogDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2809,12 +2749,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableSyslogDelete(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/syslog")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/syslog", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2829,7 +2766,7 @@ type (
 // RuckusWirelessApZoneModifySyslogPatch: Use this API command to modify the syslog configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifySyslogPatchRequest
 //
@@ -2837,7 +2774,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifySyslogPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifySyslogPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifySyslogPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifySyslogPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2846,13 +2783,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifySyslogPatch(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/syslog")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/syslog", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2887,7 +2824,7 @@ type (
 // RuckusWirelessApZoneModifyTimeZonePatch: Use this API command to modify the time zone of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyTimeZonePatchRequest
 //
@@ -2895,7 +2832,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTimeZonePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyTimeZonePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTimeZonePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyTimeZonePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2904,13 +2841,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTimeZonePatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/timezone")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/timezone", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2923,7 +2860,7 @@ type (
 // RuckusWirelessApZoneModifyTunnelProfilePatch: Use this API command to change tunnel profile of Zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyTunnelProfilePatchRequest
 //
@@ -2931,7 +2868,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTunnelProfilePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyTunnelProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTunnelProfilePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyTunnelProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2940,19 +2877,19 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTunnelProfilePatch(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/tunnelProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/tunnelProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneDisableApUsbSoftwarePackageDelete: Disable AP Usb Software Package of a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -2962,7 +2899,7 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyTunnelProfilePatch(ctx *UserC
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableApUsbSoftwarePackageDelete(ctx *UserContext, id string, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableApUsbSoftwarePackageDelete(ctx context.Context, id string, optionalParams map[string]string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -2971,15 +2908,10 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableApUsbSoftwarePackageDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/usbSoftwarePackage")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	request.queryParameters = map[string]string{
-		"applyModel": optionalParams["applyModel"],
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/usbSoftwarePackage", true)
+	request.SetPathParameter("id", id)
+	request.SetQueryParameter("applyModel", optionalParams["applyModel"])
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -2999,7 +2931,7 @@ type (
 // RuckusWirelessApZoneModifyApUsbSoftwarePackagePatch: Modify AP Usb Software Package of a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyApUsbSoftwarePackagePatchRequest
 //
@@ -3007,7 +2939,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApUsbSoftwarePackagePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyApUsbSoftwarePackagePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApUsbSoftwarePackagePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyApUsbSoftwarePackagePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3016,26 +2948,26 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApUsbSoftwarePackagePatch(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/usbSoftwarePackage")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/usbSoftwarePackage", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // RuckusWirelessApZoneClearHotspot20VenueProfileDelete: Use this API command to clear Hotspot 2.0 venue profile for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneClearHotspot20VenueProfileDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneClearHotspot20VenueProfileDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3044,12 +2976,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneClearHotspot20VenueProfileDelete(ct
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{id}/venueProfile")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{id}/venueProfile", true)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3062,7 +2991,7 @@ type (
 // RuckusWirelessApZoneModifyHotspot20VenueProfilePatch: Use this API command to modify Hotspot 2.0 venue profile for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyHotspot20VenueProfilePatchRequest
 //
@@ -3070,7 +2999,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyHotspot20VenueProfilePatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyHotspot20VenueProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyHotspot20VenueProfilePatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyHotspot20VenueProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3079,13 +3008,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyHotspot20VenueProfilePatch(ct
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/venueProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/venueProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3102,7 +3031,7 @@ type (
 // RuckusWirelessApZoneModifyRadio24gPatch: Use this API command to modify the 2.4GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyRadio24gPatchRequest
 //
@@ -3110,7 +3039,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyRadio24gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyRadio24gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3119,13 +3048,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gPatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/wifi24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/wifi24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3148,7 +3077,7 @@ type (
 // RuckusWirelessApZoneModifyRadio5gPatch: Use this API command to modify the 5GHz radio configuration for APs that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneModifyRadio5gPatchRequest
 //
@@ -3156,7 +3085,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio5gPatch(ctx *UserContext, id string, requestBody *RuckusWirelessApZoneModifyRadio5gPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio5gPatch(ctx context.Context, id string, requestBody *RuckusWirelessApZoneModifyRadio5gPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3165,13 +3094,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio5gPatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{id}/wifi50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{id}/wifi50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3210,14 +3139,14 @@ type (
 // ZoneAaaRetrieveListRadiusAccountingGet: Use this API command to retrieve a list of radius accounting servers of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveListRadiusAccountingGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveListRadiusAccountingGet(ctx *UserContext, zoneId string) (*http.Response, *ZoneAaaRetrieveListRadiusAccountingGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveListRadiusAccountingGet(ctx context.Context, zoneId string) (*http.Response, *ZoneAaaRetrieveListRadiusAccountingGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3226,13 +3155,10 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveListRadiusAccountingGet(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/accounting")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/accounting", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaRetrieveListRadiusAccountingGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3264,7 +3190,7 @@ type (
 // ZoneAaaCreateRadiusAccountingPost: Use this API command to create a new radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *ZoneAaaCreateRadiusAccountingPostRequest
 //
@@ -3272,7 +3198,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaCreateRadiusAccountingPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaCreateRadiusAccountingPost(ctx *UserContext, zoneId string, requestBody *ZoneAaaCreateRadiusAccountingPostRequest) (*http.Response, *ZoneAaaCreateRadiusAccountingPost201Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaCreateRadiusAccountingPost(ctx context.Context, zoneId string, requestBody *ZoneAaaCreateRadiusAccountingPostRequest) (*http.Response, *ZoneAaaCreateRadiusAccountingPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3281,21 +3207,21 @@ func (r *RuckusZonesAPI) ZoneAaaCreateRadiusAccountingPost(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/aaa/accounting")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/aaa/accounting", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaCreateRadiusAccountingPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ZoneAaaDeleteRadiusAccountingDelete: Use this API command to delete a radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3303,7 +3229,7 @@ func (r *RuckusZonesAPI) ZoneAaaCreateRadiusAccountingPost(ctx *UserContext, zon
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaDeleteRadiusAccountingDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaDeleteRadiusAccountingDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3316,13 +3242,10 @@ func (r *RuckusZonesAPI) ZoneAaaDeleteRadiusAccountingDelete(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3352,7 +3275,7 @@ type (
 // ZoneAaaRetrieveRadiusAccountingGet: Use this API command to retrieve a radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3360,7 +3283,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveRadiusAccountingGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveRadiusAccountingGet(ctx *UserContext, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveRadiusAccountingGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveRadiusAccountingGet(ctx context.Context, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveRadiusAccountingGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3373,14 +3296,11 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveRadiusAccountingGet(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &ZoneAaaRetrieveRadiusAccountingGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3394,7 +3314,7 @@ type (
 // ZoneAaaModifyRadiusAccountingPatch: Use this API command to modify the basic information on radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifyRadiusAccountingPatchRequest
@@ -3403,7 +3323,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifyRadiusAccountingPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifyRadiusAccountingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifyRadiusAccountingPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifyRadiusAccountingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3416,14 +3336,14 @@ func (r *RuckusZonesAPI) ZoneAaaModifyRadiusAccountingPatch(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3437,7 +3357,7 @@ type (
 // ZoneAaaModifyPrimaryServerOfRadiusAccountingPatch: Use this API command to modify primary server on radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifyPrimaryServerOfRadiusAccountingPatchRequest
@@ -3446,7 +3366,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusAccountingPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifyPrimaryServerOfRadiusAccountingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusAccountingPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifyPrimaryServerOfRadiusAccountingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3459,20 +3379,20 @@ func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusAccountingPatch(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}/primary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}/primary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ZoneAaaDisableSecondaryServerRadiusAccountingDelete: Use this API command to disable secondary server on radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3480,7 +3400,7 @@ func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusAccountingPatch(ctx *
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaDisableSecondaryServerRadiusAccountingDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaDisableSecondaryServerRadiusAccountingDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3493,13 +3413,10 @@ func (r *RuckusZonesAPI) ZoneAaaDisableSecondaryServerRadiusAccountingDelete(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}/secondary")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}/secondary", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3513,7 +3430,7 @@ type (
 // ZoneAaaModifySecondaryServerOfRadiusAccountingPatch: Use this API command to modify secondary server on radius accounting server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifySecondaryServerOfRadiusAccountingPatchRequest
@@ -3522,7 +3439,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifySecondaryServerOfRadiusAccountingPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifySecondaryServerOfRadiusAccountingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifySecondaryServerOfRadiusAccountingPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifySecondaryServerOfRadiusAccountingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3535,14 +3452,14 @@ func (r *RuckusZonesAPI) ZoneAaaModifySecondaryServerOfRadiusAccountingPatch(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}/secondary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/accounting/{id}/secondary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3573,14 +3490,14 @@ type (
 // ZoneAaaRetrieveListActivedirectoryGet: Use this API command to retrieve a list of active directory servers of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveListActivedirectoryGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveListActivedirectoryGet(ctx *UserContext, zoneId string) (*http.Response, *ZoneAaaRetrieveListActivedirectoryGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveListActivedirectoryGet(ctx context.Context, zoneId string) (*http.Response, *ZoneAaaRetrieveListActivedirectoryGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3589,13 +3506,10 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveListActivedirectoryGet(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/ad")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/ad", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaRetrieveListActivedirectoryGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3619,7 +3533,7 @@ type (
 // ZoneAaaCreateActivedirectoryPost: Use this API command to create a new active directory server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *ZoneAaaCreateActivedirectoryPostRequest
 //
@@ -3627,7 +3541,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaCreateActivedirectoryPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaCreateActivedirectoryPost(ctx *UserContext, zoneId string, requestBody *ZoneAaaCreateActivedirectoryPostRequest) (*http.Response, *ZoneAaaCreateActivedirectoryPost201Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaCreateActivedirectoryPost(ctx context.Context, zoneId string, requestBody *ZoneAaaCreateActivedirectoryPostRequest) (*http.Response, *ZoneAaaCreateActivedirectoryPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3636,21 +3550,21 @@ func (r *RuckusZonesAPI) ZoneAaaCreateActivedirectoryPost(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/aaa/ad")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/aaa/ad", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaCreateActivedirectoryPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ZoneAaaDeleteActivedirectoryDelete: Use this API command to delete an active directory server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3658,7 +3572,7 @@ func (r *RuckusZonesAPI) ZoneAaaCreateActivedirectoryPost(ctx *UserContext, zone
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaDeleteActivedirectoryDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaDeleteActivedirectoryDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3671,13 +3585,10 @@ func (r *RuckusZonesAPI) ZoneAaaDeleteActivedirectoryDelete(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/aaa/ad/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/aaa/ad/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3699,7 +3610,7 @@ type (
 // ZoneAaaRetrieveActivedirectoryGet: Use this API command to retrieve an active directory server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3707,7 +3618,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveActivedirectoryGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveActivedirectoryGet(ctx *UserContext, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveActivedirectoryGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveActivedirectoryGet(ctx context.Context, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveActivedirectoryGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3720,14 +3631,11 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveActivedirectoryGet(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/ad/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/ad/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &ZoneAaaRetrieveActivedirectoryGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3747,7 +3655,7 @@ type (
 // ZoneAaaModifyActivedirectoryPatch: Use this API command to modify the basic information on active directory server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifyActivedirectoryPatchRequest
@@ -3756,7 +3664,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifyActivedirectoryPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifyActivedirectoryPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifyActivedirectoryPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifyActivedirectoryPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3769,14 +3677,14 @@ func (r *RuckusZonesAPI) ZoneAaaModifyActivedirectoryPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/ad/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/ad/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3808,14 +3716,14 @@ type (
 // ZoneAaaRetrieveListLdapGet: Use this API command to retrieve a list of LDAP servers of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveListLdapGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveListLdapGet(ctx *UserContext, zoneId string) (*http.Response, *ZoneAaaRetrieveListLdapGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveListLdapGet(ctx context.Context, zoneId string) (*http.Response, *ZoneAaaRetrieveListLdapGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3824,13 +3732,10 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveListLdapGet(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/ldap")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/ldap", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaRetrieveListLdapGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3855,7 +3760,7 @@ type (
 // ZoneAaaCreateLdapPost: Use this API command to create a new LDAP server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *ZoneAaaCreateLdapPostRequest
 //
@@ -3863,7 +3768,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaCreateLdapPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaCreateLdapPost(ctx *UserContext, zoneId string, requestBody *ZoneAaaCreateLdapPostRequest) (*http.Response, *ZoneAaaCreateLdapPost201Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaCreateLdapPost(ctx context.Context, zoneId string, requestBody *ZoneAaaCreateLdapPostRequest) (*http.Response, *ZoneAaaCreateLdapPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3872,21 +3777,21 @@ func (r *RuckusZonesAPI) ZoneAaaCreateLdapPost(ctx *UserContext, zoneId string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/aaa/ldap")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/aaa/ldap", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaCreateLdapPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ZoneAaaDeleteLdapDelete: Use this API command to delete a LDAP server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3894,7 +3799,7 @@ func (r *RuckusZonesAPI) ZoneAaaCreateLdapPost(ctx *UserContext, zoneId string, 
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaDeleteLdapDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaDeleteLdapDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3907,13 +3812,10 @@ func (r *RuckusZonesAPI) ZoneAaaDeleteLdapDelete(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/aaa/ldap/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/aaa/ldap/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -3936,7 +3838,7 @@ type (
 // ZoneAaaRetrieveLdapGet: Use this API command to retrieve a LDAP server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -3944,7 +3846,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveLdapGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveLdapGet(ctx *UserContext, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveLdapGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveLdapGet(ctx context.Context, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveLdapGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -3957,14 +3859,11 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveLdapGet(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/ldap/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/ldap/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &ZoneAaaRetrieveLdapGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -3985,7 +3884,7 @@ type (
 // ZoneAaaModifyLdapPatch: Use this API command to modify the basic information on LDAP server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifyLdapPatchRequest
@@ -3994,7 +3893,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifyLdapPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifyLdapPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifyLdapPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifyLdapPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4007,14 +3906,14 @@ func (r *RuckusZonesAPI) ZoneAaaModifyLdapPatch(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/ldap/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/ldap/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4053,14 +3952,14 @@ type (
 // ZoneAaaRetrieveListRadiusGet: Use this API command to retrieve a list of radius servers of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveListRadiusGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveListRadiusGet(ctx *UserContext, zoneId string) (*http.Response, *ZoneAaaRetrieveListRadiusGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveListRadiusGet(ctx context.Context, zoneId string) (*http.Response, *ZoneAaaRetrieveListRadiusGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4069,13 +3968,10 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveListRadiusGet(ctx *UserContext, zoneId s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/radius")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/radius", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaRetrieveListRadiusGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4107,7 +4003,7 @@ type (
 // ZoneAaaCreateRadiusPost: Use this API command to create a new radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *ZoneAaaCreateRadiusPostRequest
 //
@@ -4115,7 +4011,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaCreateRadiusPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaCreateRadiusPost(ctx *UserContext, zoneId string, requestBody *ZoneAaaCreateRadiusPostRequest) (*http.Response, *ZoneAaaCreateRadiusPost201Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaCreateRadiusPost(ctx context.Context, zoneId string, requestBody *ZoneAaaCreateRadiusPostRequest) (*http.Response, *ZoneAaaCreateRadiusPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4124,21 +4020,21 @@ func (r *RuckusZonesAPI) ZoneAaaCreateRadiusPost(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/aaa/radius")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/aaa/radius", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ZoneAaaCreateRadiusPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ZoneAaaDeleteRadiusDelete: Use this API command to delete a radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -4146,7 +4042,7 @@ func (r *RuckusZonesAPI) ZoneAaaCreateRadiusPost(ctx *UserContext, zoneId string
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaDeleteRadiusDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaDeleteRadiusDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4159,13 +4055,10 @@ func (r *RuckusZonesAPI) ZoneAaaDeleteRadiusDelete(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4195,7 +4088,7 @@ type (
 // ZoneAaaRetrieveRadiusGet: Use this API command to retrieve a radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -4203,7 +4096,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ZoneAaaRetrieveRadiusGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaRetrieveRadiusGet(ctx *UserContext, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveRadiusGet200Response, error) {
+func (r *RuckusZonesAPI) ZoneAaaRetrieveRadiusGet(ctx context.Context, zoneId string, id string) (*http.Response, *ZoneAaaRetrieveRadiusGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4216,14 +4109,11 @@ func (r *RuckusZonesAPI) ZoneAaaRetrieveRadiusGet(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &ZoneAaaRetrieveRadiusGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4237,7 +4127,7 @@ type (
 // ZoneAaaModifyRadiusPatch: Use this API command to modify the basic information on radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifyRadiusPatchRequest
@@ -4246,7 +4136,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifyRadiusPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifyRadiusPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifyRadiusPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifyRadiusPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4259,14 +4149,14 @@ func (r *RuckusZonesAPI) ZoneAaaModifyRadiusPatch(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4280,7 +4170,7 @@ type (
 // ZoneAaaModifyPrimaryServerOfRadiusPatch: Use this API command to modify primary server on radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifyPrimaryServerOfRadiusPatchRequest
@@ -4289,7 +4179,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifyPrimaryServerOfRadiusPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifyPrimaryServerOfRadiusPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4302,20 +4192,20 @@ func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusPatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}/primary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}/primary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ZoneAaaDisableSecondaryServerRadiusDelete: Use this API command to disable secondary server on radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -4323,7 +4213,7 @@ func (r *RuckusZonesAPI) ZoneAaaModifyPrimaryServerOfRadiusPatch(ctx *UserContex
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaDisableSecondaryServerRadiusDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaDisableSecondaryServerRadiusDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4336,13 +4226,10 @@ func (r *RuckusZonesAPI) ZoneAaaDisableSecondaryServerRadiusDelete(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}/secondary")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}/secondary", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4356,7 +4243,7 @@ type (
 // ZoneAaaModifySecondaryServerOfRadiusPatch: Use this API command to modify secondary server on radius server of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ZoneAaaModifySecondaryServerOfRadiusPatchRequest
@@ -4365,7 +4252,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ZoneAaaModifySecondaryServerOfRadiusPatch(ctx *UserContext, zoneId string, id string, requestBody *ZoneAaaModifySecondaryServerOfRadiusPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ZoneAaaModifySecondaryServerOfRadiusPatch(ctx context.Context, zoneId string, id string, requestBody *ZoneAaaModifySecondaryServerOfRadiusPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4378,14 +4265,14 @@ func (r *RuckusZonesAPI) ZoneAaaModifySecondaryServerOfRadiusPatch(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}/secondary")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/aaa/radius/{id}/secondary", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4415,14 +4302,14 @@ type (
 // RuckusWirelessApZoneRetrieveApFirmwareListGet: Use this API command to retrieve AP Firmware the list that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveApFirmwareListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveApFirmwareListGet(ctx *UserContext, zoneId string) (*http.Response, *RuckusWirelessApZoneRetrieveApFirmwareListGet200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveApFirmwareListGet(ctx context.Context, zoneId string) (*http.Response, *RuckusWirelessApZoneRetrieveApFirmwareListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4431,13 +4318,10 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveApFirmwareListGet(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apFirmware")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apFirmware", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &RuckusWirelessApZoneRetrieveApFirmwareListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4450,7 +4334,7 @@ type (
 // RuckusWirelessApZoneChangeApFirmwarePut: Use this API command to change the AP Firmware that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneChangeApFirmwarePutRequest
 //
@@ -4458,7 +4342,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneChangeApFirmwarePut(ctx *UserContext, zoneId string, requestBody *RuckusWirelessApZoneChangeApFirmwarePutRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneChangeApFirmwarePut(ctx context.Context, zoneId string, requestBody *RuckusWirelessApZoneChangeApFirmwarePutRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4467,13 +4351,13 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneChangeApFirmwarePut(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PUT", "/v5_0/rkszones/{zoneId}/apFirmware")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("PUT", "/v5_0/rkszones/{zoneId}/apFirmware", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4495,7 +4379,7 @@ type (
 // ApGroupRetrieveListGet: Use this API command to retrieve the list of AP groups that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -4506,7 +4390,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApGroupRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *ApGroupRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) ApGroupRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *ApGroupRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4533,17 +4417,12 @@ func (r *RuckusZonesAPI) ApGroupRetrieveListGet(ctx *UserContext, zoneId string,
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apgroups")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apgroups", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &ApGroupRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4561,7 +4440,7 @@ type (
 // ApGroupCreatePost: Use this API command to create new AP group within a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *ApGroupCreatePostRequest
 //
@@ -4569,7 +4448,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApGroupCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupCreatePost(ctx *UserContext, zoneId string, requestBody *ApGroupCreatePostRequest) (*http.Response, *ApGroupCreatePost201Response, error) {
+func (r *RuckusZonesAPI) ApGroupCreatePost(ctx context.Context, zoneId string, requestBody *ApGroupCreatePostRequest) (*http.Response, *ApGroupCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4578,14 +4457,14 @@ func (r *RuckusZonesAPI) ApGroupCreatePost(ctx *UserContext, zoneId string, requ
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/apgroups")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/apgroups", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ApGroupCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -4714,14 +4593,14 @@ type (
 // ApGroupRetrieveGet1: Use this API command to retrieve information about default AP group of zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApGroupRetrieveGet1200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupRetrieveGet1(ctx *UserContext, zoneId string) (*http.Response, *ApGroupRetrieveGet1200Response, error) {
+func (r *RuckusZonesAPI) ApGroupRetrieveGet1(ctx context.Context, zoneId string) (*http.Response, *ApGroupRetrieveGet1200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4730,20 +4609,17 @@ func (r *RuckusZonesAPI) ApGroupRetrieveGet1(ctx *UserContext, zoneId string) (*
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apgroups/default")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apgroups/default", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ApGroupRetrieveGet1200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // ApGroupDeleteDelete: Use this API command to delete an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -4751,7 +4627,7 @@ func (r *RuckusZonesAPI) ApGroupRetrieveGet1(ctx *UserContext, zoneId string) (*
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4764,13 +4640,10 @@ func (r *RuckusZonesAPI) ApGroupDeleteDelete(ctx *UserContext, zoneId string, id
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -4898,7 +4771,7 @@ type (
 // ApGroupRetrieveGet: Use this API command to retrieve information about an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -4906,7 +4779,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApGroupRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *ApGroupRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) ApGroupRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *ApGroupRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4919,14 +4792,11 @@ func (r *RuckusZonesAPI) ApGroupRetrieveGet(ctx *UserContext, zoneId string, id 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apgroups/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apgroups/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &ApGroupRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -4946,7 +4816,7 @@ type (
 // ApGroupModifyBasicPatch: Use this API command to modify the basic information of an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyBasicPatchRequest
@@ -4955,7 +4825,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -4968,20 +4838,20 @@ func (r *RuckusZonesAPI) ApGroupModifyBasicPatch(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableAltitudeOfApgroupDelete: Use this API command to clear the altitude of AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -4989,7 +4859,7 @@ func (r *RuckusZonesAPI) ApGroupModifyBasicPatch(ctx *UserContext, zoneId string
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableAltitudeOfApgroupDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableAltitudeOfApgroupDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5002,13 +4872,10 @@ func (r *RuckusZonesAPI) ApGroupDisableAltitudeOfApgroupDelete(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/altitude")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/altitude", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5021,7 +4888,7 @@ type (
 // ApGroupModifyAltitudeOfApgroupPatch: Use this API command to modify the altitude of AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyAltitudeOfApgroupPatchRequest
@@ -5030,7 +4897,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyAltitudeOfApgroupPatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyAltitudeOfApgroupPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyAltitudeOfApgroupPatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyAltitudeOfApgroupPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5043,20 +4910,20 @@ func (r *RuckusZonesAPI) ApGroupModifyAltitudeOfApgroupPatch(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/altitude")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/altitude", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableApManagementVlanOverrideDelete: Disable AP Management Vlan Override of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5064,7 +4931,7 @@ func (r *RuckusZonesAPI) ApGroupModifyAltitudeOfApgroupPatch(ctx *UserContext, z
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableApManagementVlanOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableApManagementVlanOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5077,13 +4944,10 @@ func (r *RuckusZonesAPI) ApGroupDisableApManagementVlanOverrideDelete(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apMgmtVlan")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apMgmtVlan", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5096,7 +4960,7 @@ type (
 // ApGroupModifyApManagementVlanPatch: Modify AP Management Vlan of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyApManagementVlanPatchRequest
@@ -5105,7 +4969,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyApManagementVlanPatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyApManagementVlanPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyApManagementVlanPatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyApManagementVlanPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5118,20 +4982,20 @@ func (r *RuckusZonesAPI) ApGroupModifyApManagementVlanPatch(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apMgmtVlan")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apMgmtVlan", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableOverrideApModelDelete: Use this API command to disable AP model specific configuration override zone that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - model (string): Access Point Model
@@ -5140,7 +5004,7 @@ func (r *RuckusZonesAPI) ApGroupModifyApManagementVlanPatch(ctx *UserContext, zo
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableOverrideApModelDelete(ctx *UserContext, zoneId string, id string, model string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableOverrideApModelDelete(ctx context.Context, zoneId string, id string, model string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5157,14 +5021,11 @@ func (r *RuckusZonesAPI) ApGroupDisableOverrideApModelDelete(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"model\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apmodel/{model}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"model":  model,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apmodel/{model}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("model", model)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5219,7 +5080,7 @@ type (
 // ApGroupRetrieveApModelGet: Use this API command to retrieve AP model specific configuration override zone that belong to an AP group, empty mean not override zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - model (string): Access Point Model
@@ -5228,7 +5089,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApGroupRetrieveApModelGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupRetrieveApModelGet(ctx *UserContext, zoneId string, id string, model string) (*http.Response, *ApGroupRetrieveApModelGet200Response, error) {
+func (r *RuckusZonesAPI) ApGroupRetrieveApModelGet(ctx context.Context, zoneId string, id string, model string) (*http.Response, *ApGroupRetrieveApModelGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5245,15 +5106,12 @@ func (r *RuckusZonesAPI) ApGroupRetrieveApModelGet(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"model\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apmodel/{model}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"model":  model,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apmodel/{model}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("model", model)
 	out := &ApGroupRetrieveApModelGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -5309,7 +5167,7 @@ type (
 // ApGroupOverrideApModelPut: Use this API command to modify AP model specific configuration override zone that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - model (string): Access Point Model
@@ -5319,7 +5177,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupOverrideApModelPut(ctx *UserContext, zoneId string, id string, model string, requestBody *ApGroupOverrideApModelPutRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupOverrideApModelPut(ctx context.Context, zoneId string, id string, model string, requestBody *ApGroupOverrideApModelPutRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5336,21 +5194,21 @@ func (r *RuckusZonesAPI) ApGroupOverrideApModelPut(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"model\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PUT", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apmodel/{model}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"model":  model,
+	request := NewRequest("PUT", "/v5_0/rkszones/{zoneId}/apgroups/{id}/apmodel/{model}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("model", model)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio24gAutoChannelselectmodeOverrideDelete: Disable Radio 2.4G Auto ChannelSelectMode and ChannelFly MTBC Override of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5358,7 +5216,7 @@ func (r *RuckusZonesAPI) ApGroupOverrideApModelPut(ctx *UserContext, zoneId stri
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio24gAutoChannelselectmodeOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio24gAutoChannelselectmodeOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5371,13 +5229,10 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gAutoChannelselectmodeOverrideDele
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection24", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5390,7 +5245,7 @@ type (
 // ApGroupModifyRadio24gAutoChannelselectmodeOverridePatch: Override Radio 2.4G Auto ChannelSelectMode and ChannelFly MTBC of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyRadio24gAutoChannelselectmodeOverridePatchRequest
@@ -5399,7 +5254,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyRadio24gAutoChannelselectmodeOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyRadio24gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyRadio24gAutoChannelselectmodeOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyRadio24gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5412,20 +5267,20 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio24gAutoChannelselectmodeOverridePatch
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gAutoChannelselectmodeOverrideDelete: Disable Radio 5G Auto ChannelSelectMode and ChannelFly MTBC Override of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5433,7 +5288,7 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio24gAutoChannelselectmodeOverridePatch
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gAutoChannelselectmodeOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gAutoChannelselectmodeOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5446,13 +5301,10 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gAutoChannelselectmodeOverrideDelet
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection50", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5465,7 +5317,7 @@ type (
 // ApGroupModifyRadio5gAutoChannelselectmodeOverridePatch: Override Radio 5G Auto ChannelSelectMode and ChannelFly MTBC of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyRadio5gAutoChannelselectmodeOverridePatchRequest
@@ -5474,7 +5326,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyRadio5gAutoChannelselectmodeOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyRadio5gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyRadio5gAutoChannelselectmodeOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyRadio5gAutoChannelselectmodeOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5487,20 +5339,20 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio5gAutoChannelselectmodeOverridePatch(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/autoChannelSelection50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableChannelEvaluationIntervalOverrideDelete: Disable Channel Evaluation Interval Override of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5508,7 +5360,7 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio5gAutoChannelselectmodeOverridePatch(
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableChannelEvaluationIntervalOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableChannelEvaluationIntervalOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5521,19 +5373,16 @@ func (r *RuckusZonesAPI) ApGroupDisableChannelEvaluationIntervalOverrideDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/channelEvaluationInterval")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/channelEvaluationInterval", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableClientAdmissionControl24gOverrideDelete: Use this API command to disable client admission control 2.4GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5541,7 +5390,7 @@ func (r *RuckusZonesAPI) ApGroupDisableChannelEvaluationIntervalOverrideDelete(c
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableClientAdmissionControl24gOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableClientAdmissionControl24gOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5554,13 +5403,10 @@ func (r *RuckusZonesAPI) ApGroupDisableClientAdmissionControl24gOverrideDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl24", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5575,7 +5421,7 @@ type (
 // ApGroupModifyClientAdmissionControl24gOverridePatch: Use this API command to modify client admission control 2.4GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyClientAdmissionControl24gOverridePatchRequest
@@ -5584,7 +5430,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl24gOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyClientAdmissionControl24gOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl24gOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyClientAdmissionControl24gOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5597,20 +5443,20 @@ func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl24gOverridePatch(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableClientAdmissionControl5gOverrideDelete: Use this API command to disable client admission control 5GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5618,7 +5464,7 @@ func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl24gOverridePatch(ctx
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableClientAdmissionControl5gOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableClientAdmissionControl5gOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5631,13 +5477,10 @@ func (r *RuckusZonesAPI) ApGroupDisableClientAdmissionControl5gOverrideDelete(ct
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl50", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5652,7 +5495,7 @@ type (
 // ApGroupModifyClientAdmissionControl5gOverridePatch: Use this API command to modify client admission control 5GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyClientAdmissionControl5gOverridePatchRequest
@@ -5661,7 +5504,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl5gOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyClientAdmissionControl5gOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl5gOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyClientAdmissionControl5gOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5674,20 +5517,20 @@ func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl5gOverridePatch(ctx 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/clientAdmissionControl50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableLocationOverrideDelete: Use this API command to disable location override for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5695,7 +5538,7 @@ func (r *RuckusZonesAPI) ApGroupModifyClientAdmissionControl5gOverridePatch(ctx 
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableLocationOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableLocationOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5708,19 +5551,16 @@ func (r *RuckusZonesAPI) ApGroupDisableLocationOverrideDelete(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/location")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/location", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableLocationAdditionalinfoOverrideDelete: Use this API command to disable location additionalInfo override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5728,7 +5568,7 @@ func (r *RuckusZonesAPI) ApGroupDisableLocationOverrideDelete(ctx *UserContext, 
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableLocationAdditionalinfoOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableLocationAdditionalinfoOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5741,19 +5581,16 @@ func (r *RuckusZonesAPI) ApGroupDisableLocationAdditionalinfoOverrideDelete(ctx 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/locationAdditionalInfo")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/locationAdditionalInfo", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableLocationBasedServiceOverrideDelete: Use this API command to disable location based service override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5761,7 +5598,7 @@ func (r *RuckusZonesAPI) ApGroupDisableLocationAdditionalinfoOverrideDelete(ctx 
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableLocationBasedServiceOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableLocationBasedServiceOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5774,13 +5611,10 @@ func (r *RuckusZonesAPI) ApGroupDisableLocationBasedServiceOverrideDelete(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/locationBasedService")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/locationBasedService", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5794,7 +5628,7 @@ type (
 // ApGroupModifyLocationBasedServiceOverridePatch: Use this API command to modify location based service override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyLocationBasedServiceOverridePatchRequest
@@ -5803,7 +5637,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyLocationBasedServiceOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyLocationBasedServiceOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyLocationBasedServiceOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyLocationBasedServiceOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5816,14 +5650,14 @@ func (r *RuckusZonesAPI) ApGroupModifyLocationBasedServiceOverridePatch(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/locationBasedService")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/locationBasedService", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -5841,7 +5675,7 @@ type (
 // ApGroupAddMemberListPost: Add multiple members to an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupAddMemberListPostRequest
@@ -5850,7 +5684,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupAddMemberListPost(ctx *UserContext, zoneId string, id string, requestBody *ApGroupAddMemberListPostRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupAddMemberListPost(ctx context.Context, zoneId string, id string, requestBody *ApGroupAddMemberListPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5863,20 +5697,20 @@ func (r *RuckusZonesAPI) ApGroupAddMemberListPost(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/apgroups/{id}/members")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/apgroups/{id}/members", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 201, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 201, nil)
 }
 
 // ApGroupRemoveMemberDelete: Use this API command to remove a member AP from an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - apMac (MAC): Access Point MAC Address
@@ -5885,7 +5719,7 @@ func (r *RuckusZonesAPI) ApGroupAddMemberListPost(ctx *UserContext, zoneId strin
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupRemoveMemberDelete(ctx *UserContext, zoneId string, id string, apMac string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupRemoveMemberDelete(ctx context.Context, zoneId string, id string, apMac string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5902,20 +5736,17 @@ func (r *RuckusZonesAPI) ApGroupRemoveMemberDelete(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/members/{apMac}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"apMac":  apMac,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/members/{apMac}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("apMac", apMac)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupAddMemberPost: Use this API command to add a member AP to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - apMac (MAC): Access Point MAC Address
@@ -5924,7 +5755,7 @@ func (r *RuckusZonesAPI) ApGroupRemoveMemberDelete(ctx *UserContext, zoneId stri
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupAddMemberPost(ctx *UserContext, zoneId string, id string, apMac string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupAddMemberPost(ctx context.Context, zoneId string, id string, apMac string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5941,20 +5772,17 @@ func (r *RuckusZonesAPI) ApGroupAddMemberPost(ctx *UserContext, zoneId string, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"apMac\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/apgroups/{id}/members/{apMac}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"apMac":  apMac,
-	}
-	return r.client.doRequest(request, 201, nil)
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/apgroups/{id}/members/{apMac}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("apMac", apMac)
+	return r.client.Ensure(ctx, request, 201, nil)
 }
 
 // ApGroupDisableApUsbSoftwarePackageDelete: Disable AP Usb Software Package of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -5965,7 +5793,7 @@ func (r *RuckusZonesAPI) ApGroupAddMemberPost(ctx *UserContext, zoneId string, i
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableApUsbSoftwarePackageDelete(ctx *UserContext, zoneId string, id string, optionalParams map[string]string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableApUsbSoftwarePackageDelete(ctx context.Context, zoneId string, id string, optionalParams map[string]string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -5978,16 +5806,11 @@ func (r *RuckusZonesAPI) ApGroupDisableApUsbSoftwarePackageDelete(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/usbSoftwarePackage")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	request.queryParameters = map[string]string{
-		"applyModel": optionalParams["applyModel"],
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/usbSoftwarePackage", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetQueryParameter("applyModel", optionalParams["applyModel"])
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6007,7 +5830,7 @@ type (
 // ApGroupModifyApUsbSoftwarePackagePatch: Modify AP Usb Software Package of an AP group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyApUsbSoftwarePackagePatchRequest
@@ -6016,7 +5839,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyApUsbSoftwarePackagePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyApUsbSoftwarePackagePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyApUsbSoftwarePackagePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyApUsbSoftwarePackagePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6029,14 +5852,14 @@ func (r *RuckusZonesAPI) ApGroupModifyApUsbSoftwarePackagePatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/usbSoftwarePackage")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/usbSoftwarePackage", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6049,7 +5872,7 @@ type (
 // ApUsbSoftwarePackageGetApgroupAssociateGet: Get APUsbSoftwarePackage associate with APGroup by model name
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - modelName (string)
@@ -6058,7 +5881,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApUsbSoftwarePackageGetApgroupAssociateGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetApgroupAssociateGet(ctx *UserContext, zoneId string, id string, modelName string) (*http.Response, *ApUsbSoftwarePackageGetApgroupAssociateGet200Response, error) {
+func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetApgroupAssociateGet(ctx context.Context, zoneId string, id string, modelName string) (*http.Response, *ApUsbSoftwarePackageGetApgroupAssociateGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6075,22 +5898,19 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetApgroupAssociateGet(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"modelName\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apgroups/{id}/usbsoftware/{modelName}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":    zoneId,
-		"id":        id,
-		"modelName": modelName,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apgroups/{id}/usbsoftware/{modelName}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("modelName", modelName)
 	out := &ApUsbSoftwarePackageGetApgroupAssociateGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // ApGroupClearHotspot20VenueProfileDelete: Use this API command to clear Hotspot 2.0 venue profile for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6098,7 +5918,7 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetApgroupAssociateGet(ctx *UserCon
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupClearHotspot20VenueProfileDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupClearHotspot20VenueProfileDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6111,13 +5931,10 @@ func (r *RuckusZonesAPI) ApGroupClearHotspot20VenueProfileDelete(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/venueProfile")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/venueProfile", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6130,7 +5947,7 @@ type (
 // ApGroupModifyHotspot20VenueProfilePatch: Use this API command to  modify Hotspot 2.0 venue profile for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyHotspot20VenueProfilePatchRequest
@@ -6139,7 +5956,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyHotspot20VenueProfilePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyHotspot20VenueProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyHotspot20VenueProfilePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyHotspot20VenueProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6152,20 +5969,20 @@ func (r *RuckusZonesAPI) ApGroupModifyHotspot20VenueProfilePatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/venueProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/venueProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio24gOverrideDelete: Use this API command to disable 2.4GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6173,7 +5990,7 @@ func (r *RuckusZonesAPI) ApGroupModifyHotspot20VenueProfilePatch(ctx *UserContex
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio24gOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio24gOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6186,13 +6003,10 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gOverrideDelete(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6209,7 +6023,7 @@ type (
 // ApGroupModifyRadio24gOverridePatch: Use this API command to modify the 2.4GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyRadio24gOverridePatchRequest
@@ -6218,7 +6032,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyRadio24gOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyRadio24gOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyRadio24gOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyRadio24gOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6231,20 +6045,20 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio24gOverridePatch(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio24gChannelOverrideDelete: Use this API command to disable 2.4GHz radio channel override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6252,7 +6066,7 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio24gOverridePatch(ctx *UserContext, zo
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6265,19 +6079,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelOverrideDelete(ctx *UserCo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/channel")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/channel", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio24gChannelrangeOverrideDelete: Use this API command to disable 2.4GHz radio channelRange override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6285,7 +6096,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelOverrideDelete(ctx *UserCo
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelrangeOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelrangeOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6298,19 +6109,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelrangeOverrideDelete(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/channelRange")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/channelRange", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio24gChannelwidthOverrideDelete: Use this API command to disable 2.4GHz radio channelWidth override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6318,7 +6126,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelrangeOverrideDelete(ctx *U
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelwidthOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelwidthOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6331,19 +6139,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelwidthOverrideDelete(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/channelWidth")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/channelWidth", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio24gTxpowerOverrideDelete: Use this API command to disable 2.4GHz radio txPower override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6351,7 +6156,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gChannelwidthOverrideDelete(ctx *U
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio24gTxpowerOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio24gTxpowerOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6364,19 +6169,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gTxpowerOverrideDelete(ctx *UserCo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/txPower")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi24/txPower", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gOverrideDelete: Use this API command to disable 5GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6384,7 +6186,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gTxpowerOverrideDelete(ctx *UserCo
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6397,13 +6199,10 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gOverrideDelete(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6426,7 +6225,7 @@ type (
 // ApGroupModifyRadio5gOverridePatch: Use this API command to modify the 5GHz radio configuration override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyRadio5gOverridePatchRequest
@@ -6435,7 +6234,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyRadio5gOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyRadio5gOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyRadio5gOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyRadio5gOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6448,20 +6247,20 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio5gOverridePatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gChannelwidthOverrideDelete: Use this API command to disable 5GHz radio channelWidth override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6469,7 +6268,7 @@ func (r *RuckusZonesAPI) ApGroupModifyRadio5gOverridePatch(ctx *UserContext, zon
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gChannelwidthOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gChannelwidthOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6482,19 +6281,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gChannelwidthOverrideDelete(ctx *Us
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/channelWidth")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/channelWidth", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gIndoorchannelOverrideDelete: Use this API command to disable 5GHz radio indoorChannel override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6502,7 +6298,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gChannelwidthOverrideDelete(ctx *Us
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6515,19 +6311,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelOverrideDelete(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/indoorChannel")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/indoorChannel", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gIndoorchannelrangeOverrideDelete: Use this API command to disable 5GHz radio indoorChannelRange override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6535,7 +6328,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelOverrideDelete(ctx *U
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelrangeOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelrangeOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6548,19 +6341,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelrangeOverrideDelete(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/indoorChannelRange")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/indoorChannelRange", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gOutdoorchannelOverrideDelete: Use this API command to disable 5GHz radio outdoorChannel override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6568,7 +6358,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gIndoorchannelrangeOverrideDelete(c
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6581,19 +6371,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelOverrideDelete(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/outdoorChannel")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/outdoorChannel", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gOutdoorchannelrangeOverrideDelete: Use this API command to disable 5GHz radio outdoorChannelRange override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6601,7 +6388,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelOverrideDelete(ctx *
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelrangeOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelrangeOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6614,19 +6401,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelrangeOverrideDelete(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/outdoorChannelRange")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/outdoorChannelRange", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableRadio5gTxpowerOverrideDelete: Use this API command to disable 5GHz radio txPower override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6634,7 +6418,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gOutdoorchannelrangeOverrideDelete(
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableRadio5gTxpowerOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableRadio5gTxpowerOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6647,19 +6431,16 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gTxpowerOverrideDelete(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/txPower")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wifi50/txPower", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableWlanGroup24gOverrideDelete: Use this API command to disable WLAN group on 2.4GHz radio override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6667,7 +6448,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gTxpowerOverrideDelete(ctx *UserCon
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableWlanGroup24gOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableWlanGroup24gOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6680,13 +6461,10 @@ func (r *RuckusZonesAPI) ApGroupDisableWlanGroup24gOverrideDelete(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup24")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup24", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6699,7 +6477,7 @@ type (
 // ApGroupModifyWlanGroup24gOverridePatch: Use this API command to modify the WLAN group on 2.4GHz radio override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyWlanGroup24gOverridePatchRequest
@@ -6708,7 +6486,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyWlanGroup24gOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyWlanGroup24gOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyWlanGroup24gOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyWlanGroup24gOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6721,20 +6499,20 @@ func (r *RuckusZonesAPI) ApGroupModifyWlanGroup24gOverridePatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup24")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup24", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // ApGroupDisableWlanGroup5gOverrideDelete: Use this API command to disable WLAN group on 5GHz radio override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 //
@@ -6742,7 +6520,7 @@ func (r *RuckusZonesAPI) ApGroupModifyWlanGroup24gOverridePatch(ctx *UserContext
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupDisableWlanGroup5gOverrideDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupDisableWlanGroup5gOverrideDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6755,13 +6533,10 @@ func (r *RuckusZonesAPI) ApGroupDisableWlanGroup5gOverrideDelete(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup50")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup50", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6774,7 +6549,7 @@ type (
 // ApGroupModifyWlanGroup5gOverridePatch: Use this API command to modify the WLAN group on 5GHz radio override zone for APs that belong to an AP group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): AP Group ID
 // - requestBody: *ApGroupModifyWlanGroup5gOverridePatchRequest
@@ -6783,7 +6558,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApGroupModifyWlanGroup5gOverridePatch(ctx *UserContext, zoneId string, id string, requestBody *ApGroupModifyWlanGroup5gOverridePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApGroupModifyWlanGroup5gOverridePatch(ctx context.Context, zoneId string, id string, requestBody *ApGroupModifyWlanGroup5gOverridePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6796,14 +6571,14 @@ func (r *RuckusZonesAPI) ApGroupModifyWlanGroup5gOverridePatch(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup50")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/apgroups/{id}/wlanGroup50", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -6858,7 +6633,7 @@ type (
 // RuckusWirelessApZoneRetrieveApModelGet: Use this API command to retrieve AP model specific configuration that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - model (string): Access Point Model
 //
@@ -6866,7 +6641,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveApModelGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveApModelGet(ctx *UserContext, zoneId string, model string) (*http.Response, *RuckusWirelessApZoneRetrieveApModelGet200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveApModelGet(ctx context.Context, zoneId string, model string) (*http.Response, *RuckusWirelessApZoneRetrieveApModelGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6879,14 +6654,11 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveApModelGet(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"model\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/apmodel/{model}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"model":  model,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/apmodel/{model}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("model", model)
 	out := &RuckusWirelessApZoneRetrieveApModelGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -6942,7 +6714,7 @@ type (
 // RuckusWirelessApZoneModifyApModelPut: Use this API command to modify the AP model specific configuration that belong to a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - model (string): Access Point Model
 // - requestBody: *RuckusWirelessApZoneModifyApModelPutRequest
@@ -6951,7 +6723,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApModelPut(ctx *UserContext, zoneId string, model string, requestBody *RuckusWirelessApZoneModifyApModelPutRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApModelPut(ctx context.Context, zoneId string, model string, requestBody *RuckusWirelessApZoneModifyApModelPutRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -6964,14 +6736,14 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyApModelPut(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"model\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PUT", "/v5_0/rkszones/{zoneId}/apmodel/{model}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"model":  model,
+	request := NewRequest("PUT", "/v5_0/rkszones/{zoneId}/apmodel/{model}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("model", model)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7013,14 +6785,14 @@ type (
 // BonjourFencingPolicyRetrieveListGet: Use this API command to retrieve a list of Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourFencingPolicyRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *BonjourFencingPolicyRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *BonjourFencingPolicyRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7029,13 +6801,10 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyRetrieveListGet(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &BonjourFencingPolicyRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7065,7 +6834,7 @@ type (
 // BonjourFencingPolicyCreatePost: Use this API command to create Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *BonjourFencingPolicyCreatePostRequest
 //
@@ -7073,7 +6842,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourFencingPolicyCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyCreatePost(ctx *UserContext, zoneId string, requestBody *BonjourFencingPolicyCreatePostRequest) (*http.Response, *BonjourFencingPolicyCreatePost201Response, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyCreatePost(ctx context.Context, zoneId string, requestBody *BonjourFencingPolicyCreatePostRequest) (*http.Response, *BonjourFencingPolicyCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7082,14 +6851,14 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyCreatePost(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &BonjourFencingPolicyCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -7123,7 +6892,7 @@ type (
 // BonjourFencingPolicyRetrieveGet: Use this API command to retrieve Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -7131,7 +6900,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourFencingPolicyRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *BonjourFencingPolicyRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *BonjourFencingPolicyRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7144,14 +6913,11 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyRetrieveGet(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &BonjourFencingPolicyRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7165,7 +6931,7 @@ type (
 // BonjourFencingPolicyModifyBasicPatch: Use this API command to modify the basic information of Bonjour Fencing Policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *BonjourFencingPolicyModifyBasicPatchRequest
@@ -7174,7 +6940,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *BonjourFencingPolicyModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *BonjourFencingPolicyModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7187,14 +6953,14 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyModifyBasicPatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7213,7 +6979,7 @@ type (
 // BonjourFencingPolicyModifyBonjourFencingRuleListPatch: Use this API command to modify Bonjour Fencing Rule List.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *BonjourFencingPolicyModifyBonjourFencingRuleListPatchRequestSlice
@@ -7222,7 +6988,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourFencingPolicyModifyBonjourFencingRuleListPatch(ctx *UserContext, zoneId string, id string, requestBody BonjourFencingPolicyModifyBonjourFencingRuleListPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourFencingPolicyModifyBonjourFencingRuleListPatch(ctx context.Context, zoneId string, id string, requestBody BonjourFencingPolicyModifyBonjourFencingRuleListPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7235,14 +7001,14 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyModifyBonjourFencingRuleListPatch(c
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy/{id}/bonjourFencingRuleList")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/bonjourFencingPolicy/{id}/bonjourFencingRuleList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7254,7 +7020,7 @@ type (
 // BonjourGatewayPoliciesModifyEnablePatch: Use this API command to enable/disable bonjour gateway policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *BonjourGatewayPoliciesModifyEnablePatchRequest
 //
@@ -7262,7 +7028,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyEnablePatch(ctx *UserContext, zoneId string, requestBody *BonjourGatewayPoliciesModifyEnablePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyEnablePatch(ctx context.Context, zoneId string, requestBody *BonjourGatewayPoliciesModifyEnablePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7271,13 +7037,13 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyEnablePatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/bounjourGateway/enable")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/bounjourGateway/enable", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7302,14 +7068,14 @@ type (
 // BonjourGatewayPoliciesRetrieveListGet: Use this API command to retrieve a list of bonjour gateway policies.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourGatewayPoliciesRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *BonjourGatewayPoliciesRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *BonjourGatewayPoliciesRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7318,13 +7084,10 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesRetrieveListGet(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &BonjourGatewayPoliciesRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7353,7 +7116,7 @@ type (
 // BonjourGatewayPoliciesCreatePost: Use this API command to create bonjour gateway policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *BonjourGatewayPoliciesCreatePostRequest
 //
@@ -7361,7 +7124,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourGatewayPoliciesCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesCreatePost(ctx *UserContext, zoneId string, requestBody *BonjourGatewayPoliciesCreatePostRequest) (*http.Response, *BonjourGatewayPoliciesCreatePost201Response, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesCreatePost(ctx context.Context, zoneId string, requestBody *BonjourGatewayPoliciesCreatePostRequest) (*http.Response, *BonjourGatewayPoliciesCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7370,21 +7133,21 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesCreatePost(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &BonjourGatewayPoliciesCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // BonjourGatewayPoliciesDeleteDelete: Use this API command to delete bonjour gateway policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -7392,7 +7155,7 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesCreatePost(ctx *UserContext, zone
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7405,13 +7168,10 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesDeleteDelete(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7436,7 +7196,7 @@ type (
 // BonjourGatewayPoliciesRetrieveGet: Use this API command to retrieve bonjour gateway policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -7444,7 +7204,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *BonjourGatewayPoliciesRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *BonjourGatewayPoliciesRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *BonjourGatewayPoliciesRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7457,14 +7217,11 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesRetrieveGet(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &BonjourGatewayPoliciesRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7478,7 +7235,7 @@ type (
 // BonjourGatewayPoliciesModifyBasicPatch: Use this API command to modify the basic information of bonjour gateway policy.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *BonjourGatewayPoliciesModifyBasicPatchRequest
@@ -7487,7 +7244,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *BonjourGatewayPoliciesModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *BonjourGatewayPoliciesModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7500,14 +7257,14 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyBasicPatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7525,7 +7282,7 @@ type (
 // BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleListPatch: Use this API command to modify bonjour gateway policy rules.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleListPatchRequestSlice
@@ -7534,7 +7291,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleListPatch(ctx *UserContext, zoneId string, id string, requestBody BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleListPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleListPatch(ctx context.Context, zoneId string, id string, requestBody BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleListPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7547,14 +7304,14 @@ func (r *RuckusZonesAPI) BonjourGatewayPoliciesModifyBonjourGatewayPolicyRuleLis
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}/bonjourPolicyRuleList")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/bounjourGateway/policies/{id}/bonjourPolicyRuleList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7600,14 +7357,14 @@ type (
 // ClientIsolationWhitelistRetrieveListGet: Retrieve a list of Client Isolation Whitelist
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ClientIsolationWhitelistRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *ClientIsolationWhitelistRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *ClientIsolationWhitelistRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7616,13 +7373,10 @@ func (r *RuckusZonesAPI) ClientIsolationWhitelistRetrieveListGet(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ClientIsolationWhitelistRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7650,7 +7404,7 @@ type (
 // ClientIsolationWhitelistCreateClientIsolationWhitelistPost: Create a new ClientIsolationWhitelist
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *ClientIsolationWhitelistCreateClientIsolationWhitelistPostRequest
 //
@@ -7658,7 +7412,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ClientIsolationWhitelistCreateClientIsolationWhitelistPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistCreateClientIsolationWhitelistPost(ctx *UserContext, zoneId string, requestBody *ClientIsolationWhitelistCreateClientIsolationWhitelistPostRequest) (*http.Response, *ClientIsolationWhitelistCreateClientIsolationWhitelistPost201Response, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistCreateClientIsolationWhitelistPost(ctx context.Context, zoneId string, requestBody *ClientIsolationWhitelistCreateClientIsolationWhitelistPostRequest) (*http.Response, *ClientIsolationWhitelistCreateClientIsolationWhitelistPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7667,14 +7421,14 @@ func (r *RuckusZonesAPI) ClientIsolationWhitelistCreateClientIsolationWhitelistP
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ClientIsolationWhitelistCreateClientIsolationWhitelistPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -7706,7 +7460,7 @@ type (
 // ClientIsolationWhitelistRetrieveGet: Retrieve an Client Isolation Whitelist
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -7714,7 +7468,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ClientIsolationWhitelistRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *ClientIsolationWhitelistRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *ClientIsolationWhitelistRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7727,14 +7481,11 @@ func (r *RuckusZonesAPI) ClientIsolationWhitelistRetrieveGet(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &ClientIsolationWhitelistRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7749,7 +7500,7 @@ type (
 // ClientIsolationWhitelistModifyBasicPatch: Modify a specific Client Isolation Whitelist basic
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ClientIsolationWhitelistModifyBasicPatchRequest
@@ -7758,7 +7509,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *ClientIsolationWhitelistModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *ClientIsolationWhitelistModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7771,14 +7522,14 @@ func (r *RuckusZonesAPI) ClientIsolationWhitelistModifyBasicPatch(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7794,7 +7545,7 @@ type (
 // ClientIsolationWhitelistModifyClientIsolationWhitelistEntriesConfigurationPatch: Modify Client Isolation Whitelist entries configuration
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *ClientIsolationWhitelistModifyClientIsolationWhitelistEntriesConfigurationPatchRequestSlice
@@ -7803,7 +7554,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ClientIsolationWhitelistModifyClientIsolationWhitelistEntriesConfigurationPatch(ctx *UserContext, zoneId string, id string, requestBody ClientIsolationWhitelistModifyClientIsolationWhitelistEntriesConfigurationPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ClientIsolationWhitelistModifyClientIsolationWhitelistEntriesConfigurationPatch(ctx context.Context, zoneId string, id string, requestBody ClientIsolationWhitelistModifyClientIsolationWhitelistEntriesConfigurationPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7816,14 +7567,14 @@ func (r *RuckusZonesAPI) ClientIsolationWhitelistModifyClientIsolationWhitelistE
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist/{id}/whitelist")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/clientIsolationWhitelist/{id}/whitelist", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7835,14 +7586,14 @@ type (
 // DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet: Use this API command to retrieve interval of delete expired DPSK of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet(ctx *UserContext, zoneId string) (*http.Response, *DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet200Response, error) {
+func (r *RuckusZonesAPI) DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet(ctx context.Context, zoneId string) (*http.Response, *DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7851,13 +7602,10 @@ func (r *RuckusZonesAPI) DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/deleteExpiredDpsk")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/deleteExpiredDpsk", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DynamicPskRetrieveIntervalOfDeleteExpiredDpskGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7870,7 +7618,7 @@ type (
 // DynamicPskModifyIntervalOfDeleteExpiredDpskPut: Use this API command to modify interval of delete expired DPSK of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *DynamicPskModifyIntervalOfDeleteExpiredDpskPutRequest
 //
@@ -7878,7 +7626,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskModifyIntervalOfDeleteExpiredDpskPut(ctx *UserContext, zoneId string, requestBody *DynamicPskModifyIntervalOfDeleteExpiredDpskPutRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DynamicPskModifyIntervalOfDeleteExpiredDpskPut(ctx context.Context, zoneId string, requestBody *DynamicPskModifyIntervalOfDeleteExpiredDpskPutRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7887,13 +7635,13 @@ func (r *RuckusZonesAPI) DynamicPskModifyIntervalOfDeleteExpiredDpskPut(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PUT", "/v5_0/rkszones/{zoneId}/deleteExpiredDpsk")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("PUT", "/v5_0/rkszones/{zoneId}/deleteExpiredDpsk", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -7915,7 +7663,7 @@ type (
 // DevicePolicyRetrieveListDevicePolicyPorfileGet: Retrieve a list of Device Policy Porfiles within a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -7926,7 +7674,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DevicePolicyRetrieveListDevicePolicyPorfileGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DevicePolicyRetrieveListDevicePolicyPorfileGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *DevicePolicyRetrieveListDevicePolicyPorfileGet200Response, error) {
+func (r *RuckusZonesAPI) DevicePolicyRetrieveListDevicePolicyPorfileGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *DevicePolicyRetrieveListDevicePolicyPorfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7953,17 +7701,12 @@ func (r *RuckusZonesAPI) DevicePolicyRetrieveListDevicePolicyPorfileGet(ctx *Use
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/devicePolicy")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/devicePolicy", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &DevicePolicyRetrieveListDevicePolicyPorfileGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -7982,7 +7725,7 @@ type (
 // DevicePolicyCreateDevicePolicyPorfilePost: Create a new Device Policy Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *DevicePolicyCreateDevicePolicyPorfilePostRequest
 //
@@ -7990,7 +7733,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DevicePolicyCreateDevicePolicyPorfilePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DevicePolicyCreateDevicePolicyPorfilePost(ctx *UserContext, zoneId string, requestBody *DevicePolicyCreateDevicePolicyPorfilePostRequest) (*http.Response, *DevicePolicyCreateDevicePolicyPorfilePost201Response, error) {
+func (r *RuckusZonesAPI) DevicePolicyCreateDevicePolicyPorfilePost(ctx context.Context, zoneId string, requestBody *DevicePolicyCreateDevicePolicyPorfilePostRequest) (*http.Response, *DevicePolicyCreateDevicePolicyPorfilePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -7999,21 +7742,21 @@ func (r *RuckusZonesAPI) DevicePolicyCreateDevicePolicyPorfilePost(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/devicePolicy")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/devicePolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DevicePolicyCreateDevicePolicyPorfilePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // DevicePolicyDeleteDevicePolicyPorfileDelete: Delete Device Policy Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -8021,7 +7764,7 @@ func (r *RuckusZonesAPI) DevicePolicyCreateDevicePolicyPorfilePost(ctx *UserCont
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DevicePolicyDeleteDevicePolicyPorfileDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DevicePolicyDeleteDevicePolicyPorfileDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8034,13 +7777,10 @@ func (r *RuckusZonesAPI) DevicePolicyDeleteDevicePolicyPorfileDelete(ctx *UserCo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8067,7 +7807,7 @@ type (
 // DevicePolicyRetrieveDevicePolicyPorfileGet: Retrieve a Device Policy Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -8075,7 +7815,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DevicePolicyRetrieveDevicePolicyPorfileGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DevicePolicyRetrieveDevicePolicyPorfileGet(ctx *UserContext, zoneId string, id string) (*http.Response, *DevicePolicyRetrieveDevicePolicyPorfileGet200Response, error) {
+func (r *RuckusZonesAPI) DevicePolicyRetrieveDevicePolicyPorfileGet(ctx context.Context, zoneId string, id string) (*http.Response, *DevicePolicyRetrieveDevicePolicyPorfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8088,14 +7828,11 @@ func (r *RuckusZonesAPI) DevicePolicyRetrieveDevicePolicyPorfileGet(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &DevicePolicyRetrieveDevicePolicyPorfileGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8110,7 +7847,7 @@ type (
 // DevicePolicyModifyDevicePolicyPorfilePatch: Modify a specific Device Policy Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DevicePolicyModifyDevicePolicyPorfilePatchRequest
@@ -8119,7 +7856,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DevicePolicyModifyDevicePolicyPorfilePatch(ctx *UserContext, zoneId string, id string, requestBody *DevicePolicyModifyDevicePolicyPorfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DevicePolicyModifyDevicePolicyPorfilePatch(ctx context.Context, zoneId string, id string, requestBody *DevicePolicyModifyDevicePolicyPorfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8132,14 +7869,14 @@ func (r *RuckusZonesAPI) DevicePolicyModifyDevicePolicyPorfilePatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8158,7 +7895,7 @@ type (
 // DevicePolicyModifyRuleOfDevicePolicyPorfilePatch: Modify Rule of Device Policy Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DevicePolicyModifyRuleOfDevicePolicyPorfilePatchRequestSlice
@@ -8167,7 +7904,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DevicePolicyModifyRuleOfDevicePolicyPorfilePatch(ctx *UserContext, zoneId string, id string, requestBody DevicePolicyModifyRuleOfDevicePolicyPorfilePatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DevicePolicyModifyRuleOfDevicePolicyPorfilePatch(ctx context.Context, zoneId string, id string, requestBody DevicePolicyModifyRuleOfDevicePolicyPorfilePatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8180,14 +7917,14 @@ func (r *RuckusZonesAPI) DevicePolicyModifyRuleOfDevicePolicyPorfilePatch(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}/rule")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/devicePolicy/{id}/rule", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8201,7 +7938,7 @@ type (
 // DhcpDeleteMultipleDhcpPoolsDelete: Use this API command to delete multiple DHCP Pools.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *DhcpDeleteMultipleDhcpPoolsDeleteRequest
 //
@@ -8209,7 +7946,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpDeleteMultipleDhcpPoolsDelete(ctx *UserContext, zoneId string, requestBody *DhcpDeleteMultipleDhcpPoolsDeleteRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DhcpDeleteMultipleDhcpPoolsDelete(ctx context.Context, zoneId string, requestBody *DhcpDeleteMultipleDhcpPoolsDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8218,13 +7955,13 @@ func (r *RuckusZonesAPI) DhcpDeleteMultipleDhcpPoolsDelete(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8263,14 +8000,14 @@ type (
 // DhcpGetDhcpPoolListGet: Use this API command to get DHCP Pool list.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpGetDhcpPoolListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpGetDhcpPoolListGet(ctx *UserContext, zoneId string) (*http.Response, *DhcpGetDhcpPoolListGet200Response, error) {
+func (r *RuckusZonesAPI) DhcpGetDhcpPoolListGet(ctx context.Context, zoneId string) (*http.Response, *DhcpGetDhcpPoolListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8279,13 +8016,10 @@ func (r *RuckusZonesAPI) DhcpGetDhcpPoolListGet(ctx *UserContext, zoneId string)
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DhcpGetDhcpPoolListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8312,7 +8046,7 @@ type (
 // DhcpCreateDhcpPoolPost: Use this API command to create DHCP Pool.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *DhcpCreateDhcpPoolPostRequest
 //
@@ -8320,7 +8054,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpCreateDhcpPoolPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpCreateDhcpPoolPost(ctx *UserContext, zoneId string, requestBody *DhcpCreateDhcpPoolPostRequest) (*http.Response, *DhcpCreateDhcpPoolPost201Response, error) {
+func (r *RuckusZonesAPI) DhcpCreateDhcpPoolPost(ctx context.Context, zoneId string, requestBody *DhcpCreateDhcpPoolPostRequest) (*http.Response, *DhcpCreateDhcpPoolPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8329,21 +8063,21 @@ func (r *RuckusZonesAPI) DhcpCreateDhcpPoolPost(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DhcpCreateDhcpPoolPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // DhcpDeleteDhcpPoolByPoolSIdDelete: Use this API command to delete DHCP Pool by pool's ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -8351,7 +8085,7 @@ func (r *RuckusZonesAPI) DhcpCreateDhcpPoolPost(ctx *UserContext, zoneId string,
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpDeleteDhcpPoolByPoolSIdDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DhcpDeleteDhcpPoolByPoolSIdDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8364,13 +8098,10 @@ func (r *RuckusZonesAPI) DhcpDeleteDhcpPoolByPoolSIdDelete(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8394,7 +8125,7 @@ type (
 // DhcpGetDhcpPoolByPoolSIdGet: Use this API command to get DHCP Pool by pool's ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -8402,7 +8133,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpGetDhcpPoolByPoolSIdGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpGetDhcpPoolByPoolSIdGet(ctx *UserContext, zoneId string, id string) (*http.Response, *DhcpGetDhcpPoolByPoolSIdGet200Response, error) {
+func (r *RuckusZonesAPI) DhcpGetDhcpPoolByPoolSIdGet(ctx context.Context, zoneId string, id string) (*http.Response, *DhcpGetDhcpPoolByPoolSIdGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8415,14 +8146,11 @@ func (r *RuckusZonesAPI) DhcpGetDhcpPoolByPoolSIdGet(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &DhcpGetDhcpPoolByPoolSIdGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8445,7 +8173,7 @@ type (
 // DhcpModifyDhcpProfileByPoolSIdPatch: Use this API command to modify DHCP Pool by pool's ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DhcpModifyDhcpProfileByPoolSIdPatchRequest
@@ -8454,7 +8182,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpModifyDhcpProfileByPoolSIdPatch(ctx *UserContext, zoneId string, id string, requestBody *DhcpModifyDhcpProfileByPoolSIdPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DhcpModifyDhcpProfileByPoolSIdPatch(ctx context.Context, zoneId string, id string, requestBody *DhcpModifyDhcpProfileByPoolSIdPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8467,14 +8195,14 @@ func (r *RuckusZonesAPI) DhcpModifyDhcpProfileByPoolSIdPatch(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpProfile/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8506,14 +8234,14 @@ type (
 // DhcpGetDhcpConfigurationGet: Use this API command to get DHCP Configuration.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DhcpGetDhcpConfigurationGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DhcpGetDhcpConfigurationGet(ctx *UserContext, zoneId string) (*http.Response, *DhcpGetDhcpConfigurationGet200Response, error) {
+func (r *RuckusZonesAPI) DhcpGetDhcpConfigurationGet(ctx context.Context, zoneId string) (*http.Response, *DhcpGetDhcpConfigurationGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8522,13 +8250,10 @@ func (r *RuckusZonesAPI) DhcpGetDhcpConfigurationGet(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpSiteConfig")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpSiteConfig", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DhcpGetDhcpConfigurationGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8579,7 +8304,7 @@ type (
 // RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost: Use this API command to get the DHCP/NAT service IP assignment when selecting with Enable on Multiple APs. In Manually Select AP mode(the manualSelect is true), the body should contain with selected APs(include the siteAps array). Otherwise, it's no need to include the selected APs in Auto Select AP mode(see samples).
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPostRequest
 //
@@ -8587,7 +8312,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost(ctx *UserContext, zoneId string, requestBody *RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPostRequest) (*http.Response, *RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200Response, error) {
+func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost(ctx context.Context, zoneId string, requestBody *RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPostRequest) (*http.Response, *RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8596,14 +8321,14 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentP
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpSiteConfig/doAssignIp")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/dhcpSite/dhcpSiteConfig/doAssignIp", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8626,14 +8351,14 @@ type (
 // DiffservRetrieveListGet: Use this API command to retrieve a list of DiffServ profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DiffservRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *DiffservRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) DiffservRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *DiffservRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8642,13 +8367,10 @@ func (r *RuckusZonesAPI) DiffservRetrieveListGet(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/diffserv")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/diffserv", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DiffservRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8681,7 +8403,7 @@ type (
 // DiffservCreatePost: Use this API command to create DiffServ profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *DiffservCreatePostRequest
 //
@@ -8689,7 +8411,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DiffservCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservCreatePost(ctx *UserContext, zoneId string, requestBody *DiffservCreatePostRequest) (*http.Response, *DiffservCreatePost201Response, error) {
+func (r *RuckusZonesAPI) DiffservCreatePost(ctx context.Context, zoneId string, requestBody *DiffservCreatePostRequest) (*http.Response, *DiffservCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8698,21 +8420,21 @@ func (r *RuckusZonesAPI) DiffservCreatePost(ctx *UserContext, zoneId string, req
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/diffserv")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/diffserv", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DiffservCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // DiffservDeleteDelete: Use this API command to delete DiffServ profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -8720,7 +8442,7 @@ func (r *RuckusZonesAPI) DiffservCreatePost(ctx *UserContext, zoneId string, req
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DiffservDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8733,13 +8455,10 @@ func (r *RuckusZonesAPI) DiffservDeleteDelete(ctx *UserContext, zoneId string, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/diffserv/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/diffserv/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8768,7 +8487,7 @@ type (
 // DiffservRetrieveGet: Use this API command to retrieve DiffServ profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -8776,7 +8495,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DiffservRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *DiffservRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) DiffservRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *DiffservRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8789,14 +8508,11 @@ func (r *RuckusZonesAPI) DiffservRetrieveGet(ctx *UserContext, zoneId string, id
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/diffserv/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/diffserv/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &DiffservRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -8810,7 +8526,7 @@ type (
 // DiffservModifyBasicPatch: Use this API command to modify the basic information of DiffServ profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DiffservModifyBasicPatchRequest
@@ -8819,7 +8535,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *DiffservModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DiffservModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *DiffservModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8832,14 +8548,14 @@ func (r *RuckusZonesAPI) DiffservModifyBasicPatch(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8852,7 +8568,7 @@ type (
 // DiffservModifyDownlinkDiffservPatch: Use this API command to modify downlink diffserv.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DiffservModifyDownlinkDiffservPatchRequest
@@ -8861,7 +8577,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservModifyDownlinkDiffservPatch(ctx *UserContext, zoneId string, id string, requestBody *DiffservModifyDownlinkDiffservPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DiffservModifyDownlinkDiffservPatch(ctx context.Context, zoneId string, id string, requestBody *DiffservModifyDownlinkDiffservPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8874,14 +8590,14 @@ func (r *RuckusZonesAPI) DiffservModifyDownlinkDiffservPatch(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}/downlinkDiffServ")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}/downlinkDiffServ", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8891,7 +8607,7 @@ type (
 // DiffservModifyPreservedListPatch: Use this API command to modify preserved list.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DiffservModifyPreservedListPatchRequest
@@ -8900,7 +8616,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservModifyPreservedListPatch(ctx *UserContext, zoneId string, id string, requestBody DiffservModifyPreservedListPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DiffservModifyPreservedListPatch(ctx context.Context, zoneId string, id string, requestBody DiffservModifyPreservedListPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8913,14 +8629,14 @@ func (r *RuckusZonesAPI) DiffservModifyPreservedListPatch(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}/preservedList")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}/preservedList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8933,7 +8649,7 @@ type (
 // DiffservModifyUplinkDiffservPatch: Use this API command to modify uplink diffserv.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *DiffservModifyUplinkDiffservPatchRequest
@@ -8942,7 +8658,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DiffservModifyUplinkDiffservPatch(ctx *UserContext, zoneId string, id string, requestBody *DiffservModifyUplinkDiffservPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DiffservModifyUplinkDiffservPatch(ctx context.Context, zoneId string, id string, requestBody *DiffservModifyUplinkDiffservPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -8955,14 +8671,14 @@ func (r *RuckusZonesAPI) DiffservModifyUplinkDiffservPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}/uplinkDiffServ")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/diffserv/{id}/uplinkDiffServ", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -8992,14 +8708,14 @@ type (
 // DynamicPskRetrieveDpskInfoByZoneGet: Use this API command to retrieve DPSK info of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskRetrieveDpskInfoByZoneGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByZoneGet(ctx *UserContext, zoneId string) (*http.Response, *DynamicPskRetrieveDpskInfoByZoneGet200Response, error) {
+func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByZoneGet(ctx context.Context, zoneId string) (*http.Response, *DynamicPskRetrieveDpskInfoByZoneGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9008,13 +8724,10 @@ func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByZoneGet(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/dpsk")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/dpsk", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DynamicPskRetrieveDpskInfoByZoneGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9038,14 +8751,14 @@ type (
 // DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet: Use this API command to retrieve DPSK enabled WLAN info of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet(ctx *UserContext, zoneId string) (*http.Response, *DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet200Response, error) {
+func (r *RuckusZonesAPI) DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet(ctx context.Context, zoneId string) (*http.Response, *DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9054,13 +8767,10 @@ func (r *RuckusZonesAPI) DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet(ctx *Use
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/dpskEnabledWlans")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/dpskEnabledWlans", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &DynamicPskRetrieveDpskEnabledWlanInfoByZoneGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9083,14 +8793,14 @@ type (
 // Hotspot20WlanProfileRetrieveListGet: Use this API command to retrieve a list of Hotspot 2.0 WLAN profiles of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WlanProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *Hotspot20WlanProfileRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *Hotspot20WlanProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9099,13 +8809,10 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileRetrieveListGet(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/hs20s")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/hs20s", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &Hotspot20WlanProfileRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9153,7 +8860,7 @@ type (
 // Hotspot20WlanProfileCreatePost: Use this API command to create a new Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *Hotspot20WlanProfileCreatePostRequest
 //
@@ -9161,7 +8868,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WlanProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileCreatePost(ctx *UserContext, zoneId string, requestBody *Hotspot20WlanProfileCreatePostRequest) (*http.Response, *Hotspot20WlanProfileCreatePost201Response, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileCreatePost(ctx context.Context, zoneId string, requestBody *Hotspot20WlanProfileCreatePostRequest) (*http.Response, *Hotspot20WlanProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9170,21 +8877,21 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileCreatePost(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/hs20s")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/hs20s", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &Hotspot20WlanProfileCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // Hotspot20WlanProfileDeleteDelete: Use this API command to delete a Hotspot 2.0 WLAN Profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 //
@@ -9192,7 +8899,7 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileCreatePost(ctx *UserContext, zoneId
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9205,13 +8912,10 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileDeleteDelete(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/hs20s/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/hs20s/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9276,7 +8980,7 @@ type (
 // Hotspot20WlanProfileRetrieveGet: Use this API command to retrieve a Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 //
@@ -9284,7 +8988,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20WlanProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *Hotspot20WlanProfileRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *Hotspot20WlanProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9297,14 +9001,11 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileRetrieveGet(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/hs20s/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/hs20s/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &Hotspot20WlanProfileRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9322,7 +9023,7 @@ type (
 // Hotspot20WlanProfileModifyBasicPatch: Use this API command to modify the basic information on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifyBasicPatchRequest
@@ -9331,7 +9032,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *Hotspot20WlanProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *Hotspot20WlanProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9344,14 +9045,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyBasicPatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9368,7 +9069,7 @@ type (
 // Hotspot20WlanProfileModifyDefaultConnectionCapabilitiesPatch: Use this API command to modify connection capabilities on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifyDefaultConnectionCapabilitiesPatchRequestSlice
@@ -9377,7 +9078,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyDefaultConnectionCapabilitiesPatch(ctx *UserContext, zoneId string, id string, requestBody Hotspot20WlanProfileModifyDefaultConnectionCapabilitiesPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyDefaultConnectionCapabilitiesPatch(ctx context.Context, zoneId string, id string, requestBody Hotspot20WlanProfileModifyDefaultConnectionCapabilitiesPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9390,14 +9091,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyDefaultConnectionCapabilities
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/connectionCapabilities")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/connectionCapabilities", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9414,7 +9115,7 @@ type (
 // Hotspot20WlanProfileModifyCustomConnectionCapabilitiesPatch: Use this API command to modify custom connection capabilities on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifyCustomConnectionCapabilitiesPatchRequestSlice
@@ -9423,7 +9124,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyCustomConnectionCapabilitiesPatch(ctx *UserContext, zoneId string, id string, requestBody Hotspot20WlanProfileModifyCustomConnectionCapabilitiesPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyCustomConnectionCapabilitiesPatch(ctx context.Context, zoneId string, id string, requestBody Hotspot20WlanProfileModifyCustomConnectionCapabilitiesPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9436,14 +9137,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyCustomConnectionCapabilitiesP
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/customConnectionCapabilities")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/customConnectionCapabilities", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9456,7 +9157,7 @@ type (
 // Hotspot20WlanProfileModifyDefaultIdentityProviderPatch: Use this API command to modify the default identity provider profile on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifyDefaultIdentityProviderPatchRequest
@@ -9465,7 +9166,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyDefaultIdentityProviderPatch(ctx *UserContext, zoneId string, id string, requestBody *Hotspot20WlanProfileModifyDefaultIdentityProviderPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyDefaultIdentityProviderPatch(ctx context.Context, zoneId string, id string, requestBody *Hotspot20WlanProfileModifyDefaultIdentityProviderPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9478,14 +9179,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyDefaultIdentityProviderPatch(
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/defaultIdentityProvider")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/defaultIdentityProvider", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9500,7 +9201,7 @@ type (
 // Hotspot20WlanProfileModifyIdentityProvidersPatch: Use this API command to modify identity provider profiles on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifyIdentityProvidersPatchRequestSlice
@@ -9509,7 +9210,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyIdentityProvidersPatch(ctx *UserContext, zoneId string, id string, requestBody Hotspot20WlanProfileModifyIdentityProvidersPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyIdentityProvidersPatch(ctx context.Context, zoneId string, id string, requestBody Hotspot20WlanProfileModifyIdentityProvidersPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9522,14 +9223,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyIdentityProvidersPatch(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/identityProviders")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/identityProviders", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9542,7 +9243,7 @@ type (
 // Hotspot20WlanProfileModifyOperatorPatch: Use this API command to modify operator profile on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifyOperatorPatchRequest
@@ -9551,7 +9252,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyOperatorPatch(ctx *UserContext, zoneId string, id string, requestBody *Hotspot20WlanProfileModifyOperatorPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyOperatorPatch(ctx context.Context, zoneId string, id string, requestBody *Hotspot20WlanProfileModifyOperatorPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9564,14 +9265,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifyOperatorPatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/operator")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/operator", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9584,7 +9285,7 @@ type (
 // Hotspot20WlanProfileModifySignupSsidPatch: Use this API command to modify signup SSID on Hotspot 2.0 WLAN profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Profile ID
 // - requestBody: *Hotspot20WlanProfileModifySignupSsidPatchRequest
@@ -9593,7 +9294,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20WlanProfileModifySignupSsidPatch(ctx *UserContext, zoneId string, id string, requestBody *Hotspot20WlanProfileModifySignupSsidPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20WlanProfileModifySignupSsidPatch(ctx context.Context, zoneId string, id string, requestBody *Hotspot20WlanProfileModifySignupSsidPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9606,14 +9307,14 @@ func (r *RuckusZonesAPI) Hotspot20WlanProfileModifySignupSsidPatch(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/signupSsid")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20s/{id}/signupSsid", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9635,14 +9336,14 @@ type (
 // Hotspot20VenueProfileRetrieveListGet: Use this API command to retrieve a list of Hotspot 2.0 venue profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20VenueProfileRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20VenueProfileRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *Hotspot20VenueProfileRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) Hotspot20VenueProfileRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *Hotspot20VenueProfileRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9651,13 +9352,10 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileRetrieveListGet(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/hs20/venues")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/hs20/venues", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &Hotspot20VenueProfileRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9687,7 +9385,7 @@ type (
 // Hotspot20VenueProfileCreatePost: Use this API command to create a new Hotspot 2.0 venue profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *Hotspot20VenueProfileCreatePostRequest
 //
@@ -9695,7 +9393,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20VenueProfileCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20VenueProfileCreatePost(ctx *UserContext, zoneId string, requestBody *Hotspot20VenueProfileCreatePostRequest) (*http.Response, *Hotspot20VenueProfileCreatePost201Response, error) {
+func (r *RuckusZonesAPI) Hotspot20VenueProfileCreatePost(ctx context.Context, zoneId string, requestBody *Hotspot20VenueProfileCreatePostRequest) (*http.Response, *Hotspot20VenueProfileCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9704,21 +9402,21 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileCreatePost(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/hs20/venues")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/hs20/venues", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &Hotspot20VenueProfileCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // Hotspot20VenueProfileDeleteDelete: Use this API command to delete Hotspot 2.0 venue profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Venue Profile ID
 //
@@ -9726,7 +9424,7 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileCreatePost(ctx *UserContext, zoneI
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20VenueProfileDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20VenueProfileDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9739,13 +9437,10 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileDeleteDelete(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9772,7 +9467,7 @@ type (
 // Hotspot20VenueProfileRetrieveGet: Use this API command to retrieve a Hotspot 2.0 venue profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Venue Profile ID
 //
@@ -9780,7 +9475,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *Hotspot20VenueProfileRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20VenueProfileRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *Hotspot20VenueProfileRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) Hotspot20VenueProfileRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *Hotspot20VenueProfileRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9793,14 +9488,11 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileRetrieveGet(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &Hotspot20VenueProfileRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9818,7 +9510,7 @@ type (
 // Hotspot20VenueProfileModifyBasicPatch: Use this API command to modify the basic information on Hotspot 2.0 venue profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Venue Profile ID
 // - requestBody: *Hotspot20VenueProfileModifyBasicPatchRequest
@@ -9827,7 +9519,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20VenueProfileModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *Hotspot20VenueProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20VenueProfileModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *Hotspot20VenueProfileModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9840,14 +9532,14 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileModifyBasicPatch(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9862,7 +9554,7 @@ type (
 // Hotspot20VenueProfileModifyVenueNamesPatch: Use this API command to modify the venue names on Hotspot 2.0 venue profile of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot 2.0 Venue Profile ID
 // - requestBody: *Hotspot20VenueProfileModifyVenueNamesPatchRequestSlice
@@ -9871,7 +9563,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) Hotspot20VenueProfileModifyVenueNamesPatch(ctx *UserContext, zoneId string, id string, requestBody Hotspot20VenueProfileModifyVenueNamesPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) Hotspot20VenueProfileModifyVenueNamesPatch(ctx context.Context, zoneId string, id string, requestBody Hotspot20VenueProfileModifyVenueNamesPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9884,14 +9576,14 @@ func (r *RuckusZonesAPI) Hotspot20VenueProfileModifyVenueNamesPatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}/venueNames")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/hs20/venues/{id}/venueNames", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -9913,7 +9605,7 @@ type (
 // L2AccessControlRetrieveListGet: Retrieve a list of L2 Access Control
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -9924,7 +9616,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *L2AccessControlRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) L2AccessControlRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *L2AccessControlRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) L2AccessControlRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *L2AccessControlRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -9951,17 +9643,12 @@ func (r *RuckusZonesAPI) L2AccessControlRetrieveListGet(ctx *UserContext, zoneId
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/l2ACL")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/l2ACL", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &L2AccessControlRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -9983,7 +9670,7 @@ type (
 // L2AccessControlCreateL2AccessControlPost: Create a new L2 Access Control
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *L2AccessControlCreateL2AccessControlPostRequest
 //
@@ -9991,7 +9678,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *L2AccessControlCreateL2AccessControlPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) L2AccessControlCreateL2AccessControlPost(ctx *UserContext, zoneId string, requestBody *L2AccessControlCreateL2AccessControlPostRequest) (*http.Response, *L2AccessControlCreateL2AccessControlPost201Response, error) {
+func (r *RuckusZonesAPI) L2AccessControlCreateL2AccessControlPost(ctx context.Context, zoneId string, requestBody *L2AccessControlCreateL2AccessControlPostRequest) (*http.Response, *L2AccessControlCreateL2AccessControlPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10000,21 +9687,21 @@ func (r *RuckusZonesAPI) L2AccessControlCreateL2AccessControlPost(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/l2ACL")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/l2ACL", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &L2AccessControlCreateL2AccessControlPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // L2AccessControlDeleteDelete: Delete an L2 Access Control
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): L2 ACL ID
 //
@@ -10022,7 +9709,7 @@ func (r *RuckusZonesAPI) L2AccessControlCreateL2AccessControlPost(ctx *UserConte
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) L2AccessControlDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) L2AccessControlDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10035,13 +9722,10 @@ func (r *RuckusZonesAPI) L2AccessControlDeleteDelete(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/l2ACL/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/l2ACL/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10060,7 +9744,7 @@ type (
 // L2AccessControlRetrieveGet: Retrieve an L2 Access Control
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): L2 ACL ID
 //
@@ -10068,7 +9752,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *L2AccessControlRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) L2AccessControlRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *L2AccessControlRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) L2AccessControlRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *L2AccessControlRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10081,14 +9765,11 @@ func (r *RuckusZonesAPI) L2AccessControlRetrieveGet(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/l2ACL/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/l2ACL/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &L2AccessControlRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -10103,7 +9784,7 @@ type (
 // L2AccessControlModifyBasicPatch: Modify a specific L2 Access Control basic
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): L2 ACL ID
 // - requestBody: *L2AccessControlModifyBasicPatchRequest
@@ -10112,7 +9793,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) L2AccessControlModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *L2AccessControlModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) L2AccessControlModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *L2AccessControlModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10125,14 +9806,14 @@ func (r *RuckusZonesAPI) L2AccessControlModifyBasicPatch(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/l2ACL/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/l2ACL/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10142,7 +9823,7 @@ type (
 // L2AccessControlModifyRuleMacsPatch: Modify a specific L2 Access Control Rule Macs
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): L2 ACL ID
 // - requestBody: *L2AccessControlModifyRuleMacsPatchRequest
@@ -10151,7 +9832,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) L2AccessControlModifyRuleMacsPatch(ctx *UserContext, zoneId string, id string, requestBody L2AccessControlModifyRuleMacsPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) L2AccessControlModifyRuleMacsPatch(ctx context.Context, zoneId string, id string, requestBody L2AccessControlModifyRuleMacsPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10164,14 +9845,14 @@ func (r *RuckusZonesAPI) L2AccessControlModifyRuleMacsPatch(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/l2ACL/{id}/ruleMacs")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/l2ACL/{id}/ruleMacs", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10193,14 +9874,14 @@ type (
 // GuestAccessRetrieveListGet: Use this API command to retrieve a list of guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *GuestAccessRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *GuestAccessRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) GuestAccessRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *GuestAccessRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10209,13 +9890,10 @@ func (r *RuckusZonesAPI) GuestAccessRetrieveListGet(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/guest")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/guest", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &GuestAccessRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -10259,7 +9937,7 @@ type (
 // GuestAccessCreatePost: Use this API command to create new guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *GuestAccessCreatePostRequest
 //
@@ -10267,7 +9945,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *GuestAccessCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessCreatePost(ctx *UserContext, zoneId string, requestBody *GuestAccessCreatePostRequest) (*http.Response, *GuestAccessCreatePost201Response, error) {
+func (r *RuckusZonesAPI) GuestAccessCreatePost(ctx context.Context, zoneId string, requestBody *GuestAccessCreatePostRequest) (*http.Response, *GuestAccessCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10276,21 +9954,21 @@ func (r *RuckusZonesAPI) GuestAccessCreatePost(ctx *UserContext, zoneId string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/portals/guest")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/portals/guest", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &GuestAccessCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // GuestAccessDeleteDelete: Use this API command to delete guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -10298,7 +9976,7 @@ func (r *RuckusZonesAPI) GuestAccessCreatePost(ctx *UserContext, zoneId string, 
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10311,13 +9989,10 @@ func (r *RuckusZonesAPI) GuestAccessDeleteDelete(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/guest/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/guest/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10358,7 +10033,7 @@ type (
 // GuestAccessRetrieveGet: Use this API command to retrieve guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -10366,7 +10041,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *GuestAccessRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *GuestAccessRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) GuestAccessRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *GuestAccessRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10379,14 +10054,11 @@ func (r *RuckusZonesAPI) GuestAccessRetrieveGet(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/guest/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/guest/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &GuestAccessRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -10400,7 +10072,7 @@ type (
 // GuestAccessModifyBasicPatch: Use this API command to modify the basic information on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *GuestAccessModifyBasicPatchRequest
@@ -10409,7 +10081,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *GuestAccessModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *GuestAccessModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10422,14 +10094,14 @@ func (r *RuckusZonesAPI) GuestAccessModifyBasicPatch(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10445,7 +10117,7 @@ type (
 // GuestAccessModifyPortalCustomizationPatch: Use this API command to modify the portal customization on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *GuestAccessModifyPortalCustomizationPatchRequest
@@ -10454,7 +10126,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessModifyPortalCustomizationPatch(ctx *UserContext, zoneId string, id string, requestBody *GuestAccessModifyPortalCustomizationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessModifyPortalCustomizationPatch(ctx context.Context, zoneId string, id string, requestBody *GuestAccessModifyPortalCustomizationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10467,20 +10139,20 @@ func (r *RuckusZonesAPI) GuestAccessModifyPortalCustomizationPatch(ctx *UserCont
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/portalCustomization")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/portalCustomization", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // GuestAccessRedirectToUrlUserVisitDelete: Use this API command to set redirect to the URL that user intends to visit on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -10488,7 +10160,7 @@ func (r *RuckusZonesAPI) GuestAccessModifyPortalCustomizationPatch(ctx *UserCont
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessRedirectToUrlUserVisitDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessRedirectToUrlUserVisitDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10501,13 +10173,10 @@ func (r *RuckusZonesAPI) GuestAccessRedirectToUrlUserVisitDelete(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/redirect")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/redirect", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10519,7 +10188,7 @@ type (
 // GuestAccessModifyRedirectPatch: Use this API command to modify the redirect information on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *GuestAccessModifyRedirectPatchRequest
@@ -10528,7 +10197,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessModifyRedirectPatch(ctx *UserContext, zoneId string, id string, requestBody *GuestAccessModifyRedirectPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessModifyRedirectPatch(ctx context.Context, zoneId string, id string, requestBody *GuestAccessModifyRedirectPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10541,20 +10210,20 @@ func (r *RuckusZonesAPI) GuestAccessModifyRedirectPatch(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/redirect")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/redirect", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // GuestAccessDisableSmsGatewayDelete: Use this API command to disable SMS gateway on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -10562,7 +10231,7 @@ func (r *RuckusZonesAPI) GuestAccessModifyRedirectPatch(ctx *UserContext, zoneId
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessDisableSmsGatewayDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessDisableSmsGatewayDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10575,13 +10244,10 @@ func (r *RuckusZonesAPI) GuestAccessDisableSmsGatewayDelete(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/smsGateway")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/smsGateway", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10594,7 +10260,7 @@ type (
 // GuestAccessModifySmsGatewayPatch: Use this API command to modify SMS gateway on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *GuestAccessModifySmsGatewayPatchRequest
@@ -10603,7 +10269,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessModifySmsGatewayPatch(ctx *UserContext, zoneId string, id string, requestBody *GuestAccessModifySmsGatewayPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessModifySmsGatewayPatch(ctx context.Context, zoneId string, id string, requestBody *GuestAccessModifySmsGatewayPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10616,14 +10282,14 @@ func (r *RuckusZonesAPI) GuestAccessModifySmsGatewayPatch(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/smsGateway")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/smsGateway", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10636,7 +10302,7 @@ type (
 // GuestAccessModifyUserSessionPatch: Use this API command to modify the user session on guest access of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *GuestAccessModifyUserSessionPatchRequest
@@ -10645,7 +10311,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) GuestAccessModifyUserSessionPatch(ctx *UserContext, zoneId string, id string, requestBody *GuestAccessModifyUserSessionPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) GuestAccessModifyUserSessionPatch(ctx context.Context, zoneId string, id string, requestBody *GuestAccessModifyUserSessionPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10658,14 +10324,14 @@ func (r *RuckusZonesAPI) GuestAccessModifyUserSessionPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/userSession")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/guest/{id}/userSession", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10687,14 +10353,14 @@ type (
 // HotspotServiceRetrieveListGet: Use this API command to retrieve a list of Hotspot(WISPr) of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *HotspotServiceRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *HotspotServiceRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) HotspotServiceRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *HotspotServiceRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10703,13 +10369,10 @@ func (r *RuckusZonesAPI) HotspotServiceRetrieveListGet(ctx *UserContext, zoneId 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/hotspot")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/hotspot", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &HotspotServiceRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -10750,7 +10413,7 @@ type (
 // HotspotServiceCreateExternalPost: Use this API command to create a new Hotspot(WISPr) with external logon URL of a zone.MacAddressFormat
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *HotspotServiceCreateExternalPostRequest
 //
@@ -10758,7 +10421,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *HotspotServiceCreateExternalPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceCreateExternalPost(ctx *UserContext, zoneId string, requestBody *HotspotServiceCreateExternalPostRequest) (*http.Response, *HotspotServiceCreateExternalPost201Response, error) {
+func (r *RuckusZonesAPI) HotspotServiceCreateExternalPost(ctx context.Context, zoneId string, requestBody *HotspotServiceCreateExternalPostRequest) (*http.Response, *HotspotServiceCreateExternalPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10767,14 +10430,14 @@ func (r *RuckusZonesAPI) HotspotServiceCreateExternalPost(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/portals/hotspot/external")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/portals/hotspot/external", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &HotspotServiceCreateExternalPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -10814,7 +10477,7 @@ type (
 // HotspotServiceCreateInternalPost: Use this API command to create a new Hotspot(WISPr) with internal logon URL of a zone.MacAddressFormat
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *HotspotServiceCreateInternalPostRequest
 //
@@ -10822,7 +10485,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *HotspotServiceCreateInternalPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceCreateInternalPost(ctx *UserContext, zoneId string, requestBody *HotspotServiceCreateInternalPostRequest) (*http.Response, *HotspotServiceCreateInternalPost201Response, error) {
+func (r *RuckusZonesAPI) HotspotServiceCreateInternalPost(ctx context.Context, zoneId string, requestBody *HotspotServiceCreateInternalPostRequest) (*http.Response, *HotspotServiceCreateInternalPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10831,14 +10494,14 @@ func (r *RuckusZonesAPI) HotspotServiceCreateInternalPost(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/portals/hotspot/internal")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/portals/hotspot/internal", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &HotspotServiceCreateInternalPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -10878,7 +10541,7 @@ type (
 // HotspotServiceCreateSmartClientOnlyPost: Use this API command to create a new Hotspot(WISPr) with smart client only of a zone.MacAddressFormat
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *HotspotServiceCreateSmartClientOnlyPostRequest
 //
@@ -10886,7 +10549,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *HotspotServiceCreateSmartClientOnlyPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceCreateSmartClientOnlyPost(ctx *UserContext, zoneId string, requestBody *HotspotServiceCreateSmartClientOnlyPostRequest) (*http.Response, *HotspotServiceCreateSmartClientOnlyPost201Response, error) {
+func (r *RuckusZonesAPI) HotspotServiceCreateSmartClientOnlyPost(ctx context.Context, zoneId string, requestBody *HotspotServiceCreateSmartClientOnlyPostRequest) (*http.Response, *HotspotServiceCreateSmartClientOnlyPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10895,21 +10558,21 @@ func (r *RuckusZonesAPI) HotspotServiceCreateSmartClientOnlyPost(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/portals/hotspot/smartClientOnly")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/portals/hotspot/smartClientOnly", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &HotspotServiceCreateSmartClientOnlyPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // HotspotServiceDeleteDelete: Use this API command to delete a Hotspot(WISPr) of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 //
@@ -10917,7 +10580,7 @@ func (r *RuckusZonesAPI) HotspotServiceCreateSmartClientOnlyPost(ctx *UserContex
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) HotspotServiceDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -10930,13 +10593,10 @@ func (r *RuckusZonesAPI) HotspotServiceDeleteDelete(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -10985,7 +10645,7 @@ type (
 // HotspotServiceRetrieveGet: Use this API command to retrieve a Hotspot(WISPr) of zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 //
@@ -10993,7 +10653,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *HotspotServiceRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *HotspotServiceRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) HotspotServiceRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *HotspotServiceRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11006,14 +10666,11 @@ func (r *RuckusZonesAPI) HotspotServiceRetrieveGet(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &HotspotServiceRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -11031,7 +10688,7 @@ type (
 // HotspotServiceModifyBasicPatch: Use this API command to modify the basic information on Hotspot(WISPr) of a zone.MacAddressFormat
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 // - requestBody: *HotspotServiceModifyBasicPatchRequest
@@ -11040,7 +10697,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *HotspotServiceModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) HotspotServiceModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *HotspotServiceModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11053,14 +10710,14 @@ func (r *RuckusZonesAPI) HotspotServiceModifyBasicPatch(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11073,7 +10730,7 @@ type (
 // HotspotServiceModifyLocationPatch: Use this API command to modify the location information on Hotspot(WISPr) of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 // - requestBody: *HotspotServiceModifyLocationPatchRequest
@@ -11082,7 +10739,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceModifyLocationPatch(ctx *UserContext, zoneId string, id string, requestBody *HotspotServiceModifyLocationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) HotspotServiceModifyLocationPatch(ctx context.Context, zoneId string, id string, requestBody *HotspotServiceModifyLocationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11095,14 +10752,14 @@ func (r *RuckusZonesAPI) HotspotServiceModifyLocationPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/location")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/location", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11118,7 +10775,7 @@ type (
 // HotspotServiceModifyPortalCustomizationPatch: Use this API command to modify portal customization on Hotspot(WISPr) of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 // - requestBody: *HotspotServiceModifyPortalCustomizationPatchRequest
@@ -11127,7 +10784,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceModifyPortalCustomizationPatch(ctx *UserContext, zoneId string, id string, requestBody *HotspotServiceModifyPortalCustomizationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) HotspotServiceModifyPortalCustomizationPatch(ctx context.Context, zoneId string, id string, requestBody *HotspotServiceModifyPortalCustomizationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11140,14 +10797,14 @@ func (r *RuckusZonesAPI) HotspotServiceModifyPortalCustomizationPatch(ctx *UserC
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/portalCustomization")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/portalCustomization", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11159,7 +10816,7 @@ type (
 // HotspotServiceModifyRedirectPatch: Use this API command to modify the redirect information on Hotspot(WISPr) of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 // - requestBody: *HotspotServiceModifyRedirectPatchRequest
@@ -11168,7 +10825,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceModifyRedirectPatch(ctx *UserContext, zoneId string, id string, requestBody *HotspotServiceModifyRedirectPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) HotspotServiceModifyRedirectPatch(ctx context.Context, zoneId string, id string, requestBody *HotspotServiceModifyRedirectPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11181,14 +10838,14 @@ func (r *RuckusZonesAPI) HotspotServiceModifyRedirectPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/redirect")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/redirect", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11198,7 +10855,7 @@ type (
 // HotspotServiceModifyWalledGardensPatch: Use this API command to modify walled gardens on Hotspot(WISPr) of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): HotSpot Profile ID
 // - requestBody: *HotspotServiceModifyWalledGardensPatchRequest
@@ -11207,7 +10864,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) HotspotServiceModifyWalledGardensPatch(ctx *UserContext, zoneId string, id string, requestBody HotspotServiceModifyWalledGardensPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) HotspotServiceModifyWalledGardensPatch(ctx context.Context, zoneId string, id string, requestBody HotspotServiceModifyWalledGardensPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11220,14 +10877,14 @@ func (r *RuckusZonesAPI) HotspotServiceModifyWalledGardensPatch(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/walledGardens")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/hotspot/{id}/walledGardens", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11249,14 +10906,14 @@ type (
 // WebAuthenticationRetrieveListGet: Use this API command to retrieve a list of web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *WebAuthenticationRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationRetrieveListGet(ctx *UserContext, zoneId string) (*http.Response, *WebAuthenticationRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) WebAuthenticationRetrieveListGet(ctx context.Context, zoneId string) (*http.Response, *WebAuthenticationRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11265,13 +10922,10 @@ func (r *RuckusZonesAPI) WebAuthenticationRetrieveListGet(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/webauth")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/webauth", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WebAuthenticationRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -11289,7 +10943,7 @@ type (
 // WebAuthenticationCreatePost: Use this API command to create a new web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WebAuthenticationCreatePostRequest
 //
@@ -11297,7 +10951,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WebAuthenticationCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationCreatePost(ctx *UserContext, zoneId string, requestBody *WebAuthenticationCreatePostRequest) (*http.Response, *WebAuthenticationCreatePost201Response, error) {
+func (r *RuckusZonesAPI) WebAuthenticationCreatePost(ctx context.Context, zoneId string, requestBody *WebAuthenticationCreatePostRequest) (*http.Response, *WebAuthenticationCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11306,21 +10960,21 @@ func (r *RuckusZonesAPI) WebAuthenticationCreatePost(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/portals/webauth")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/portals/webauth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WebAuthenticationCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // WebAuthenticationDeleteDelete: Use this API command to delete an web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -11328,7 +10982,7 @@ func (r *RuckusZonesAPI) WebAuthenticationCreatePost(ctx *UserContext, zoneId st
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WebAuthenticationDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11341,13 +10995,10 @@ func (r *RuckusZonesAPI) WebAuthenticationDeleteDelete(ctx *UserContext, zoneId 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11374,7 +11025,7 @@ type (
 // WebAuthenticationRetrieveGet: Use this API command to retrieve a web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -11382,7 +11033,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WebAuthenticationRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *WebAuthenticationRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) WebAuthenticationRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *WebAuthenticationRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11395,14 +11046,11 @@ func (r *RuckusZonesAPI) WebAuthenticationRetrieveGet(ctx *UserContext, zoneId s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &WebAuthenticationRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -11417,7 +11065,7 @@ type (
 // WebAuthenticationModifyBasicPatch: Use this API command to modify the basic information on web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *WebAuthenticationModifyBasicPatchRequest
@@ -11426,7 +11074,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *WebAuthenticationModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WebAuthenticationModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *WebAuthenticationModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11439,20 +11087,20 @@ func (r *RuckusZonesAPI) WebAuthenticationModifyBasicPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WebAuthenticationRedirectToUrlUserVisitDelete: Use this API command to set redirect to the URL that user intends to visit on web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -11460,7 +11108,7 @@ func (r *RuckusZonesAPI) WebAuthenticationModifyBasicPatch(ctx *UserContext, zon
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationRedirectToUrlUserVisitDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WebAuthenticationRedirectToUrlUserVisitDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11473,13 +11121,10 @@ func (r *RuckusZonesAPI) WebAuthenticationRedirectToUrlUserVisitDelete(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}/redirect")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}/redirect", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11491,7 +11136,7 @@ type (
 // WebAuthenticationModifyRedirectPatch: Use this API command to modify the redirect information on web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *WebAuthenticationModifyRedirectPatchRequest
@@ -11500,7 +11145,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationModifyRedirectPatch(ctx *UserContext, zoneId string, id string, requestBody *WebAuthenticationModifyRedirectPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WebAuthenticationModifyRedirectPatch(ctx context.Context, zoneId string, id string, requestBody *WebAuthenticationModifyRedirectPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11513,14 +11158,14 @@ func (r *RuckusZonesAPI) WebAuthenticationModifyRedirectPatch(ctx *UserContext, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}/redirect")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}/redirect", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11533,7 +11178,7 @@ type (
 // WebAuthenticationModifyUsersessionPatch: Use this API command to modify the user session on web authentication of a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *WebAuthenticationModifyUsersessionPatchRequest
@@ -11542,7 +11187,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WebAuthenticationModifyUsersessionPatch(ctx *UserContext, zoneId string, id string, requestBody *WebAuthenticationModifyUsersessionPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WebAuthenticationModifyUsersessionPatch(ctx context.Context, zoneId string, id string, requestBody *WebAuthenticationModifyUsersessionPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11555,14 +11200,14 @@ func (r *RuckusZonesAPI) WebAuthenticationModifyUsersessionPatch(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}/userSession")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/webauth/{id}/userSession", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11584,7 +11229,7 @@ type (
 // WechatRetrieveListGet: Use this API command to retrieve a list of wechat portal.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -11595,7 +11240,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WechatRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *WechatRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) WechatRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *WechatRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11622,17 +11267,12 @@ func (r *RuckusZonesAPI) WechatRetrieveListGet(ctx *UserContext, zoneId string, 
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/wechat")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/wechat", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &WechatRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -11665,7 +11305,7 @@ type (
 // WechatCreatePost: Use this API command to create wechat portal.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WechatCreatePostRequest
 //
@@ -11673,7 +11313,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WechatCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatCreatePost(ctx *UserContext, zoneId string, requestBody *WechatCreatePostRequest) (*http.Response, *WechatCreatePost201Response, error) {
+func (r *RuckusZonesAPI) WechatCreatePost(ctx context.Context, zoneId string, requestBody *WechatCreatePostRequest) (*http.Response, *WechatCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11682,21 +11322,21 @@ func (r *RuckusZonesAPI) WechatCreatePost(ctx *UserContext, zoneId string, reque
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/portals/wechat")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/portals/wechat", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WechatCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // WechatDeleteDelete: Use this API command to delete wechat portal.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -11704,7 +11344,7 @@ func (r *RuckusZonesAPI) WechatCreatePost(ctx *UserContext, zoneId string, reque
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WechatDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11717,13 +11357,10 @@ func (r *RuckusZonesAPI) WechatDeleteDelete(ctx *UserContext, zoneId string, id 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11751,7 +11388,7 @@ type (
 // WechatRetrieveGet: Use this API command to retrieve wechat portal by ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -11759,7 +11396,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WechatRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *WechatRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) WechatRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *WechatRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11772,14 +11409,11 @@ func (r *RuckusZonesAPI) WechatRetrieveGet(ctx *UserContext, zoneId string, id s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &WechatRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -11797,7 +11431,7 @@ type (
 // WechatModifyBasicPatch: Use this API command to modify the basic information of wechat portal.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *WechatModifyBasicPatchRequest
@@ -11806,7 +11440,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *WechatModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WechatModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *WechatModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11819,14 +11453,14 @@ func (r *RuckusZonesAPI) WechatModifyBasicPatch(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11841,7 +11475,7 @@ type (
 // WechatModifyDnatPortMappingPatch: Use this API command to modify DNAT port mapping of a wechat profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *WechatModifyDnatPortMappingPatchRequestSlice
@@ -11850,7 +11484,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatModifyDnatPortMappingPatch(ctx *UserContext, zoneId string, id string, requestBody WechatModifyDnatPortMappingPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WechatModifyDnatPortMappingPatch(ctx context.Context, zoneId string, id string, requestBody WechatModifyDnatPortMappingPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11863,14 +11497,14 @@ func (r *RuckusZonesAPI) WechatModifyDnatPortMappingPatch(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}/dnatPortMapping")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}/dnatPortMapping", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11880,7 +11514,7 @@ type (
 // WechatModifyWhitelistPatch: Use this API command to modify whiteList of a wechat profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *WechatModifyWhitelistPatchRequest
@@ -11889,7 +11523,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WechatModifyWhitelistPatch(ctx *UserContext, zoneId string, id string, requestBody WechatModifyWhitelistPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WechatModifyWhitelistPatch(ctx context.Context, zoneId string, id string, requestBody WechatModifyWhitelistPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11902,14 +11536,14 @@ func (r *RuckusZonesAPI) WechatModifyWhitelistPatch(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}/whiteList")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/portals/wechat/{id}/whiteList", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -11931,7 +11565,7 @@ type (
 // EthernetPortProfileRetrieveListEthernetPortPorfileGet: Retrieve a list of Ethernet Port Porfiles within a zone
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -11942,7 +11576,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *EthernetPortProfileRetrieveListEthernetPortPorfileGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) EthernetPortProfileRetrieveListEthernetPortPorfileGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *EthernetPortProfileRetrieveListEthernetPortPorfileGet200Response, error) {
+func (r *RuckusZonesAPI) EthernetPortProfileRetrieveListEthernetPortPorfileGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *EthernetPortProfileRetrieveListEthernetPortPorfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -11969,17 +11603,12 @@ func (r *RuckusZonesAPI) EthernetPortProfileRetrieveListEthernetPortPorfileGet(c
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/profile/ethernetPort")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/profile/ethernetPort", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &EthernetPortProfileRetrieveListEthernetPortPorfileGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -12043,7 +11672,7 @@ type (
 // EthernetPortProfileCreateEthernetPortPorfilePost: Create a new Ethernet Port Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *EthernetPortProfileCreateEthernetPortPorfilePostRequest
 //
@@ -12051,7 +11680,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *EthernetPortProfileCreateEthernetPortPorfilePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) EthernetPortProfileCreateEthernetPortPorfilePost(ctx *UserContext, zoneId string, requestBody *EthernetPortProfileCreateEthernetPortPorfilePostRequest) (*http.Response, *EthernetPortProfileCreateEthernetPortPorfilePost201Response, error) {
+func (r *RuckusZonesAPI) EthernetPortProfileCreateEthernetPortPorfilePost(ctx context.Context, zoneId string, requestBody *EthernetPortProfileCreateEthernetPortPorfilePostRequest) (*http.Response, *EthernetPortProfileCreateEthernetPortPorfilePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12060,21 +11689,21 @@ func (r *RuckusZonesAPI) EthernetPortProfileCreateEthernetPortPorfilePost(ctx *U
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/profile/ethernetPort")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/profile/ethernetPort", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &EthernetPortProfileCreateEthernetPortPorfilePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // EthernetPortProfileDeleteEthernetPortPorfileDelete: Delete Ethernet Port Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -12082,7 +11711,7 @@ func (r *RuckusZonesAPI) EthernetPortProfileCreateEthernetPortPorfilePost(ctx *U
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) EthernetPortProfileDeleteEthernetPortPorfileDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) EthernetPortProfileDeleteEthernetPortPorfileDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12095,13 +11724,10 @@ func (r *RuckusZonesAPI) EthernetPortProfileDeleteEthernetPortPorfileDelete(ctx 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12161,7 +11787,7 @@ type (
 // EthernetPortProfileRetrieveEthernetPortPorfileGet: Retrieve a Ethernet Port Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -12169,7 +11795,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *EthernetPortProfileRetrieveEthernetPortPorfileGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) EthernetPortProfileRetrieveEthernetPortPorfileGet(ctx *UserContext, zoneId string, id string) (*http.Response, *EthernetPortProfileRetrieveEthernetPortPorfileGet200Response, error) {
+func (r *RuckusZonesAPI) EthernetPortProfileRetrieveEthernetPortPorfileGet(ctx context.Context, zoneId string, id string) (*http.Response, *EthernetPortProfileRetrieveEthernetPortPorfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12182,14 +11808,11 @@ func (r *RuckusZonesAPI) EthernetPortProfileRetrieveEthernetPortPorfileGet(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &EthernetPortProfileRetrieveEthernetPortPorfileGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -12208,7 +11831,7 @@ type (
 // EthernetPortProfileModifyEthernetPortPorfilePatch: Modify a specific Ethernet Port Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *EthernetPortProfileModifyEthernetPortPorfilePatchRequest
@@ -12217,7 +11840,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) EthernetPortProfileModifyEthernetPortPorfilePatch(ctx *UserContext, zoneId string, id string, requestBody *EthernetPortProfileModifyEthernetPortPorfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) EthernetPortProfileModifyEthernetPortPorfilePatch(ctx context.Context, zoneId string, id string, requestBody *EthernetPortProfileModifyEthernetPortPorfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12230,14 +11853,14 @@ func (r *RuckusZonesAPI) EthernetPortProfileModifyEthernetPortPorfilePatch(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12284,7 +11907,7 @@ type (
 // EthernetPortProfileModify8021xOfEthernetPortPorfilePatch: Modify _8021X of Ethernet Port Porfile
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 // - requestBody: *EthernetPortProfileModify8021xOfEthernetPortPorfilePatchRequest
@@ -12293,7 +11916,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) EthernetPortProfileModify8021xOfEthernetPortPorfilePatch(ctx *UserContext, zoneId string, id string, requestBody *EthernetPortProfileModify8021xOfEthernetPortPorfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) EthernetPortProfileModify8021xOfEthernetPortPorfilePatch(ctx context.Context, zoneId string, id string, requestBody *EthernetPortProfileModify8021xOfEthernetPortPorfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12306,14 +11929,14 @@ func (r *RuckusZonesAPI) EthernetPortProfileModify8021xOfEthernetPortPorfilePatc
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}/_8021X")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/profile/ethernetPort/{id}/_8021X", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12335,7 +11958,7 @@ type (
 // ApUsbSoftwarePackageRetrieveListGet: Retrieve a list of AP Usb Software Package
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -12346,7 +11969,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApUsbSoftwarePackageRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApUsbSoftwarePackageRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *ApUsbSoftwarePackageRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) ApUsbSoftwarePackageRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *ApUsbSoftwarePackageRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12373,17 +11996,12 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageRetrieveListGet(ctx *UserContext, z
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/usbsoftware")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/usbsoftware", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &ApUsbSoftwarePackageRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -12396,14 +12014,14 @@ type (
 // ApUsbSoftwarePackageUploadFilePost: Create new AP Usb Software Package by upload file
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ApUsbSoftwarePackageUploadFilePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApUsbSoftwarePackageUploadFilePost(ctx *UserContext, zoneId string) (*http.Response, *ApUsbSoftwarePackageUploadFilePost201Response, error) {
+func (r *RuckusZonesAPI) ApUsbSoftwarePackageUploadFilePost(ctx context.Context, zoneId string) (*http.Response, *ApUsbSoftwarePackageUploadFilePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12412,20 +12030,17 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageUploadFilePost(ctx *UserContext, zo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/usbsoftware")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/usbsoftware", true)
+	request.SetPathParameter("zoneId", zoneId)
 	out := &ApUsbSoftwarePackageUploadFilePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // ApUsbSoftwarePackageDeleteDelete: Delete specified AP Usb Software Package
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (string)
 //
@@ -12433,7 +12048,7 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageUploadFilePost(ctx *UserContext, zo
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApUsbSoftwarePackageDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) ApUsbSoftwarePackageDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12446,13 +12061,10 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageDeleteDelete(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/usbsoftware/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/usbsoftware/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12465,7 +12077,7 @@ type (
 // ApUsbSoftwarePackageGetZoneAssociateGet: Get APUsbSoftwarePackage associate with zone by model name
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - modelName (string)
 //
@@ -12473,7 +12085,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ApUsbSoftwarePackageGetZoneAssociateGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetZoneAssociateGet(ctx *UserContext, zoneId string, modelName string) (*http.Response, *ApUsbSoftwarePackageGetZoneAssociateGet200Response, error) {
+func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetZoneAssociateGet(ctx context.Context, zoneId string, modelName string) (*http.Response, *ApUsbSoftwarePackageGetZoneAssociateGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12486,14 +12098,11 @@ func (r *RuckusZonesAPI) ApUsbSoftwarePackageGetZoneAssociateGet(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"modelName\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/usbsoftware/{modelName}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":    zoneId,
-		"modelName": modelName,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/usbsoftware/{modelName}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("modelName", modelName)
 	out := &ApUsbSoftwarePackageGetZoneAssociateGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -12539,7 +12148,7 @@ type (
 // WlanGroupRetrieveListGet: Use this API command to retrieve the list of WLAN groups within a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -12550,7 +12159,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanGroupRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *WlanGroupRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) WlanGroupRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *WlanGroupRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12577,17 +12186,12 @@ func (r *RuckusZonesAPI) WlanGroupRetrieveListGet(ctx *UserContext, zoneId strin
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlangroups")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlangroups", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &WlanGroupRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -12605,7 +12209,7 @@ type (
 // WlanGroupCreatePost: Use this API command to create a new WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanGroupCreatePostRequest
 //
@@ -12613,7 +12217,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanGroupCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupCreatePost(ctx *UserContext, zoneId string, requestBody *WlanGroupCreatePostRequest) (*http.Response, *WlanGroupCreatePost201Response, error) {
+func (r *RuckusZonesAPI) WlanGroupCreatePost(ctx context.Context, zoneId string, requestBody *WlanGroupCreatePostRequest) (*http.Response, *WlanGroupCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12622,21 +12226,21 @@ func (r *RuckusZonesAPI) WlanGroupCreatePost(ctx *UserContext, zoneId string, re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlangroups")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlangroups", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanGroupCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // WlanGroupDeleteDelete: Use this API command to delete a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 //
@@ -12644,7 +12248,7 @@ func (r *RuckusZonesAPI) WlanGroupCreatePost(ctx *UserContext, zoneId string, re
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12657,13 +12261,10 @@ func (r *RuckusZonesAPI) WlanGroupDeleteDelete(ctx *UserContext, zoneId string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12699,7 +12300,7 @@ type (
 // WlanGroupRetrieveGet: Use this API command to retrieve the WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 //
@@ -12707,7 +12308,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanGroupRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *WlanGroupRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) WlanGroupRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *WlanGroupRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12720,14 +12321,11 @@ func (r *RuckusZonesAPI) WlanGroupRetrieveGet(ctx *UserContext, zoneId string, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlangroups/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlangroups/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &WlanGroupRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -12741,7 +12339,7 @@ type (
 // WlanGroupModifyBasicPatch: Use this API command to modify the basic information of a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - requestBody: *WlanGroupModifyBasicPatchRequest
@@ -12750,7 +12348,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanGroupModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *WlanGroupModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12763,14 +12361,14 @@ func (r *RuckusZonesAPI) WlanGroupModifyBasicPatch(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlangroups/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlangroups/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12790,7 +12388,7 @@ type (
 // WlanGroupAddMemberPost: Use this API command to add a member to a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - requestBody: *WlanGroupAddMemberPostRequest
@@ -12799,7 +12397,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupAddMemberPost(ctx *UserContext, zoneId string, id string, requestBody *WlanGroupAddMemberPostRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupAddMemberPost(ctx context.Context, zoneId string, id string, requestBody *WlanGroupAddMemberPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12812,20 +12410,20 @@ func (r *RuckusZonesAPI) WlanGroupAddMemberPost(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 201, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 201, nil)
 }
 
 // WlanGroupRemoveMemberDelete: Use this API command to remove a member from a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - memberId (string)
@@ -12834,7 +12432,7 @@ func (r *RuckusZonesAPI) WlanGroupAddMemberPost(ctx *UserContext, zoneId string,
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupRemoveMemberDelete(ctx *UserContext, zoneId string, id string, memberId string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupRemoveMemberDelete(ctx context.Context, zoneId string, id string, memberId string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12851,14 +12449,11 @@ func (r *RuckusZonesAPI) WlanGroupRemoveMemberDelete(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"memberId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":   zoneId,
-		"id":       id,
-		"memberId": memberId,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("memberId", memberId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12871,7 +12466,7 @@ type (
 // WlanGroupModifyMemberPatch: Use this API command to modify a member of a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - memberId (string)
@@ -12881,7 +12476,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupModifyMemberPatch(ctx *UserContext, zoneId string, id string, memberId string, requestBody *WlanGroupModifyMemberPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupModifyMemberPatch(ctx context.Context, zoneId string, id string, memberId string, requestBody *WlanGroupModifyMemberPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12898,21 +12493,21 @@ func (r *RuckusZonesAPI) WlanGroupModifyMemberPatch(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"memberId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":   zoneId,
-		"id":       id,
-		"memberId": memberId,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("memberId", memberId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanGroupDisableMemberNasOverrideDelete: Use this API command to disable a member NAS-ID override of a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - memberId (string)
@@ -12921,7 +12516,7 @@ func (r *RuckusZonesAPI) WlanGroupModifyMemberPatch(ctx *UserContext, zoneId str
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupDisableMemberNasOverrideDelete(ctx *UserContext, zoneId string, id string, memberId string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupDisableMemberNasOverrideDelete(ctx context.Context, zoneId string, id string, memberId string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12938,20 +12533,17 @@ func (r *RuckusZonesAPI) WlanGroupDisableMemberNasOverrideDelete(ctx *UserContex
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"memberId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}/nasId")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":   zoneId,
-		"id":       id,
-		"memberId": memberId,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}/nasId", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("memberId", memberId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanGroupDisableMemberVlanOverrideDelete: Use this API command to disable a member VLAN override of a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - memberId (string)
@@ -12960,7 +12552,7 @@ func (r *RuckusZonesAPI) WlanGroupDisableMemberNasOverrideDelete(ctx *UserContex
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupDisableMemberVlanOverrideDelete(ctx *UserContext, zoneId string, id string, memberId string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupDisableMemberVlanOverrideDelete(ctx context.Context, zoneId string, id string, memberId string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -12977,14 +12569,11 @@ func (r *RuckusZonesAPI) WlanGroupDisableMemberVlanOverrideDelete(ctx *UserConte
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"memberId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}/vlanOverride")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":   zoneId,
-		"id":       id,
-		"memberId": memberId,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}/vlanOverride", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("memberId", memberId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -12997,7 +12586,7 @@ type (
 // WlanGroupModifyMemberVlanPoolingPatch: Use this API command to modify a member's VLAN pooling of a WLAN group.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Group ID
 // - memberId (string)
@@ -13007,7 +12596,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanGroupModifyMemberVlanPoolingPatch(ctx *UserContext, zoneId string, id string, memberId string, requestBody *WlanGroupModifyMemberVlanPoolingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanGroupModifyMemberVlanPoolingPatch(ctx context.Context, zoneId string, id string, memberId string, requestBody *WlanGroupModifyMemberVlanPoolingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13024,15 +12613,15 @@ func (r *RuckusZonesAPI) WlanGroupModifyMemberVlanPoolingPatch(ctx *UserContext,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"memberId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}/vlanPooling")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId":   zoneId,
-		"id":       id,
-		"memberId": memberId,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlangroups/{id}/members/{memberId}/vlanPooling", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("memberId", memberId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -13057,7 +12646,7 @@ type (
 // WlanRetrieveListGet: Use this API command to retrieve a list of WLANs within a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -13068,7 +12657,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *WlanRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) WlanRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *WlanRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13095,17 +12684,12 @@ func (r *RuckusZonesAPI) WlanRetrieveListGet(ctx *UserContext, zoneId string, op
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlans")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlans", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &WlanRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -13125,7 +12709,7 @@ type (
 // WlanCreateStandardOpenPost: Use this API command to create a new standard, open and non-tunneled basic WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateStandardOpenPostRequest
 //
@@ -13133,7 +12717,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateStandardOpenPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateStandardOpenPost(ctx *UserContext, zoneId string, requestBody *WlanCreateStandardOpenPostRequest) (*http.Response, *WlanCreateStandardOpenPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateStandardOpenPost(ctx context.Context, zoneId string, requestBody *WlanCreateStandardOpenPostRequest) (*http.Response, *WlanCreateStandardOpenPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13142,14 +12726,14 @@ func (r *RuckusZonesAPI) WlanCreateStandardOpenPost(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateStandardOpenPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13195,7 +12779,7 @@ type (
 // WlanSchedulerRetrieveListGet: Use this API command to retrieve the list of WLAN schedule from a zone.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 //
 // Optional Parameter Map:
@@ -13206,7 +12790,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanSchedulerRetrieveListGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanSchedulerRetrieveListGet(ctx *UserContext, zoneId string, optionalParams map[string]string) (*http.Response, *WlanSchedulerRetrieveListGet200Response, error) {
+func (r *RuckusZonesAPI) WlanSchedulerRetrieveListGet(ctx context.Context, zoneId string, optionalParams map[string]string) (*http.Response, *WlanSchedulerRetrieveListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13233,17 +12817,12 @@ func (r *RuckusZonesAPI) WlanSchedulerRetrieveListGet(ctx *UserContext, zoneId s
 	} else {
 		listSize = "100"
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlanSchedulers")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-	}
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlanSchedulers", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &WlanSchedulerRetrieveListGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -13282,7 +12861,7 @@ type (
 // WlanSchedulerCreatePost: Use this API command to create a new WLAN schedule.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanSchedulerCreatePostRequest
 //
@@ -13290,7 +12869,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanSchedulerCreatePost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanSchedulerCreatePost(ctx *UserContext, zoneId string, requestBody *WlanSchedulerCreatePostRequest) (*http.Response, *WlanSchedulerCreatePost201Response, error) {
+func (r *RuckusZonesAPI) WlanSchedulerCreatePost(ctx context.Context, zoneId string, requestBody *WlanSchedulerCreatePostRequest) (*http.Response, *WlanSchedulerCreatePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13299,21 +12878,21 @@ func (r *RuckusZonesAPI) WlanSchedulerCreatePost(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlanSchedulers")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlanSchedulers", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanSchedulerCreatePost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // WlanSchedulerDeleteDelete: Use this API command to delete a WLAN schedule.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Schedule ID
 //
@@ -13321,7 +12900,7 @@ func (r *RuckusZonesAPI) WlanSchedulerCreatePost(ctx *UserContext, zoneId string
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanSchedulerDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanSchedulerDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13334,13 +12913,10 @@ func (r *RuckusZonesAPI) WlanSchedulerDeleteDelete(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlanSchedulers/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlanSchedulers/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -13376,7 +12952,7 @@ type (
 // WlanSchedulerRetrieveGet: Use this API command to retrieve a WLAN schedule.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Schedule ID
 //
@@ -13384,7 +12960,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanSchedulerRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanSchedulerRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *WlanSchedulerRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) WlanSchedulerRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *WlanSchedulerRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13397,14 +12973,11 @@ func (r *RuckusZonesAPI) WlanSchedulerRetrieveGet(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlanSchedulers/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlanSchedulers/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &WlanSchedulerRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -13418,7 +12991,7 @@ type (
 // WlanSchedulerModifyPatch: Use this API command to modify a WLAN schedule.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (UUIDv4): WLAN Schedule ID
 // - requestBody: *WlanSchedulerModifyPatchRequest
@@ -13427,7 +13000,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanSchedulerModifyPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanSchedulerModifyPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanSchedulerModifyPatch(ctx context.Context, zoneId string, id string, requestBody *WlanSchedulerModifyPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13440,14 +13013,14 @@ func (r *RuckusZonesAPI) WlanSchedulerModifyPatch(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlanSchedulers/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlanSchedulers/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -13480,7 +13053,7 @@ type (
 // WlanCreateGuestAccessPost: Use this API command to create a new guest access WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateGuestAccessPostRequest
 //
@@ -13488,7 +13061,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateGuestAccessPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateGuestAccessPost(ctx *UserContext, zoneId string, requestBody *WlanCreateGuestAccessPostRequest) (*http.Response, *WlanCreateGuestAccessPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateGuestAccessPost(ctx context.Context, zoneId string, requestBody *WlanCreateGuestAccessPostRequest) (*http.Response, *WlanCreateGuestAccessPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13497,14 +13070,14 @@ func (r *RuckusZonesAPI) WlanCreateGuestAccessPost(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/guest")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/guest", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateGuestAccessPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13530,7 +13103,7 @@ type (
 // WlanCreateHotspot20Post: Use this API command to create a new Hotspot 2.0 access WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateHotspot20PostRequest
 //
@@ -13538,7 +13111,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateHotspot20Post201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateHotspot20Post(ctx *UserContext, zoneId string, requestBody *WlanCreateHotspot20PostRequest) (*http.Response, *WlanCreateHotspot20Post201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateHotspot20Post(ctx context.Context, zoneId string, requestBody *WlanCreateHotspot20PostRequest) (*http.Response, *WlanCreateHotspot20Post201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13547,14 +13120,14 @@ func (r *RuckusZonesAPI) WlanCreateHotspot20Post(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/hotspot20")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/hotspot20", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateHotspot20Post201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13574,7 +13147,7 @@ type (
 // WlanCreateHotspot20OsenPost: Use this API command to create a new Hotspot 2.0 Secure Online Signup WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateHotspot20OsenPostRequest
 //
@@ -13582,7 +13155,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateHotspot20OsenPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateHotspot20OsenPost(ctx *UserContext, zoneId string, requestBody *WlanCreateHotspot20OsenPostRequest) (*http.Response, *WlanCreateHotspot20OsenPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateHotspot20OsenPost(ctx context.Context, zoneId string, requestBody *WlanCreateHotspot20OsenPostRequest) (*http.Response, *WlanCreateHotspot20OsenPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13591,14 +13164,14 @@ func (r *RuckusZonesAPI) WlanCreateHotspot20OsenPost(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/hotspot20osen")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/hotspot20osen", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateHotspot20OsenPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13626,7 +13199,7 @@ type (
 // WlanCreate8021xPost: Use this API command to create a new standard, 802.1X and non-tunneled WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreate8021xPostRequest
 //
@@ -13634,7 +13207,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreate8021xPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreate8021xPost(ctx *UserContext, zoneId string, requestBody *WlanCreate8021xPostRequest) (*http.Response, *WlanCreate8021xPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreate8021xPost(ctx context.Context, zoneId string, requestBody *WlanCreate8021xPostRequest) (*http.Response, *WlanCreate8021xPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13643,14 +13216,14 @@ func (r *RuckusZonesAPI) WlanCreate8021xPost(ctx *UserContext, zoneId string, re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/standard80211")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/standard80211", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreate8021xPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13678,7 +13251,7 @@ type (
 // WlanCreateMacAuthPost: Use this API command to create a new standard, MAC auth and non-tunneled WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateMacAuthPostRequest
 //
@@ -13686,7 +13259,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateMacAuthPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateMacAuthPost(ctx *UserContext, zoneId string, requestBody *WlanCreateMacAuthPostRequest) (*http.Response, *WlanCreateMacAuthPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateMacAuthPost(ctx context.Context, zoneId string, requestBody *WlanCreateMacAuthPostRequest) (*http.Response, *WlanCreateMacAuthPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13695,14 +13268,14 @@ func (r *RuckusZonesAPI) WlanCreateMacAuthPost(ctx *UserContext, zoneId string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/standardmac")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/standardmac", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateMacAuthPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13736,7 +13309,7 @@ type (
 // WlanCreateWebAuthPost: Use this API command to creates new web authentication WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateWebAuthPostRequest
 //
@@ -13744,7 +13317,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateWebAuthPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateWebAuthPost(ctx *UserContext, zoneId string, requestBody *WlanCreateWebAuthPostRequest) (*http.Response, *WlanCreateWebAuthPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateWebAuthPost(ctx context.Context, zoneId string, requestBody *WlanCreateWebAuthPostRequest) (*http.Response, *WlanCreateWebAuthPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13753,14 +13326,14 @@ func (r *RuckusZonesAPI) WlanCreateWebAuthPost(ctx *UserContext, zoneId string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/webauth")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/webauth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateWebAuthPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13786,7 +13359,7 @@ type (
 // WlanCreateWechatPost: Use this API command to create a new wechat WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateWechatPostRequest
 //
@@ -13794,7 +13367,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateWechatPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateWechatPost(ctx *UserContext, zoneId string, requestBody *WlanCreateWechatPostRequest) (*http.Response, *WlanCreateWechatPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateWechatPost(ctx context.Context, zoneId string, requestBody *WlanCreateWechatPostRequest) (*http.Response, *WlanCreateWechatPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13803,14 +13376,14 @@ func (r *RuckusZonesAPI) WlanCreateWechatPost(ctx *UserContext, zoneId string, r
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/wechat")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/wechat", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateWechatPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13844,7 +13417,7 @@ type (
 // WlanCreateHotspotPost: Use this API command to create new hotspot (WISPr) WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateHotspotPostRequest
 //
@@ -13852,7 +13425,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateHotspotPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateHotspotPost(ctx *UserContext, zoneId string, requestBody *WlanCreateHotspotPostRequest) (*http.Response, *WlanCreateHotspotPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateHotspotPost(ctx context.Context, zoneId string, requestBody *WlanCreateHotspotPostRequest) (*http.Response, *WlanCreateHotspotPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13861,14 +13434,14 @@ func (r *RuckusZonesAPI) WlanCreateHotspotPost(ctx *UserContext, zoneId string, 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/wispr")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/wispr", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateHotspotPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -13902,7 +13475,7 @@ type (
 // WlanCreateHotspotMacBypassPost: Use this API command to create a new hotspot (WISPr) with MAC bypass WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - requestBody: *WlanCreateHotspotMacBypassPostRequest
 //
@@ -13910,7 +13483,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanCreateHotspotMacBypassPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanCreateHotspotMacBypassPost(ctx *UserContext, zoneId string, requestBody *WlanCreateHotspotMacBypassPostRequest) (*http.Response, *WlanCreateHotspotMacBypassPost201Response, error) {
+func (r *RuckusZonesAPI) WlanCreateHotspotMacBypassPost(ctx context.Context, zoneId string, requestBody *WlanCreateHotspotMacBypassPostRequest) (*http.Response, *WlanCreateHotspotMacBypassPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13919,21 +13492,21 @@ func (r *RuckusZonesAPI) WlanCreateHotspotMacBypassPost(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"zoneId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/wisprmac")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/wisprmac", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
 	out := &WlanCreateHotspotMacBypassPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
 // WlanDeleteDelete: Use this API command to delete a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -13941,7 +13514,7 @@ func (r *RuckusZonesAPI) WlanCreateHotspotMacBypassPost(ctx *UserContext, zoneId
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDeleteDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDeleteDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -13954,13 +13527,10 @@ func (r *RuckusZonesAPI) WlanDeleteDelete(ctx *UserContext, zoneId string, id st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14169,7 +13739,7 @@ type (
 // WlanRetrieveGet: Use this API command to retrieve a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -14177,7 +13747,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WlanRetrieveGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanRetrieveGet(ctx *UserContext, zoneId string, id string) (*http.Response, *WlanRetrieveGet200Response, error) {
+func (r *RuckusZonesAPI) WlanRetrieveGet(ctx context.Context, zoneId string, id string) (*http.Response, *WlanRetrieveGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14190,14 +13760,11 @@ func (r *RuckusZonesAPI) WlanRetrieveGet(ctx *UserContext, zoneId string, id str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlans/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlans/{id}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &WlanRetrieveGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -14220,7 +13787,7 @@ type (
 // WlanModifyBasicPatch: Use this API command to modify the basic information of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyBasicPatchRequest
@@ -14229,7 +13796,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyBasicPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyBasicPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyBasicPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyBasicPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14242,20 +13809,20 @@ func (r *RuckusZonesAPI) WlanModifyBasicPatch(ctx *UserContext, zoneId string, i
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanDisableAccountingDelete: Use this API command to disable the accounting of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -14263,7 +13830,7 @@ func (r *RuckusZonesAPI) WlanModifyBasicPatch(ctx *UserContext, zoneId string, i
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDisableAccountingDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDisableAccountingDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14276,13 +13843,10 @@ func (r *RuckusZonesAPI) WlanDisableAccountingDelete(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/accountingServiceOrProfile")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/accountingServiceOrProfile", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14298,7 +13862,7 @@ type (
 // WlanModifyAccountingPatch: Use this API command to modify the accounting settings of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyAccountingPatchRequest
@@ -14307,7 +13871,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyAccountingPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyAccountingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyAccountingPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyAccountingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14320,14 +13884,14 @@ func (r *RuckusZonesAPI) WlanModifyAccountingPatch(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/accountingServiceOrProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/accountingServiceOrProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14370,7 +13934,7 @@ type (
 // WlanModifyAdvancedOptionsPatch: Use this API command to modify the advanced settings of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyAdvancedOptionsPatchRequest
@@ -14379,7 +13943,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyAdvancedOptionsPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyAdvancedOptionsPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyAdvancedOptionsPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyAdvancedOptionsPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14392,14 +13956,14 @@ func (r *RuckusZonesAPI) WlanModifyAdvancedOptionsPatch(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/advancedOptions")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/advancedOptions", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14414,7 +13978,7 @@ type (
 // WlanModifyAuthenticationPatch: Use this API command to modify the authentication method of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyAuthenticationPatchRequest
@@ -14423,7 +13987,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyAuthenticationPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyAuthenticationPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyAuthenticationPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyAuthenticationPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14436,14 +14000,14 @@ func (r *RuckusZonesAPI) WlanModifyAuthenticationPatch(ctx *UserContext, zoneId 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/authServiceOrProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/authServiceOrProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14458,7 +14022,7 @@ type (
 // CaleaSetCaleaConfigForWlanPatch: Use this API command to set CALEA config for wlan.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *CaleaSetCaleaConfigForWlanPatchRequest
@@ -14467,7 +14031,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) CaleaSetCaleaConfigForWlanPatch(ctx *UserContext, zoneId string, id string, requestBody *CaleaSetCaleaConfigForWlanPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) CaleaSetCaleaConfigForWlanPatch(ctx context.Context, zoneId string, id string, requestBody *CaleaSetCaleaConfigForWlanPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14480,14 +14044,14 @@ func (r *RuckusZonesAPI) CaleaSetCaleaConfigForWlanPatch(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/calea")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/calea", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14501,7 +14065,7 @@ type (
 // WlanModifyCoreTunnelPatch: Use this API command to modify the core tunnel configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyCoreTunnelPatchRequest
@@ -14510,7 +14074,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyCoreTunnelPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyCoreTunnelPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyCoreTunnelPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyCoreTunnelPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14523,14 +14087,14 @@ func (r *RuckusZonesAPI) WlanModifyCoreTunnelPatch(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/coreTunnelProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/coreTunnelProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14543,7 +14107,7 @@ type (
 // WlanModifyUserTrafficProfilePatch: Use this API command to modify the user traffic profile configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyUserTrafficProfilePatchRequest
@@ -14552,7 +14116,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyUserTrafficProfilePatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyUserTrafficProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyUserTrafficProfilePatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyUserTrafficProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14565,20 +14129,20 @@ func (r *RuckusZonesAPI) WlanModifyUserTrafficProfilePatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/defaultUserTrafficProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/defaultUserTrafficProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanDisableDevicePolicyDelete: Use this API command to disable the device policy of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -14586,7 +14150,7 @@ func (r *RuckusZonesAPI) WlanModifyUserTrafficProfilePatch(ctx *UserContext, zon
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDisableDevicePolicyDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDisableDevicePolicyDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14599,13 +14163,10 @@ func (r *RuckusZonesAPI) WlanDisableDevicePolicyDelete(ctx *UserContext, zoneId 
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/devicePolicy")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/devicePolicy", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14618,7 +14179,7 @@ type (
 // WlanModifyDevicePolicyPatch: Use this API command to modify the device policy of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyDevicePolicyPatchRequest
@@ -14627,7 +14188,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyDevicePolicyPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyDevicePolicyPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyDevicePolicyPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyDevicePolicyPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14640,20 +14201,20 @@ func (r *RuckusZonesAPI) WlanModifyDevicePolicyPatch(ctx *UserContext, zoneId st
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/devicePolicy")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/devicePolicy", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanDisableDiffservProfileDelete: Use this API command to disable the DiffServ profile of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -14661,7 +14222,7 @@ func (r *RuckusZonesAPI) WlanModifyDevicePolicyPatch(ctx *UserContext, zoneId st
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDisableDiffservProfileDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDisableDiffservProfileDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14674,13 +14235,10 @@ func (r *RuckusZonesAPI) WlanDisableDiffservProfileDelete(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/diffServProfile")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/diffServProfile", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14693,7 +14251,7 @@ type (
 // WlanModifyDiffservProfilePatch: Use this API command to modify the DiffServ profile of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyDiffservProfilePatchRequest
@@ -14702,7 +14260,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyDiffservProfilePatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyDiffservProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyDiffservProfilePatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyDiffservProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14715,20 +14273,20 @@ func (r *RuckusZonesAPI) WlanModifyDiffservProfilePatch(ctx *UserContext, zoneId
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/diffServProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/diffServProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanDisableDnsServerProfileDelete: Use this API command to disable DNS server profile of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -14736,7 +14294,7 @@ func (r *RuckusZonesAPI) WlanModifyDiffservProfilePatch(ctx *UserContext, zoneId
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDisableDnsServerProfileDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDisableDnsServerProfileDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14749,13 +14307,10 @@ func (r *RuckusZonesAPI) WlanDisableDnsServerProfileDelete(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/dnsServerProfile")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/dnsServerProfile", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14768,7 +14323,7 @@ type (
 // WlanModifyDnsServerProfilePatch: Use this API command to modify DNS server profile of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyDnsServerProfilePatchRequest
@@ -14777,7 +14332,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyDnsServerProfilePatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyDnsServerProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyDnsServerProfilePatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyDnsServerProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14790,14 +14345,14 @@ func (r *RuckusZonesAPI) WlanModifyDnsServerProfilePatch(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/dnsServerProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/dnsServerProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14827,7 +14382,7 @@ type (
 // DynamicPskRetrieveDpskInfoByWlanGet: Use this API command to retrieve DPSK info of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -14835,7 +14390,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskRetrieveDpskInfoByWlanGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByWlanGet(ctx *UserContext, zoneId string, id string) (*http.Response, *DynamicPskRetrieveDpskInfoByWlanGet200Response, error) {
+func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByWlanGet(ctx context.Context, zoneId string, id string) (*http.Response, *DynamicPskRetrieveDpskInfoByWlanGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14848,14 +14403,11 @@ func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByWlanGet(ctx *UserContext, z
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &DynamicPskRetrieveDpskInfoByWlanGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -14872,7 +14424,7 @@ type (
 // WlanModifyDpskSettingPatch: Use this API command to modify DPSK setting of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyDpskSettingPatchRequest
@@ -14881,7 +14433,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyDpskSettingPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyDpskSettingPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyDpskSettingPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyDpskSettingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14894,14 +14446,14 @@ func (r *RuckusZonesAPI) WlanModifyDpskSettingPatch(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -14919,7 +14471,7 @@ type (
 // DynamicPskDeleteDpskPost: Use this API command to delete DPSKs of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *DynamicPskDeleteDpskPostRequest
@@ -14928,7 +14480,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskDeleteDpskPost200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskDeleteDpskPost(ctx *UserContext, zoneId string, id string, requestBody *DynamicPskDeleteDpskPostRequest) (*http.Response, *DynamicPskDeleteDpskPost200Response, error) {
+func (r *RuckusZonesAPI) DynamicPskDeleteDpskPost(ctx context.Context, zoneId string, id string, requestBody *DynamicPskDeleteDpskPostRequest) (*http.Response, *DynamicPskDeleteDpskPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -14941,15 +14493,15 @@ func (r *RuckusZonesAPI) DynamicPskDeleteDpskPost(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &DynamicPskDeleteDpskPost200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -14989,7 +14541,7 @@ type (
 // DynamicPskBatchGenerateDpsksPost: Use this API command to batch generate DPSKs of a WLAN. You can either specify passphrases or not. If the amount is bigger than 1, system will generate usernames with index. e.g. student-1, student-2, …etc.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *DynamicPskBatchGenerateDpsksPostRequest
@@ -14998,7 +14550,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskBatchGenerateDpsksPost201Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskBatchGenerateDpsksPost(ctx *UserContext, zoneId string, id string, requestBody *DynamicPskBatchGenerateDpsksPostRequest) (*http.Response, *DynamicPskBatchGenerateDpsksPost201Response, error) {
+func (r *RuckusZonesAPI) DynamicPskBatchGenerateDpsksPost(ctx context.Context, zoneId string, id string, requestBody *DynamicPskBatchGenerateDpsksPostRequest) (*http.Response, *DynamicPskBatchGenerateDpsksPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15011,15 +14563,15 @@ func (r *RuckusZonesAPI) DynamicPskBatchGenerateDpsksPost(ctx *UserContext, zone
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk/batchGenUnbound")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk/batchGenUnbound", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
 	out := &DynamicPskBatchGenerateDpsksPost201Response{}
-	httpResponse, _, err := r.client.doRequest(request, 201, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -15050,7 +14602,7 @@ type (
 // DynamicPskRetrieveDpskInfoByIdGet: Use this API command to retrieve DPSK info.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - dpskId (string)
@@ -15059,7 +14611,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *DynamicPskRetrieveDpskInfoByIdGet200Response
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByIdGet(ctx *UserContext, zoneId string, id string, dpskId string) (*http.Response, *DynamicPskRetrieveDpskInfoByIdGet200Response, error) {
+func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByIdGet(ctx context.Context, zoneId string, id string, dpskId string) (*http.Response, *DynamicPskRetrieveDpskInfoByIdGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15076,15 +14628,12 @@ func (r *RuckusZonesAPI) DynamicPskRetrieveDpskInfoByIdGet(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"dpskId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "GET", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk/{dpskId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"dpskId": dpskId,
-	}
+	request := NewRequest("GET", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk/{dpskId}", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("dpskId", dpskId)
 	out := &DynamicPskRetrieveDpskInfoByIdGet200Response{}
-	httpResponse, _, err := r.client.doRequest(request, 200, out)
+	httpResponse, _, err := r.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -15097,7 +14646,7 @@ type (
 // DynamicPskUpdateDpskInfoByIdPatch: Use this API command to update DPSK info.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - dpskId (string)
@@ -15107,7 +14656,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) DynamicPskUpdateDpskInfoByIdPatch(ctx *UserContext, zoneId string, id string, dpskId string, requestBody *DynamicPskUpdateDpskInfoByIdPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) DynamicPskUpdateDpskInfoByIdPatch(ctx context.Context, zoneId string, id string, dpskId string, requestBody *DynamicPskUpdateDpskInfoByIdPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15124,15 +14673,15 @@ func (r *RuckusZonesAPI) DynamicPskUpdateDpskInfoByIdPatch(ctx *UserContext, zon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"dpskId\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk/{dpskId}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-		"dpskId": dpskId,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/dpsk/{dpskId}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	request.SetPathParameter("dpskId", dpskId)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15151,7 +14700,7 @@ type (
 // WlanModifyEncryptionPatch: Use this API command to modify the encryption settings of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyEncryptionPatchRequest
@@ -15160,7 +14709,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyEncryptionPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyEncryptionPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyEncryptionPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyEncryptionPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15173,14 +14722,14 @@ func (r *RuckusZonesAPI) WlanModifyEncryptionPatch(ctx *UserContext, zoneId stri
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/encryption")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/encryption", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15193,7 +14742,7 @@ type (
 // WlanModifyHotspot20ProfilePatch: Use this API command to modify the Hotspot 2.0 profile configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyHotspot20ProfilePatchRequest
@@ -15202,7 +14751,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyHotspot20ProfilePatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyHotspot20ProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyHotspot20ProfilePatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyHotspot20ProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15215,20 +14764,20 @@ func (r *RuckusZonesAPI) WlanModifyHotspot20ProfilePatch(ctx *UserContext, zoneI
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/hotspot20Profile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/hotspot20Profile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanDisableLayer2AclDelete: Use this API command to disable the layer 2 access control list (ACL) configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -15236,7 +14785,7 @@ func (r *RuckusZonesAPI) WlanModifyHotspot20ProfilePatch(ctx *UserContext, zoneI
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDisableLayer2AclDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDisableLayer2AclDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15249,13 +14798,10 @@ func (r *RuckusZonesAPI) WlanDisableLayer2AclDelete(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/l2ACL")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/l2ACL", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15268,7 +14814,7 @@ type (
 // WlanModifyLayer2AclPatch: Use this API command to modify the layer 2 access control list (ACL) configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyLayer2AclPatchRequest
@@ -15277,7 +14823,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyLayer2AclPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyLayer2AclPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyLayer2AclPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyLayer2AclPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15290,14 +14836,14 @@ func (r *RuckusZonesAPI) WlanModifyLayer2AclPatch(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/l2ACL")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/l2ACL", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15310,7 +14856,7 @@ type (
 // WlanModifyMacAuthPatch: Use this API command to modify the MAC authentication settings of a WLAN. macAuthMacFormat : Open(aabbccddeeff), 802.1X(AA-BB-CC-DD-EE-FF), UpperColon (AA:BB:CC:DD:EE:FF), Upper (AABBCCDDEEFF), LowerDash (aa-bb-cc-dd-ee-ff) and  LowerColon (aa:bb:cc:dd:ee:ff)
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyMacAuthPatchRequest
@@ -15319,7 +14865,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyMacAuthPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyMacAuthPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyMacAuthPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyMacAuthPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15332,14 +14878,14 @@ func (r *RuckusZonesAPI) WlanModifyMacAuthPatch(ctx *UserContext, zoneId string,
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/macAuth")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/macAuth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15352,7 +14898,7 @@ type (
 // WlanModifyPortalProfilePatch: Use this API command to modify the portal configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyPortalProfilePatchRequest
@@ -15361,7 +14907,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyPortalProfilePatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyPortalProfilePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyPortalProfilePatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyPortalProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15374,20 +14920,20 @@ func (r *RuckusZonesAPI) WlanModifyPortalProfilePatch(ctx *UserContext, zoneId s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/portalServiceProfile")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/portalServiceProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanDisableQosMapSetDelete: Use this API command to disable Qos Map Set of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -15395,7 +14941,7 @@ func (r *RuckusZonesAPI) WlanModifyPortalProfilePatch(ctx *UserContext, zoneId s
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanDisableQosMapSetDelete(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanDisableQosMapSetDelete(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15408,13 +14954,10 @@ func (r *RuckusZonesAPI) WlanDisableQosMapSetDelete(ctx *UserContext, zoneId str
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/qosMaps")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/rkszones/{zoneId}/wlans/{id}/qosMaps", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15434,7 +14977,7 @@ type (
 // WlanModifyQosMapSetPatch: Use this API command to modify Qos Map Set of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyQosMapSetPatchRequestSlice
@@ -15443,7 +14986,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyQosMapSetPatch(ctx *UserContext, zoneId string, id string, requestBody WlanModifyQosMapSetPatchRequestSlice) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyQosMapSetPatch(ctx context.Context, zoneId string, id string, requestBody WlanModifyQosMapSetPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15456,20 +14999,20 @@ func (r *RuckusZonesAPI) WlanModifyQosMapSetPatch(ctx *UserContext, zoneId strin
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/qosMaps")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/qosMaps", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 // WlanEnableQosMapSetPost: Use this API command to enable Qos Map Set of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 //
@@ -15477,7 +15020,7 @@ func (r *RuckusZonesAPI) WlanModifyQosMapSetPatch(ctx *UserContext, zoneId strin
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanEnableQosMapSetPost(ctx *UserContext, zoneId string, id string) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanEnableQosMapSetPost(ctx context.Context, zoneId string, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15490,13 +15033,10 @@ func (r *RuckusZonesAPI) WlanEnableQosMapSetPost(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "POST", "/v5_0/rkszones/{zoneId}/wlans/{id}/qosMaps")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
-	}
-	return r.client.doRequest(request, 201, nil)
+	request := NewRequest("POST", "/v5_0/rkszones/{zoneId}/wlans/{id}/qosMaps", true)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 201, nil)
 }
 
 type (
@@ -15515,7 +15055,7 @@ type (
 // WlanModifyRadiusOptionsPatch: Use this API command to modify the RADIUS settings of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyRadiusOptionsPatchRequest
@@ -15524,7 +15064,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyRadiusOptionsPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyRadiusOptionsPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyRadiusOptionsPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyRadiusOptionsPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15537,14 +15077,14 @@ func (r *RuckusZonesAPI) WlanModifyRadiusOptionsPatch(ctx *UserContext, zoneId s
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/radiusOptions")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/radiusOptions", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15558,7 +15098,7 @@ type (
 // WlanModifySchedulePatch: Use this API command to modify the schedule configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifySchedulePatchRequest
@@ -15567,7 +15107,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifySchedulePatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifySchedulePatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifySchedulePatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifySchedulePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15580,14 +15120,14 @@ func (r *RuckusZonesAPI) WlanModifySchedulePatch(ctx *UserContext, zoneId string
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/schedule")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/schedule", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -15609,7 +15149,7 @@ type (
 // WlanModifyVlanPatch: Use this API command to modify the VLAN configuration of a WLAN.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - zoneId (UUIDv4): Zone ID
 // - id (integer): WLAN ID
 // - requestBody: *WlanModifyVlanPatchRequest
@@ -15618,7 +15158,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (r *RuckusZonesAPI) WlanModifyVlanPatch(ctx *UserContext, zoneId string, id string, requestBody *WlanModifyVlanPatchRequest) (*http.Response, []byte, error) {
+func (r *RuckusZonesAPI) WlanModifyVlanPatch(ctx context.Context, zoneId string, id string, requestBody *WlanModifyVlanPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -15631,12 +15171,12 @@ func (r *RuckusZonesAPI) WlanModifyVlanPatch(ctx *UserContext, zoneId string, id
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := r.client.newRequest(ctx, "PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/vlan")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"zoneId": zoneId,
-		"id":     id,
+	request := NewRequest("PATCH", "/v5_0/rkszones/{zoneId}/wlans/{id}/vlan", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return r.client.doRequest(request, 204, nil)
+	request.SetPathParameter("zoneId", zoneId)
+	request.SetPathParameter("id", id)
+	return r.client.Ensure(ctx, request, 204, nil)
 }

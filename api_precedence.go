@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type PrecedenceAPI struct {
@@ -26,21 +27,24 @@ type (
 // PrecedenceProfileBulkDeletePrecedenceProfileDelete: Use this API command to Bulk Delete Precedence Profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileBulkDeletePrecedenceProfileDelete(ctx *UserContext, requestBody *PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequest) (*http.Response, []byte, error) {
+func (p *PrecedenceAPI) PrecedenceProfileBulkDeletePrecedenceProfileDelete(ctx context.Context, requestBody *PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/precedence")
-	request.body = requestBody
-	request.authenticated = true
-	return p.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/precedence", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -80,7 +84,7 @@ type (
 // PrecedenceProfileGetPrecedenceProfileListGet: Use this API command to Get Precedence Profile list.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -90,7 +94,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *PrecedenceProfileGetPrecedenceProfileListGet200Response
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileGetPrecedenceProfileListGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *PrecedenceProfileGetPrecedenceProfileListGet200Response, error) {
+func (p *PrecedenceAPI) PrecedenceProfileGetPrecedenceProfileListGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *PrecedenceProfileGetPrecedenceProfileListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -113,14 +117,11 @@ func (p *PrecedenceAPI) PrecedenceProfileGetPrecedenceProfileListGet(ctx *UserCo
 	} else {
 		listSize = "100"
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/precedence")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-	}
+	request := NewRequest("GET", "/v5_0/precedence", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
 	out := &PrecedenceProfileGetPrecedenceProfileListGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -154,22 +155,25 @@ type (
 // PrecedenceProfileCreatePrecedenceProfilePost: Use this API command to create Precedence Profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *PrecedenceProfileCreatePrecedenceProfilePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *PrecedenceProfileCreatePrecedenceProfilePost201Response
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileCreatePrecedenceProfilePost(ctx *UserContext, requestBody *PrecedenceProfileCreatePrecedenceProfilePostRequest) (*http.Response, *PrecedenceProfileCreatePrecedenceProfilePost201Response, error) {
+func (p *PrecedenceAPI) PrecedenceProfileCreatePrecedenceProfilePost(ctx context.Context, requestBody *PrecedenceProfileCreatePrecedenceProfilePostRequest) (*http.Response, *PrecedenceProfileCreatePrecedenceProfilePost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/precedence")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/precedence", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &PrecedenceProfileCreatePrecedenceProfilePost201Response{}
-	httpResponse, _, err := p.client.doRequest(request, 201, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -319,36 +323,39 @@ type (
 // PrecedenceProfileQueryPrecedenceProfilePost: Use this API command to query Precedence Profile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *PrecedenceProfileQueryPrecedenceProfilePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *PrecedenceProfileQueryPrecedenceProfilePost200Response
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileQueryPrecedenceProfilePost(ctx *UserContext, requestBody *PrecedenceProfileQueryPrecedenceProfilePostRequest) (*http.Response, *PrecedenceProfileQueryPrecedenceProfilePost200Response, error) {
+func (p *PrecedenceAPI) PrecedenceProfileQueryPrecedenceProfilePost(ctx context.Context, requestBody *PrecedenceProfileQueryPrecedenceProfilePostRequest) (*http.Response, *PrecedenceProfileQueryPrecedenceProfilePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := p.client.newRequest(ctx, "POST", "/v5_0/precedence/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/precedence/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &PrecedenceProfileQueryPrecedenceProfilePost200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
 // PrecedenceProfileDeletePrecedenceProfileByProfileSIdDelete: Use this API command to Delete Precedence Profile by profile's ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileDeletePrecedenceProfileByProfileSIdDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (p *PrecedenceAPI) PrecedenceProfileDeletePrecedenceProfileByProfileSIdDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -357,12 +364,9 @@ func (p *PrecedenceAPI) PrecedenceProfileDeletePrecedenceProfileByProfileSIdDele
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "DELETE", "/v5_0/precedence/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return p.client.doRequest(request, 204, nil)
+	request := NewRequest("DELETE", "/v5_0/precedence/{id}", true)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -391,14 +395,14 @@ type (
 // PrecedenceProfileGetPrecedenceProfileByProfileSIdGet: Use this API command to Get Precedence Profile by profile's ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *PrecedenceProfileGetPrecedenceProfileByProfileSIdGet200Response
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileGetPrecedenceProfileByProfileSIdGet(ctx *UserContext, id string) (*http.Response, *PrecedenceProfileGetPrecedenceProfileByProfileSIdGet200Response, error) {
+func (p *PrecedenceAPI) PrecedenceProfileGetPrecedenceProfileByProfileSIdGet(ctx context.Context, id string) (*http.Response, *PrecedenceProfileGetPrecedenceProfileByProfileSIdGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -407,13 +411,10 @@ func (p *PrecedenceAPI) PrecedenceProfileGetPrecedenceProfileByProfileSIdGet(ctx
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "GET", "/v5_0/precedence/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/precedence/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &PrecedenceProfileGetPrecedenceProfileByProfileSIdGet200Response{}
-	httpResponse, _, err := p.client.doRequest(request, 200, out)
+	httpResponse, _, err := p.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -427,7 +428,7 @@ type (
 // PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatch: Use this API command to Modify Precedence Profile by profile's ID.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatchRequest
 //
@@ -435,7 +436,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (p *PrecedenceAPI) PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatch(ctx *UserContext, id string, requestBody *PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatchRequest) (*http.Response, []byte, error) {
+func (p *PrecedenceAPI) PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatch(ctx context.Context, id string, requestBody *PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -444,11 +445,11 @@ func (p *PrecedenceAPI) PrecedenceProfileModifyPrecedenceProfileByProfileSIdPatc
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := p.client.newRequest(ctx, "PATCH", "/v5_0/precedence/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/precedence/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return p.client.doRequest(request, 200, nil)
+	request.SetPathParameter("id", id)
+	return p.client.Ensure(ctx, request, 200, nil)
 }

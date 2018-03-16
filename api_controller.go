@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type ControllerAPI struct {
@@ -49,20 +50,19 @@ type (
 // SystemSystemSummaryGet: Use this API command to retrieve the system summary.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemSystemSummaryGet200Response
 // - error: Error seen or nil if none
-func (c *ControllerAPI) SystemSystemSummaryGet(ctx *UserContext) (*http.Response, *SystemSystemSummaryGet200Response, error) {
+func (c *ControllerAPI) SystemSystemSummaryGet(ctx context.Context) (*http.Response, *SystemSystemSummaryGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/controller")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/controller", true)
 	out := &SystemSystemSummaryGet200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -244,7 +244,7 @@ type (
 // SystemSystemStatisticsGet: Use this API command to retrieve the system statistics.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (UUIDv4): Controller ID
 //
 // Optional Parameter Map:
@@ -255,7 +255,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - SystemSystemStatisticsGet200ResponseSlice
 // - error: Error seen or nil if none
-func (c *ControllerAPI) SystemSystemStatisticsGet(ctx *UserContext, id string, optionalParams map[string]string) (*http.Response, SystemSystemStatisticsGet200ResponseSlice, error) {
+func (c *ControllerAPI) SystemSystemStatisticsGet(ctx context.Context, id string, optionalParams map[string]string) (*http.Response, SystemSystemStatisticsGet200ResponseSlice, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -272,16 +272,11 @@ func (c *ControllerAPI) SystemSystemStatisticsGet(ctx *UserContext, id string, o
 	if !ok {
 		size = "32"
 	}
-	request := c.client.newRequest(ctx, "GET", "/v5_0/controller/{id}/statistics")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	request.queryParameters = map[string]string{
-		"interval": interval,
-		"size":     size,
-	}
+	request := NewRequest("GET", "/v5_0/controller/{id}/statistics", true)
+	request.SetPathParameter("id", id)
+	request.SetQueryParameter("interval", interval)
+	request.SetQueryParameter("size", size)
 	out := make(SystemSystemStatisticsGet200ResponseSlice, 0)
-	httpResponse, _, err := c.client.doRequest(request, 200, &(out))
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, &(out))
 	return httpResponse, out, err
 }

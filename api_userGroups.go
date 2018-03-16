@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type UserGroupsAPI struct {
@@ -26,21 +27,24 @@ type (
 // ScgUserGroupDeleteScgUserGroupDelete1: Delete multiple SCG user group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ScgUserGroupDeleteScgUserGroupDelete1Request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete1(ctx *UserContext, requestBody *ScgUserGroupDeleteScgUserGroupDelete1Request) (*http.Response, []byte, error) {
+func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete1(ctx context.Context, requestBody *ScgUserGroupDeleteScgUserGroupDelete1Request) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "DELETE", "/v5_0/userGroups")
-	request.body = requestBody
-	request.authenticated = true
-	return u.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/userGroups", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return u.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -110,22 +114,25 @@ type (
 // ScgUserGroupAddScgUserGroupPost: Add SCG user group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ScgUserGroupAddScgUserGroupPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupAddScgUserGroupPost201Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupAddScgUserGroupPost(ctx *UserContext, requestBody *ScgUserGroupAddScgUserGroupPostRequest) (*http.Response, *ScgUserGroupAddScgUserGroupPost201Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupAddScgUserGroupPost(ctx context.Context, requestBody *ScgUserGroupAddScgUserGroupPostRequest) (*http.Response, *ScgUserGroupAddScgUserGroupPost201Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "POST", "/v5_0/userGroups")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/userGroups", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ScgUserGroupAddScgUserGroupPost201Response{}
-	httpResponse, _, err := u.client.doRequest(request, 201, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 201, out)
 	return httpResponse, out, err
 }
 
@@ -162,20 +169,19 @@ type (
 // ScgUserGroupGetPermittedCategoriesOfCurrentUserGet: Get permitted categories of current user
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupGetPermittedCategoriesOfCurrentUserGet(ctx *UserContext) (*http.Response, *ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupGetPermittedCategoriesOfCurrentUserGet(ctx context.Context) (*http.Response, *ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/userGroups/currentUser/permissionCategories")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/userGroups/currentUser/permissionCategories", true)
 	out := &ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -361,22 +367,25 @@ type (
 // ScgUserGroupQueryUserGroupsPost: Query user groups
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *ScgUserGroupQueryUserGroupsPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupQueryUserGroupsPost200Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupQueryUserGroupsPost(ctx *UserContext, requestBody *ScgUserGroupQueryUserGroupsPostRequest) (*http.Response, *ScgUserGroupQueryUserGroupsPost200Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupQueryUserGroupsPost(ctx context.Context, requestBody *ScgUserGroupQueryUserGroupsPostRequest) (*http.Response, *ScgUserGroupQueryUserGroupsPost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "POST", "/v5_0/userGroups/query")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/userGroups/query", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &ScgUserGroupQueryUserGroupsPost200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -399,20 +408,19 @@ type (
 // ScgUserGroupGetPreDefinedRolesGet: Get pre-defined roles
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupGetPreDefinedRolesGet200Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupGetPreDefinedRolesGet(ctx *UserContext) (*http.Response, *ScgUserGroupGetPreDefinedRolesGet200Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupGetPreDefinedRolesGet(ctx context.Context) (*http.Response, *ScgUserGroupGetPreDefinedRolesGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/userGroups/roles")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/userGroups/roles", true)
 	out := &ScgUserGroupGetPreDefinedRolesGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -449,14 +457,14 @@ type (
 // ScgUserGroupGetPermissionItemsOfRoleGet: Get permission items of role
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - role (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupGetPermissionItemsOfRoleGet200Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupGetPermissionItemsOfRoleGet(ctx *UserContext, role string) (*http.Response, *ScgUserGroupGetPermissionItemsOfRoleGet200Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupGetPermissionItemsOfRoleGet(ctx context.Context, role string) (*http.Response, *ScgUserGroupGetPermissionItemsOfRoleGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -465,13 +473,10 @@ func (u *UserGroupsAPI) ScgUserGroupGetPermissionItemsOfRoleGet(ctx *UserContext
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"role\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/userGroups/roles/{role}/permissions")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"role": role,
-	}
+	request := NewRequest("GET", "/v5_0/userGroups/roles/{role}/permissions", true)
+	request.SetPathParameter("role", role)
 	out := &ScgUserGroupGetPermissionItemsOfRoleGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -484,14 +489,14 @@ type (
 // ScgUserGroupDeleteScgUserGroupDelete: Delete SCG user group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userGroupId (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupDeleteScgUserGroupDelete204Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete(ctx *UserContext, userGroupId string) (*http.Response, *ScgUserGroupDeleteScgUserGroupDelete204Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete(ctx context.Context, userGroupId string) (*http.Response, *ScgUserGroupDeleteScgUserGroupDelete204Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -500,13 +505,10 @@ func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete(ctx *UserContext, u
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userGroupId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "DELETE", "/v5_0/userGroups/{userGroupId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userGroupId": userGroupId,
-	}
+	request := NewRequest("DELETE", "/v5_0/userGroups/{userGroupId}", true)
+	request.SetPathParameter("userGroupId", userGroupId)
 	out := &ScgUserGroupDeleteScgUserGroupDelete204Response{}
-	httpResponse, _, err := u.client.doRequest(request, 204, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 204, out)
 	return httpResponse, out, err
 }
 
@@ -573,7 +575,7 @@ type (
 // ScgUserGroupGetScgUserGroupGet: Get SCG user group
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userGroupId (string)
 //
 // Optional Parameter Map:
@@ -583,7 +585,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *ScgUserGroupGetScgUserGroupGet200Response
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupGetScgUserGroupGet(ctx *UserContext, userGroupId string, optionalParams map[string]string) (*http.Response, *ScgUserGroupGetScgUserGroupGet200Response, error) {
+func (u *UserGroupsAPI) ScgUserGroupGetScgUserGroupGet(ctx context.Context, userGroupId string, optionalParams map[string]string) (*http.Response, *ScgUserGroupGetScgUserGroupGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -592,16 +594,11 @@ func (u *UserGroupsAPI) ScgUserGroupGetScgUserGroupGet(ctx *UserContext, userGro
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userGroupId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/userGroups/{userGroupId}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userGroupId": userGroupId,
-	}
-	request.queryParameters = map[string]string{
-		"includeUsers": optionalParams["includeUsers"],
-	}
+	request := NewRequest("GET", "/v5_0/userGroups/{userGroupId}", true)
+	request.SetPathParameter("userGroupId", userGroupId)
+	request.SetQueryParameter("includeUsers", optionalParams["includeUsers"])
 	out := &ScgUserGroupGetScgUserGroupGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -651,7 +648,7 @@ type (
 // ScgUserGroupUpdateUserGroupsPatch: Update user groups
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userGroupId (string)
 // - requestBody: *ScgUserGroupUpdateUserGroupsPatchRequest
 //
@@ -659,7 +656,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupUpdateUserGroupsPatch(ctx *UserContext, userGroupId string, requestBody *ScgUserGroupUpdateUserGroupsPatchRequest) (*http.Response, []byte, error) {
+func (u *UserGroupsAPI) ScgUserGroupUpdateUserGroupsPatch(ctx context.Context, userGroupId string, requestBody *ScgUserGroupUpdateUserGroupsPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -668,13 +665,13 @@ func (u *UserGroupsAPI) ScgUserGroupUpdateUserGroupsPatch(ctx *UserContext, user
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userGroupId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "PATCH", "/v5_0/userGroups/{userGroupId}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userGroupId": userGroupId,
+	request := NewRequest("PATCH", "/v5_0/userGroups/{userGroupId}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return u.client.doRequest(request, 204, nil)
+	request.SetPathParameter("userGroupId", userGroupId)
+	return u.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -693,7 +690,7 @@ type (
 // ScgUserGroupUpdatePermissionsOfUserGroupsPatch: Update permissions of user groups
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userGroupId (string)
 // - requestBody: *ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequestSlice
 //
@@ -701,7 +698,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupUpdatePermissionsOfUserGroupsPatch(ctx *UserContext, userGroupId string, requestBody ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequestSlice) (*http.Response, []byte, error) {
+func (u *UserGroupsAPI) ScgUserGroupUpdatePermissionsOfUserGroupsPatch(ctx context.Context, userGroupId string, requestBody ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -710,13 +707,13 @@ func (u *UserGroupsAPI) ScgUserGroupUpdatePermissionsOfUserGroupsPatch(ctx *User
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userGroupId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "PATCH", "/v5_0/userGroups/{userGroupId}/permissions")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userGroupId": userGroupId,
+	request := NewRequest("PATCH", "/v5_0/userGroups/{userGroupId}/permissions", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return u.client.doRequest(request, 204, nil)
+	request.SetPathParameter("userGroupId", userGroupId)
+	return u.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -731,7 +728,7 @@ type (
 // ScgUserGroupUpdatePermissionScopeOfUserGroupsPatch: Update permission scope of user groups
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userGroupId (string)
 // - requestBody: *ScgUserGroupUpdatePermissionScopeOfUserGroupsPatchRequestSlice
 //
@@ -739,7 +736,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupUpdatePermissionScopeOfUserGroupsPatch(ctx *UserContext, userGroupId string, requestBody ScgUserGroupUpdatePermissionScopeOfUserGroupsPatchRequestSlice) (*http.Response, []byte, error) {
+func (u *UserGroupsAPI) ScgUserGroupUpdatePermissionScopeOfUserGroupsPatch(ctx context.Context, userGroupId string, requestBody ScgUserGroupUpdatePermissionScopeOfUserGroupsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -748,13 +745,13 @@ func (u *UserGroupsAPI) ScgUserGroupUpdatePermissionScopeOfUserGroupsPatch(ctx *
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userGroupId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "PATCH", "/v5_0/userGroups/{userGroupId}/resourceGroups")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userGroupId": userGroupId,
+	request := NewRequest("PATCH", "/v5_0/userGroups/{userGroupId}/resourceGroups", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return u.client.doRequest(request, 204, nil)
+	request.SetPathParameter("userGroupId", userGroupId)
+	return u.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -784,7 +781,7 @@ type (
 // ScgUserGroupUpdateUserListOfUserGroupsPatch: Update user list of user groups
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - userGroupId (string)
 // - requestBody: *ScgUserGroupUpdateUserListOfUserGroupsPatchRequestSlice
 //
@@ -792,7 +789,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (u *UserGroupsAPI) ScgUserGroupUpdateUserListOfUserGroupsPatch(ctx *UserContext, userGroupId string, requestBody ScgUserGroupUpdateUserListOfUserGroupsPatchRequestSlice) (*http.Response, []byte, error) {
+func (u *UserGroupsAPI) ScgUserGroupUpdateUserListOfUserGroupsPatch(ctx context.Context, userGroupId string, requestBody ScgUserGroupUpdateUserListOfUserGroupsPatchRequestSlice) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -801,11 +798,11 @@ func (u *UserGroupsAPI) ScgUserGroupUpdateUserListOfUserGroupsPatch(ctx *UserCon
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"userGroupId\" failed validation check: %s", err)
 	}
-	request := u.client.newRequest(ctx, "PATCH", "/v5_0/userGroups/{userGroupId}/users")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"userGroupId": userGroupId,
+	request := NewRequest("PATCH", "/v5_0/userGroups/{userGroupId}/users", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return u.client.doRequest(request, 204, nil)
+	request.SetPathParameter("userGroupId", userGroupId)
+	return u.client.Ensure(ctx, request, 204, nil)
 }

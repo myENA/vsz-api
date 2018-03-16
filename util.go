@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func tryExtractSessionCookie(request *request, resp *http.Response) *http.Cookie {
+func tryExtractSessionCookie(request *Request, resp *http.Response) *http.Cookie {
 	if debug {
 		log.Printf("[request-%d] Attempting to locate \"%s\" cookie in: %+v", request.id, SessionCookieName, resp.Cookies())
 	}

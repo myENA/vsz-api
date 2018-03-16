@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type SCIAPI struct {
@@ -24,21 +25,24 @@ type (
 // SciModifyScienabledSettingPatch: Use this API command to modify SCI settings is enabled or not.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SciModifyScienabledSettingPatchRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciModifyScienabledSettingPatch(ctx *UserContext, requestBody *SciModifyScienabledSettingPatchRequest) (*http.Response, []byte, error) {
+func (s *SCIAPI) SciModifyScienabledSettingPatch(ctx context.Context, requestBody *SciModifyScienabledSettingPatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/sci/sciEnabled")
-	request.body = requestBody
-	request.authenticated = true
-	return s.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("PATCH", "/v5_0/sci/sciEnabled", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -60,20 +64,19 @@ type (
 // SciRetrieveSciAcceptedEventCodesGet: Use this API command to retrieve SciAcceptedEventCodes.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SciRetrieveSciAcceptedEventCodesGet200Response
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciRetrieveSciAcceptedEventCodesGet(ctx *UserContext) (*http.Response, *SciRetrieveSciAcceptedEventCodesGet200Response, error) {
+func (s *SCIAPI) SciRetrieveSciAcceptedEventCodesGet(ctx context.Context) (*http.Response, *SciRetrieveSciAcceptedEventCodesGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/sci/sciEventCode")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/sci/sciEventCode", true)
 	out := &SciRetrieveSciAcceptedEventCodesGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -88,21 +91,24 @@ type (
 // SciModifySciAcceptedEventCodesPost: Use this API command to modify SciAcceptedEventCodes.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SciModifySciAcceptedEventCodesPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciModifySciAcceptedEventCodesPost(ctx *UserContext, requestBody *SciModifySciAcceptedEventCodesPostRequest) (*http.Response, []byte, error) {
+func (s *SCIAPI) SciModifySciAcceptedEventCodesPost(ctx context.Context, requestBody *SciModifySciAcceptedEventCodesPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/sci/sciEventCode")
-	request.body = requestBody
-	request.authenticated = true
-	return s.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/sci/sciEventCode", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -120,21 +126,24 @@ type (
 // SciDeleteSciProfileListDelete: Use this API command to delete sciProfile list.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SciDeleteSciProfileListDeleteRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciDeleteSciProfileListDelete(ctx *UserContext, requestBody *SciDeleteSciProfileListDeleteRequest) (*http.Response, []byte, error) {
+func (s *SCIAPI) SciDeleteSciProfileListDelete(ctx context.Context, requestBody *SciDeleteSciProfileListDeleteRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/sci/sciProfile")
-	request.body = requestBody
-	request.authenticated = true
-	return s.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("DELETE", "/v5_0/sci/sciProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -160,20 +169,19 @@ type (
 // SciRetrieveSciProfileListGet: Use this API command to retrieve sciProfile list.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SciRetrieveSciProfileListGet200Response
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciRetrieveSciProfileListGet(ctx *UserContext) (*http.Response, *SciRetrieveSciProfileListGet200Response, error) {
+func (s *SCIAPI) SciRetrieveSciProfileListGet(ctx context.Context) (*http.Response, *SciRetrieveSciProfileListGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/sci/sciProfile")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/sci/sciProfile", true)
 	out := &SciRetrieveSciProfileListGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -195,22 +203,25 @@ type (
 // SciCreateSciProfilePost: Use this API command to create sciProfile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SciCreateSciProfilePostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SciCreateSciProfilePost200Response
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciCreateSciProfilePost(ctx *UserContext, requestBody *SciCreateSciProfilePostRequest) (*http.Response, *SciCreateSciProfilePost200Response, error) {
+func (s *SCIAPI) SciCreateSciProfilePost(ctx context.Context, requestBody *SciCreateSciProfilePostRequest) (*http.Response, *SciCreateSciProfilePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/sci/sciProfile")
-	request.body = requestBody
-	request.authenticated = true
+	var err error
+	request := NewRequest("POST", "/v5_0/sci/sciProfile", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
 	out := &SciCreateSciProfilePost200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -231,34 +242,37 @@ type (
 // SciModifySciPrioritiesPost: Use this API command to modify sciPriorities.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *SciModifySciPrioritiesPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciModifySciPrioritiesPost(ctx *UserContext, requestBody *SciModifySciPrioritiesPostRequest) (*http.Response, []byte, error) {
+func (s *SCIAPI) SciModifySciPrioritiesPost(ctx context.Context, requestBody *SciModifySciPrioritiesPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := s.client.newRequest(ctx, "POST", "/v5_0/sci/sciProfile/sciPriority")
-	request.body = requestBody
-	request.authenticated = true
-	return s.client.doRequest(request, 200, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/sci/sciProfile/sciPriority", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return s.client.Ensure(ctx, request, 200, nil)
 }
 
 // SciDeleteSciProfileDelete: Use this API command to delete sciProfile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciDeleteSciProfileDelete(ctx *UserContext, id string) (*http.Response, []byte, error) {
+func (s *SCIAPI) SciDeleteSciProfileDelete(ctx context.Context, id string) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -267,12 +281,9 @@ func (s *SCIAPI) SciDeleteSciProfileDelete(ctx *UserContext, id string) (*http.R
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "DELETE", "/v5_0/sci/sciProfile/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
-	return s.client.doRequest(request, 200, nil)
+	request := NewRequest("DELETE", "/v5_0/sci/sciProfile/{id}", true)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 200, nil)
 }
 
 type (
@@ -291,14 +302,14 @@ type (
 // SciRetrieveSciProfileGet: Use this API command to retrieve sciProfile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SciRetrieveSciProfileGet200Response
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciRetrieveSciProfileGet(ctx *UserContext, id string) (*http.Response, *SciRetrieveSciProfileGet200Response, error) {
+func (s *SCIAPI) SciRetrieveSciProfileGet(ctx context.Context, id string) (*http.Response, *SciRetrieveSciProfileGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -307,13 +318,10 @@ func (s *SCIAPI) SciRetrieveSciProfileGet(ctx *UserContext, id string) (*http.Re
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "GET", "/v5_0/sci/sciProfile/{id}")
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
-	}
+	request := NewRequest("GET", "/v5_0/sci/sciProfile/{id}", true)
+	request.SetPathParameter("id", id)
 	out := &SciRetrieveSciProfileGet200Response{}
-	httpResponse, _, err := s.client.doRequest(request, 200, out)
+	httpResponse, _, err := s.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -332,7 +340,7 @@ type (
 // SciModifySciProfilePatch: Use this API command to modify sciProfile.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - id (string)
 // - requestBody: *SciModifySciProfilePatchRequest
 //
@@ -340,7 +348,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (s *SCIAPI) SciModifySciProfilePatch(ctx *UserContext, id string, requestBody *SciModifySciProfilePatchRequest) (*http.Response, []byte, error) {
+func (s *SCIAPI) SciModifySciProfilePatch(ctx context.Context, id string, requestBody *SciModifySciProfilePatchRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -349,11 +357,11 @@ func (s *SCIAPI) SciModifySciProfilePatch(ctx *UserContext, id string, requestBo
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"id\" failed validation check: %s", err)
 	}
-	request := s.client.newRequest(ctx, "PATCH", "/v5_0/sci/sciProfile/{id}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"id": id,
+	request := NewRequest("PATCH", "/v5_0/sci/sciProfile/{id}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
-	return s.client.doRequest(request, 200, nil)
+	request.SetPathParameter("id", id)
+	return s.client.Ensure(ctx, request, 200, nil)
 }

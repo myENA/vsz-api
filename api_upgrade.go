@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/myENA/vsz-api/validators"
@@ -8,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type UpgradeAPI struct {
@@ -50,20 +51,19 @@ type (
 // SystemUpgradeSystemUpgradePost: Use this API command to do system upgrade
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeSystemUpgradePost200Response
 // - error: Error seen or nil if none
-func (u *UpgradeAPI) SystemUpgradeSystemUpgradePost(ctx *UserContext) (*http.Response, *SystemUpgradeSystemUpgradePost200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeSystemUpgradePost(ctx context.Context) (*http.Response, *SystemUpgradeSystemUpgradePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "POST", "/v5_0/upgrade")
-	request.authenticated = true
+	request := NewRequest("POST", "/v5_0/upgrade", true)
 	out := &SystemUpgradeSystemUpgradePost200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -95,7 +95,7 @@ type (
 // SystemUpgradeRetriveUpgradeHistoryGet: Use this API command to retrive upgrade history
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Optional Parameter Map:
 // - index (integer): The index of the first entry to be retrieved.
@@ -106,7 +106,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeRetriveUpgradeHistoryGet200Response
 // - error: Error seen or nil if none
-func (u *UpgradeAPI) SystemUpgradeRetriveUpgradeHistoryGet(ctx *UserContext, optionalParams map[string]string) (*http.Response, *SystemUpgradeRetriveUpgradeHistoryGet200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeRetriveUpgradeHistoryGet(ctx context.Context, optionalParams map[string]string) (*http.Response, *SystemUpgradeRetriveUpgradeHistoryGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -129,15 +129,12 @@ func (u *UpgradeAPI) SystemUpgradeRetriveUpgradeHistoryGet(ctx *UserContext, opt
 	} else {
 		listSize = "100"
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/upgrade/history")
-	request.authenticated = true
-	request.queryParameters = map[string]string{
-		"index":    index,
-		"listSize": listSize,
-		"timezone": optionalParams["timezone"],
-	}
+	request := NewRequest("GET", "/v5_0/upgrade/history", true)
+	request.SetQueryParameter("index", index)
+	request.SetQueryParameter("listSize", listSize)
+	request.SetQueryParameter("timezone", optionalParams["timezone"])
 	out := &SystemUpgradeRetriveUpgradeHistoryGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -191,20 +188,19 @@ type (
 // SystemUpgradeRetriveUploadPatchInfoGet: Use this API command to retrive upload file Info
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeRetriveUploadPatchInfoGet200Response
 // - error: Error seen or nil if none
-func (u *UpgradeAPI) SystemUpgradeRetriveUploadPatchInfoGet(ctx *UserContext) (*http.Response, *SystemUpgradeRetriveUploadPatchInfoGet200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeRetriveUploadPatchInfoGet(ctx context.Context) (*http.Response, *SystemUpgradeRetriveUploadPatchInfoGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/upgrade/patch")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/upgrade/patch", true)
 	out := &SystemUpgradeRetriveUploadPatchInfoGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -244,20 +240,19 @@ type (
 // SystemUpgradeRetriveClusterProgressStatusGet: Use this API command to retrive cluster progress status
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeRetriveClusterProgressStatusGet200Response
 // - error: Error seen or nil if none
-func (u *UpgradeAPI) SystemUpgradeRetriveClusterProgressStatusGet(ctx *UserContext) (*http.Response, *SystemUpgradeRetriveClusterProgressStatusGet200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeRetriveClusterProgressStatusGet(ctx context.Context) (*http.Response, *SystemUpgradeRetriveClusterProgressStatusGet200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "GET", "/v5_0/upgrade/status")
-	request.authenticated = true
+	request := NewRequest("GET", "/v5_0/upgrade/status", true)
 	out := &SystemUpgradeRetriveClusterProgressStatusGet200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -297,19 +292,18 @@ type (
 // SystemUpgradeUploadFilePost: Use this API command to upload patch file
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - *SystemUpgradeUploadFilePost200Response
 // - error: Error seen or nil if none
-func (u *UpgradeAPI) SystemUpgradeUploadFilePost(ctx *UserContext) (*http.Response, *SystemUpgradeUploadFilePost200Response, error) {
+func (u *UpgradeAPI) SystemUpgradeUploadFilePost(ctx context.Context) (*http.Response, *SystemUpgradeUploadFilePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := u.client.newRequest(ctx, "POST", "/v5_0/upgrade/upload")
-	request.authenticated = true
+	request := NewRequest("POST", "/v5_0/upgrade/upload", true)
 	out := &SystemUpgradeUploadFilePost200Response{}
-	httpResponse, _, err := u.client.doRequest(request, 200, out)
+	httpResponse, _, err := u.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }

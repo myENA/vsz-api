@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-15T14:33:32-0500
+// Generation Date: 2018-03-16T16:29:52-0500
 // API Version: v5
 
 type ClientsAPI struct {
@@ -31,21 +32,24 @@ type (
 // WirelessClientBulkDeauthClientPost: Use this API command to bulk deauth client.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *WirelessClientBulkDeauthClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClientsAPI) WirelessClientBulkDeauthClientPost(ctx *UserContext, requestBody *WirelessClientBulkDeauthClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientBulkDeauthClientPost(ctx context.Context, requestBody *WirelessClientBulkDeauthClientPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/bulkDeauth")
-	request.body = requestBody
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/clients/bulkDeauth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -64,21 +68,24 @@ type (
 // WirelessClientBulkDisconnectClientPost: Use this API command to bulk disconnect client.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *WirelessClientBulkDisconnectClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClientsAPI) WirelessClientBulkDisconnectClientPost(ctx *UserContext, requestBody *WirelessClientBulkDisconnectClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientBulkDisconnectClientPost(ctx context.Context, requestBody *WirelessClientBulkDisconnectClientPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/bulkDisconnect")
-	request.body = requestBody
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/clients/bulkDisconnect", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -246,7 +253,7 @@ type (
 // WirelessClientQueryClientByWlanNamePost: Use this API command to query client by wlan name.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - wlanname (string)
 // - requestBody: *WirelessClientQueryClientByWlanNamePostRequest
 //
@@ -254,7 +261,7 @@ type (
 // - *http.Response: HTTP Response or nil on error
 // - *WirelessClientQueryClientByWlanNamePost200Response
 // - error: Error seen or nil if none
-func (c *ClientsAPI) WirelessClientQueryClientByWlanNamePost(ctx *UserContext, wlanname string, requestBody *WirelessClientQueryClientByWlanNamePostRequest) (*http.Response, *WirelessClientQueryClientByWlanNamePost200Response, error) {
+func (c *ClientsAPI) WirelessClientQueryClientByWlanNamePost(ctx context.Context, wlanname string, requestBody *WirelessClientQueryClientByWlanNamePostRequest) (*http.Response, *WirelessClientQueryClientByWlanNamePost200Response, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
@@ -263,14 +270,14 @@ func (c *ClientsAPI) WirelessClientQueryClientByWlanNamePost(ctx *UserContext, w
 	if nil != err {
 		return nil, nil, fmt.Errorf("parameter \"wlanname\" failed validation check: %s", err)
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/byWlanName/{wlanname}")
-	request.body = requestBody
-	request.authenticated = true
-	request.pathParameters = map[string]string{
-		"wlanname": wlanname,
+	request := NewRequest("POST", "/v5_0/clients/byWlanName/{wlanname}", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
 	}
+	request.SetPathParameter("wlanname", wlanname)
 	out := &WirelessClientQueryClientByWlanNamePost200Response{}
-	httpResponse, _, err := c.client.doRequest(request, 200, out)
+	httpResponse, _, err := c.client.Ensure(ctx, request, 200, out)
 	return httpResponse, out, err
 }
 
@@ -284,21 +291,24 @@ type (
 // WirelessClientDeauthClientPost: Use this API command to deauth client.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *WirelessClientDeauthClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClientsAPI) WirelessClientDeauthClientPost(ctx *UserContext, requestBody *WirelessClientDeauthClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientDeauthClientPost(ctx context.Context, requestBody *WirelessClientDeauthClientPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/deauth")
-	request.body = requestBody
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/clients/deauth", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c.client.Ensure(ctx, request, 204, nil)
 }
 
 type (
@@ -311,19 +321,22 @@ type (
 // WirelessClientDisconnectClientPost: Use this API command to disconnect client.
 //
 // Required Parameters:
-// - ctx (*UserContext): Context to use for this request
+// - ctx (context.Context): Context to use for this request
 // - requestBody: *WirelessClientDisconnectClientPostRequest
 //
 // Returns:
 // - *http.Response: HTTP Response or nil on error
 // - []byte: Any bytes to be found in response body
 // - error: Error seen or nil if none
-func (c *ClientsAPI) WirelessClientDisconnectClientPost(ctx *UserContext, requestBody *WirelessClientDisconnectClientPostRequest) (*http.Response, []byte, error) {
+func (c *ClientsAPI) WirelessClientDisconnectClientPost(ctx context.Context, requestBody *WirelessClientDisconnectClientPostRequest) (*http.Response, []byte, error) {
 	if ctx == nil {
 		return nil, nil, errors.New("user context cannot be nil")
 	}
-	request := c.client.newRequest(ctx, "POST", "/v5_0/clients/disconnect")
-	request.body = requestBody
-	request.authenticated = true
-	return c.client.doRequest(request, 204, nil)
+	var err error
+	request := NewRequest("POST", "/v5_0/clients/disconnect", true)
+	err = request.SetBodyModel(requestBody)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c.client.Ensure(ctx, request, 204, nil)
 }
