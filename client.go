@@ -94,12 +94,14 @@ func (c *Client) Config() Config {
 }
 
 // doTest will attempt to execute the http request, testing the response to determine if we saw a malformation
-func (c *Client) doTest(req *http.Request) (*http.Response, error, bool) {
+func (c *Client) doTest(req *http.Request) (*http.Response, bool, error) {
 	resp, err := c.client.Do(req)
-	return resp, err, resp == nil && err != nil && (err == context.DeadlineExceeded || strings.HasPrefix(err.Error(), "malformed "))
+	return resp,
+		resp == nil && err != nil && (err == context.DeadlineExceeded || strings.HasPrefix(err.Error(), "malformed ")),
+		err
 }
 
-func (c *Client) doTry(request *request, tries int) (*http.Response, error) {
+func (c *Client) doTry(request *request, tries int) (*http.Response, CookieCAS, error) {
 	var httpRequest *http.Request
 	var httpResponse *http.Response
 	var cookie *http.Cookie
@@ -108,7 +110,7 @@ func (c *Client) doTry(request *request, tries int) (*http.Response, error) {
 	var err error
 
 	if httpRequest, err = request.toHTTP(); err != nil {
-		return nil, err
+		return nil, cas, err
 	}
 
 	// if this api requires an active auth session, try to locate cookie
@@ -117,19 +119,19 @@ func (c *Client) doTry(request *request, tries int) (*http.Response, error) {
 			// if cookie is not set, attempt to refresh
 			if _, err = request.ctx.RefreshCookie(c, cas); err != nil {
 				// if refresh fails, bail out
-				return nil, err
+				return nil, cas, err
 			}
 		}
 		// attempt to locate cookie one more time after refresh
 		if cookie, cas = request.ctx.Cookie(); cookie == nil {
 			// if cookie still nil, bail out
-			return nil, fmt.Errorf("unable to locate cookie for user %s", request.ctx.Username())
+			return nil, cas, fmt.Errorf("unable to locate cookie for user %s", request.ctx.Username())
 		}
 		// otherwise add cookie to request
 		httpRequest.AddCookie(cookie)
 	}
 
-	if httpResponse, err, malformed = c.doTest(httpRequest); malformed {
+	if httpResponse, malformed, err = c.doTest(httpRequest); malformed {
 		if tries < 1 {
 			log.Printf("ERROR: Query \"%s\" returned \"%s\", which may indicate a malformed response.  Trying again...", request.uri, err)
 			return c.doTry(request, tries+1)
@@ -137,7 +139,7 @@ func (c *Client) doTry(request *request, tries int) (*http.Response, error) {
 		log.Printf("ERROR: Query \"%s\" returned \"%s\", which may indicate a malformed response.  We have tried %d times, will not try again", request.uri, err, tries)
 	}
 
-	return httpResponse, err
+	return httpResponse, cas, err
 }
 
 // doRequest will attempt to execute a VSZ API request.
@@ -153,7 +155,7 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 	var buff []byte
 	var err error
 
-	if httpResponse, err = c.doTry(request, 0); err != nil {
+	if httpResponse, cas, err = c.doTry(request, 0); err != nil {
 		if httpResponse != nil {
 			httpResponse.Body.Close()
 		}
@@ -179,7 +181,7 @@ func (c *Client) doRequest(request *request, successCode int, out interface{}) (
 			return nil, nil, fmt.Errorf("unable to refresh cookief or user %s", request.ctx.Username())
 		}
 		// try once final time to execute the request...
-		if httpResponse, err = c.doTry(request, 0); err != nil {
+		if httpResponse, _, err = c.doTry(request, 0); err != nil {
 			if httpResponse != nil {
 				httpResponse.Body.Close()
 			}

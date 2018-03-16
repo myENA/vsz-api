@@ -100,6 +100,13 @@ func (c *UserContext) Password() string {
 	return password
 }
 
+// SetPassword will update the password stored within this user context
+func (c *UserContext) SetPassword(password string) {
+	c.mu.Lock()
+	c.password = password
+	c.mu.Unlock()
+}
+
 // RequestTTL returns the max duration a request is allowed to live for this user context
 func (c *UserContext) RequestTTL() time.Duration {
 	c.mu.RLock()

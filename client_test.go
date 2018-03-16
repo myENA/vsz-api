@@ -74,4 +74,15 @@ func TestClient(t *testing.T) {
 		t.FailNow()
 	}
 
+	_, _, err = client.Session().LoginSessionLogoffDelete(ctx)
+	if err != nil {
+		t.Logf("Error: %s", err)
+		t.FailNow()
+	}
+
+	_, _, err = client.Session().LoginSessionRetrieveGet(ctx)
+	if err != nil {
+		t.Logf("Error: %s", err)
+		t.FailNow()
+	}
 }
