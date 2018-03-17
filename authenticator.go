@@ -71,7 +71,6 @@ func (pa *PasswordAuthenticator) Password() string {
 	return pa.password
 }
 
-// Decorate will attempt to inject the token-bearing cookie into the request, if one has been defined.
 func (pa *PasswordAuthenticator) Decorate(httpRequest *http.Request) (AuthCAS, error) {
 	if httpRequest == nil {
 		// TODO: yell a bit more if the request is nil?
@@ -90,7 +89,6 @@ func (pa *PasswordAuthenticator) Decorate(httpRequest *http.Request) (AuthCAS, e
 	return AuthCAS(cas), errors.New("cookie requires refresh")
 }
 
-// Refresh has the following logi
 func (pa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, error) {
 	if client == nil {
 		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("client cannot be nil")
