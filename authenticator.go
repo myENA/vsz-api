@@ -12,12 +12,35 @@ import (
 type AuthCAS uint64
 
 type Authenticator interface {
-	// Decorate should do whatever is needed to decorate the request with whatever authentication token is desired
-	// if decoration fails, Refresh will be called, being given the CAS returned by Decorate.
+	// Decorate must do one of two things:
+	//
+	// If the internal state of this authenticator is such that it currently has whatever is needed to modify a given
+	// request with the appropriate authentication cookie / token / header / etc., then it must do so, returning the current
+	// CAS and a nil error
+	//
+	// If the internal state is such that decoration CANNOT happen, it must return the current CAS and an error, describing
+	// the reason it cannot decorate the request.  If the error is not nil, Refresh will be called with the CAS value
+	// returned by this method.
+	//
+	// In all cases, the current CAS must be returned.
 	Decorate(*http.Request) (AuthCAS, error)
+
+	// Refresh must doe one of two things:
+	//
+	// If the provided CAS value is current, it must assume that its current state is no longer valid and try to do what
+	// i sneeded to get back to a state that Decorate is able to do what it needs to do.
+	//
+	// If the provided CAS value is NOT equal to the current state, it must assume that a refresh attempt has already
+	// been made in another process, and just return the current CAS value with no error.
+	//
+	// The client will only attempt a refresh once per execution, so if Decorate STILL returns an error at this point,
+	// the client will return the Decorate error as the error for the entire request, as it was unable to perform its
+	// task.
 	Refresh(*Client, AuthCAS) (AuthCAS, error)
 }
 
+// PasswordAuthenticator is a simple example implementation of an Authenticator that will decorate a given request
+// with a session id bearing cookie if one exists, and attempt to create one if it doesn't.
 type PasswordAuthenticator struct {
 	username   string
 	password   string
@@ -31,55 +54,58 @@ type PasswordAuthenticator struct {
 }
 
 func NewPasswordAuthenticator(username, password string, cookieTTL time.Duration, requestTTL time.Duration) *PasswordAuthenticator {
-	csa := &PasswordAuthenticator{
+	pa := &PasswordAuthenticator{
 		username:   username,
 		password:   password,
 		cookieTTL:  cookieTTL,
 		requestTTL: requestTTL,
 	}
-	return csa
+	return pa
 }
 
-func (csa *PasswordAuthenticator) Username() string {
-	return csa.username
+func (pa *PasswordAuthenticator) Username() string {
+	return pa.username
 }
 
-func (csa *PasswordAuthenticator) Password() string {
-	return csa.password
+func (pa *PasswordAuthenticator) Password() string {
+	return pa.password
 }
 
-func (csa *PasswordAuthenticator) Decorate(httpRequest *http.Request) (AuthCAS, error) {
+// Decorate will attempt to inject the token-bearing cookie into the request, if one has been defined.
+func (pa *PasswordAuthenticator) Decorate(httpRequest *http.Request) (AuthCAS, error) {
 	if httpRequest == nil {
-		return 0, errors.New("httpRequest cannot be nil")
+		// TODO: yell a bit more if the request is nil?
+		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("httpRequest cannot be nil")
 	}
-	csa.cookieMu.RLock()
-	cas := atomic.LoadUint64(&csa.cas)
-	cookie := csa.cookie
+	pa.cookieMu.RLock()
+	cas := atomic.LoadUint64(&pa.cas)
+	cookie := pa.cookie
 	// TODO improve efficiency of this?
-	if cookie != nil && !csa.refreshed.IsZero() && csa.refreshed.Add(csa.cookieTTL).After(time.Now()) {
+	if cookie != nil && !pa.refreshed.IsZero() && pa.refreshed.Add(pa.cookieTTL).After(time.Now()) {
 		httpRequest.AddCookie(cookie)
-		csa.cookieMu.RUnlock()
+		pa.cookieMu.RUnlock()
 		return AuthCAS(cas), nil
 	}
-	csa.cookieMu.RUnlock()
+	pa.cookieMu.RUnlock()
 	return AuthCAS(cas), errors.New("cookie requires refresh")
 }
 
-func (csa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, error) {
+// Refresh has the following logi
+func (pa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, error) {
 	if client == nil {
-		return AuthCAS(atomic.LoadUint64(&csa.cas)), errors.New("client cannot be nil")
+		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("client cannot be nil")
 	}
-	csa.cookieMu.Lock()
-	ccas := atomic.LoadUint64(&csa.cas)
+	pa.cookieMu.Lock()
+	ccas := atomic.LoadUint64(&pa.cas)
 	if ccas != uint64(cas) {
 		// if the passed in CAS value does not match the currently stored one, assume somebody else has modified the
 		// cookie and just return the current cas
-		csa.cookieMu.Unlock()
+		pa.cookieMu.Unlock()
 		return AuthCAS(ccas), nil
 	}
-	username := csa.username
-	password := csa.password
-	ctx, cancel := context.WithTimeout(context.Background(), csa.requestTTL)
+	username := pa.username
+	password := pa.password
+	ctx, cancel := context.WithTimeout(context.Background(), pa.requestTTL)
 	defer cancel()
 	request := NewRequest("POST", "/v5_0/session", false)
 	err := request.SetBodyModel(&LoginSessionLogonPostRequest{
@@ -87,28 +113,28 @@ func (csa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS,
 		Password: &password,
 	})
 	if err != nil {
-		csa.cookie = nil
-		ncas := atomic.AddUint64(&csa.cas, 1)
-		csa.cookieMu.Unlock()
+		pa.cookie = nil
+		ncas := atomic.AddUint64(&pa.cas, 1)
+		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), err
 	}
 	resp, _, err := client.Ensure(ctx, request, 200, nil)
 	if err != nil {
-		csa.cookie = nil
-		ncas := atomic.AddUint64(&csa.cas, 1)
-		csa.cookieMu.Unlock()
+		pa.cookie = nil
+		ncas := atomic.AddUint64(&pa.cas, 1)
+		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), err
 	}
 	cookie := tryExtractSessionCookie(request, resp)
 	if cookie == nil {
-		csa.cookie = nil
-		ncas := atomic.AddUint64(&csa.cas, 1)
-		csa.cookieMu.Unlock()
+		pa.cookie = nil
+		ncas := atomic.AddUint64(&pa.cas, 1)
+		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), errors.New("unable to locate cookie in response")
 	}
-	csa.cookie = cookie
-	csa.refreshed = time.Now()
-	ncas := atomic.AddUint64(&csa.cas, 1)
-	csa.cookieMu.Unlock()
+	pa.cookie = cookie
+	pa.refreshed = time.Now()
+	ncas := atomic.AddUint64(&pa.cas, 1)
+	pa.cookieMu.Unlock()
 	return AuthCAS(ncas), nil
 }
