@@ -150,7 +150,7 @@ func (pa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, 
 		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), err
 	}
-	cookie := tryExtractSessionCookie(request, resp)
+	cookie := TryExtractSessionCookie(request, resp)
 	if cookie == nil {
 		pa.cookie = nil
 		ncas := atomic.AddUint64(&pa.cas, 1)
