@@ -1,17 +1,19 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func tryExtractSessionCookie(request *Request, resp *http.Response) *http.Cookie {
 	if debug {
-		log.Printf("[request-%d] Attempting to locate \"%s\" cookie in: %+v", request.id, SessionCookieName, resp.Cookies())
+		log.Printf("[request-%d] Attempting to locate \"%s\" cookie in: %+v", request.id, SessionCookieToken, resp.Cookies())
 	}
 	for _, cookie := range resp.Cookies() {
-		if cookie.Name == SessionCookieName {
+		if cookie.Name == SessionCookieToken {
 			return cookie
 		}
 	}
@@ -34,4 +36,13 @@ func buildQueryParamString(queryParams map[string]string) string {
 	} else {
 		return ""
 	}
+}
+
+func fetchContextTTL(ctx context.Context) time.Duration {
+	if ctx.Err() == nil {
+		if ctxTime, ok := ctx.Deadline(); ok {
+			return ctxTime.Sub(time.Now())
+		}
+	}
+	return 0
 }

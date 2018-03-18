@@ -8,15 +8,12 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"strings"
 	"time"
 )
 
 const (
 	DefaultScheme     = "https"
 	DefaultPathPrefix = "api/public"
-
-	SessionCookieName = "JSESSIONID"
 )
 
 type Config struct {
@@ -95,36 +92,22 @@ func (c *Client) ClientConfig() Config {
 }
 
 func (c *Client) Do(ctx context.Context, request *Request) (*http.Response, error) {
-	var httpResponse *http.Response
-	var ctxTTL time.Duration
-	var err error
-	if ctxTime, ok := ctx.Deadline(); ok && ctx.Err() == nil {
-		ctxTTL = ctxTime.Sub(time.Now())
-	}
-	if httpResponse, _, err = c.tryDo(ctx, ctxTTL, request, 0); err != nil {
-		if httpResponse != nil {
-			httpResponse.Body.Close()
-		}
-		if debug {
-			log.Printf("[request-%d] Request failed: %s", request.id, err)
-		}
-		return nil, err
-	}
-	if debug {
-		log.Printf("[request-%d] Received \"%s\"", request.id, httpResponse.Status)
-	}
+	_, _, httpResponse, err := c.do(ctx, request)
 	return httpResponse, err
 }
 
-// Ensure will attempt to execute the request, further attempting to unmarshal the response into a pointer provided
-// to "out" given that the response status code matches that passed as "successCode". Failing that, this method
-// will attempt to unmarshal the seen response into an Error struct
+// Ensure will attempt to execute the request, initiating an Authenticator Invalidate -> Refresh loop if a 401 is seen.
+//
+// If the "success" status code is seen, it will further attempt to unmarshal the response into a pointer provided
+// to "out". Failing that, this method will attempt to unmarshal the seen response into an VSZError struct
 func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, out interface{}) (*http.Response, []byte, error) {
 	var httpResponse *http.Response
+	var cas AuthCAS
+	var ctxTTL time.Duration
 	var buff []byte
 	var err error
 
-	if httpResponse, err = c.Do(ctx, request); err != nil {
+	if ctxTTL, cas, httpResponse, err = c.do(ctx, request); err != nil {
 		return nil, nil, err
 	}
 
@@ -140,7 +123,24 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 		log.Printf("[request-%d] Response body read and closed", request.id)
 	}
 
-	// if success :D
+	// check for and attempt to handle 401 unauthorized
+	if httpResponse.StatusCode == 401 && request.auth {
+		if debug {
+			log.Printf("[request-%d] Request returned 401, will try invalidate -> refresh loop once", request.id)
+		}
+		// TODO: is this logic ok...?
+		if httpResponse, _, err = c.handleUnauthorized(ctxTTL, request, httpResponse, cas); err != nil {
+			if httpResponse != nil {
+				httpResponse.Body.Close()
+			}
+			if debug {
+				log.Printf("[request-%d] Saw error after invalidate -> refresh loop: %s", request.id, err)
+			}
+			return nil, nil, err
+		}
+	}
+
+	// test for "success"
 	if httpResponse.StatusCode == successCode {
 		if debug {
 			log.Printf("[request-%d] Response code matched expected: %d", request.id, successCode)
@@ -169,8 +169,8 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 		log.Printf("[request-%d] Attempting to unmarshal into error...", request.id)
 	}
 
-	// if fail D:
-	err2 := &Error{}
+	// finally, try to unmarshal response body into Error type
+	err2 := &VSZError{}
 	err = json.Unmarshal(buff, err2)
 	if err != nil {
 		log.Printf("[request-%d] ERROR: Unable to unmarshal response: %s", request.id, err)
@@ -190,31 +190,31 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 	return httpResponse, buff, err
 }
 
-// doTest will attempt to execute the http request, testing the response to determine if we saw a malformation
-func (c *Client) doTest(req *http.Request) (*http.Response, bool, error) {
-	resp, err := c.client.Do(req)
-	return resp,
-		resp == nil && err != nil && (err == context.DeadlineExceeded || strings.HasPrefix(err.Error(), "malformed ")),
-		err
+func (c *Client) handleUnauthorized(ctxTTL time.Duration, request *Request, httpResponse *http.Response, cas AuthCAS) (*http.Response, AuthCAS, error) {
+	var err error
+	// attempt to invalidate
+	if cas, err = c.auth.Invalidate(cas); err != nil {
+		if debug {
+			log.Printf("[request-%d] Invalidate failed: %s", request.id, err)
+		}
+		return httpResponse, cas, err
+	} else if debug {
+		log.Printf("[request-%d] Invalidate succeeded, calling Refresh...", request.id)
+	}
+	// close previous attempt's body
+	httpResponse.Body.Close()
+	return c.tryDo(nil, ctxTTL, request)
 }
 
-func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Request, tries int) (*http.Response, AuthCAS, error) {
+func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Request) (*http.Response, AuthCAS, error) {
 	var httpRequest *http.Request
 	var httpResponse *http.Response
-	var malformed bool
 	var cas AuthCAS
 	var cancel context.CancelFunc
 	var err error
 
-	// TODO: this is pretty inefficient, think of something better.
-	defer func() {
-		if cancel != nil {
-			cancel()
-		}
-	}()
-
 	if debug {
-		log.Printf("[request-%d] Attempt %d", request.id, tries+1)
+		log.Printf("[request-%d] Handling...", request.id)
 	}
 
 	if ctx == nil {
@@ -226,6 +226,7 @@ func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Reque
 				log.Printf("[request-%d] Using %s ttl on retry attempt", request.id, ctxTTL)
 			}
 			ctx, cancel = context.WithTimeout(context.Background(), ctxTTL)
+			defer cancel()
 		}
 	}
 
@@ -268,13 +269,27 @@ func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Reque
 	if debug {
 		log.Printf("[request-%d] Executing...", request.id)
 	}
-	if httpResponse, malformed, err = c.doTest(httpRequest); malformed {
-		if tries < 1 {
-			log.Printf("[request-%d] ERROR: Saw \"%s\", which may indicate a malformed response.  Trying again...", request.id, err)
-			return c.tryDo(nil, ctxTTL, request, tries+1)
-		}
-		log.Printf("[request-%d] ERROR: Saw \"%s\", which may indicate a malformed response.  We have tried %d times, will not try again", request.id, err, tries)
-	}
 
+	httpResponse, err = c.client.Do(httpRequest)
 	return httpResponse, cas, err
+}
+
+func (c *Client) do(ctx context.Context, request *Request) (time.Duration, AuthCAS, *http.Response, error) {
+	var httpResponse *http.Response
+	var cas AuthCAS
+	var err error
+	ctxTTL := fetchContextTTL(ctx)
+	if httpResponse, cas, err = c.tryDo(ctx, ctxTTL, request); err != nil {
+		if httpResponse != nil {
+			httpResponse.Body.Close()
+		}
+		if debug {
+			log.Printf("[request-%d] Request failed: %s", request.id, err)
+		}
+		return ctxTTL, cas, nil, err
+	}
+	if debug {
+		log.Printf("[request-%d] Received \"%s\"", request.id, httpResponse.Status)
+	}
+	return ctxTTL, cas, httpResponse, err
 }

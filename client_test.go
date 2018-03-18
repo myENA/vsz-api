@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"sync"
 	"testing"
 	"time"
 )
@@ -76,27 +77,73 @@ func TestClient(t *testing.T) {
 
 	client := testClient(t)
 
-	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
-	_, _, err := client.RuckusZones().RuckusWirelessApZoneRetrieveListGet(ctx, nil)
-	cancel()
-	if err != nil {
-		t.Logf("Error: %s", err)
-		t.FailNow()
-	}
+	t.Run("Synchronous", func(t *testing.T) {
+		ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+		_, _, err := client.RuckusZones().RuckusWirelessApZoneRetrieveListGet(ctx, nil)
+		cancel()
+		if err != nil {
+			t.Logf("Error: %s", err)
+			t.FailNow()
+		}
 
-	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
-	_, _, err = client.Session().LoginSessionLogoffDelete(ctx)
-	cancel()
-	if err != nil {
-		t.Logf("Error: %s", err)
-		t.FailNow()
-	}
+		ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+		_, _, err = client.Session().LoginSessionLogoffDelete(ctx)
+		cancel()
+		if err != nil {
+			t.Logf("Error: %s", err)
+			t.FailNow()
+		}
 
-	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
-	_, errBody, err := client.Session().LoginSessionRetrieveGet(ctx)
-	cancel()
-	if err == nil {
-		t.Logf("Expected error, saw success with %+v", errBody)
-		t.FailNow()
-	}
+		ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+		_, _, err = client.Session().LoginSessionRetrieveGet(ctx)
+		cancel()
+		if err != nil {
+			t.Logf("Error: %s", err)
+			t.FailNow()
+		}
+	})
+
+	// This is mostly here to find issues traceable with -race, and to test the robustness of your vsz setup :)
+	t.Run("Asynchronous", func(t *testing.T) {
+		start := make(chan struct{})
+
+		wg := new(sync.WaitGroup)
+		wg.Add(10)
+		for i := 0; i < 10; i++ {
+			go func(routine int, client *api.Client, start <-chan struct{}) {
+				var ctx context.Context
+				var cancel context.CancelFunc
+				var err error
+				<-start
+				for i := 0; i < 5; i++ {
+					if t.Failed() {
+						break
+					}
+					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+					_, _, err = client.RuckusZones().RuckusWirelessApZoneRetrieveListGet(ctx, nil)
+					cancel()
+					if err != nil {
+						t.Logf("Routine %d loop %d query 1 saw error: %+v", routine, i, err)
+					}
+
+					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+					_, _, err = client.Session().LoginSessionLogoffDelete(ctx)
+					cancel()
+					if err != nil {
+						t.Logf("Routine %d loop %d query 2 saw error: %+v", routine, i, err)
+					}
+					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+					_, _, err = client.Session().LoginSessionRetrieveGet(ctx)
+					cancel()
+					if err != nil {
+						t.Logf("Routine %d loop %d query 3 saw error: %+v", routine, i, err)
+					}
+				}
+				wg.Done()
+			}(i, client, start)
+		}
+
+		close(start)
+		wg.Wait()
+	})
 }
