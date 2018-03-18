@@ -59,8 +59,7 @@ type PasswordAuthenticator struct {
 	password   string
 	requestTTL time.Duration
 
-	cas uint64
-	// if fail D:
+	cas       uint64
 	refreshed time.Time
 	cookieTTL time.Duration
 	cookie    *http.Cookie
