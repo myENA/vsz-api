@@ -13,26 +13,35 @@ import (
 
 const (
 	DefaultScheme     = "https"
-	DefaultPathPrefix = "api/public"
+	DefaultPort       = 7443
+	DefaultPathPrefix = "/api/public"
+
+	// RecommendedMinimumRequestTTL is the minimum recommended timeout value for any given context used during an api
+	// request to the VSZ.  This is designed to provide enough time to allow for re-authentication to happen if need be.
+	//
+	// There is no guard against setting a TTL lower than this value.  It is merely here as a suggestion.
+	RecommendedMinimumRequestTTL = 2500 * time.Millisecond
 )
 
 type Config struct {
-	Address       string        // REQUIRED address of your VSZ, including port
+	Hostname      string        // REQUIRED address of your VSZ, including port
 	Authenticator Authenticator // REQUIRED authentication decorator to use with this client
 
+	Port       int    // OPTIONAL defaults to 7443
 	Scheme     string // OPTIONAL defaults to https
-	PathPrefix string // OPTIONAL defaults to "api/public"
+	PathPrefix string // OPTIONAL defaults to "/api/public"
 }
 
 // DefaultConfig creates a new ClientConfig object with a non-pooled client
-func DefaultConfig(address string) *Config {
-	return defaultConfig(address)
+func DefaultConfig(hostname string) *Config {
+	return defaultConfig(hostname)
 }
 
 func defaultConfig(address string) *Config {
 	return &Config{
-		Address:    address,
+		Hostname:   address,
 		Scheme:     DefaultScheme,
+		Port:       DefaultPort,
 		PathPrefix: DefaultPathPrefix,
 	}
 }
@@ -48,10 +57,13 @@ func NewClient(conf *Config, authenticator Authenticator, client *http.Client) (
 	if authenticator == nil {
 		return nil, errors.New("authenticator cannot be nil")
 	}
-	def := defaultConfig(conf.Address)
+	def := defaultConfig(conf.Hostname)
 	if conf != nil {
 		if conf.Scheme != "" {
 			def.Scheme = conf.Scheme
+		}
+		if conf.Port > 0 {
+			def.Port = conf.Port
 		}
 		if conf.PathPrefix != "" {
 			def.PathPrefix = conf.PathPrefix
@@ -92,7 +104,7 @@ func (c *Client) ClientConfig() Config {
 }
 
 func (c *Client) Do(ctx context.Context, request *Request) (*http.Response, error) {
-	_, _, httpResponse, err := c.do(ctx, request)
+	_, httpResponse, err := c.do(ctx, request)
 	return httpResponse, err
 }
 
@@ -103,11 +115,10 @@ func (c *Client) Do(ctx context.Context, request *Request) (*http.Response, erro
 func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, out interface{}) (*http.Response, []byte, error) {
 	var httpResponse *http.Response
 	var cas AuthCAS
-	var ctxTTL time.Duration
 	var buff []byte
 	var err error
 
-	if ctxTTL, cas, httpResponse, err = c.do(ctx, request); err != nil {
+	if cas, httpResponse, err = c.do(ctx, request); err != nil {
 		return nil, nil, err
 	}
 
@@ -129,7 +140,7 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 			log.Printf("[request-%d] Request returned 401, will try invalidate -> refresh loop once", request.id)
 		}
 		// TODO: is this logic ok...?
-		if httpResponse, _, err = c.handleUnauthorized(ctxTTL, request, httpResponse, cas); err != nil {
+		if httpResponse, _, err = c.handleUnauthorized(ctx, request, httpResponse, cas); err != nil {
 			if httpResponse != nil {
 				httpResponse.Body.Close()
 			}
@@ -190,10 +201,10 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 	return httpResponse, buff, err
 }
 
-func (c *Client) handleUnauthorized(ctxTTL time.Duration, request *Request, httpResponse *http.Response, cas AuthCAS) (*http.Response, AuthCAS, error) {
+func (c *Client) handleUnauthorized(ctx context.Context, request *Request, httpResponse *http.Response, cas AuthCAS) (*http.Response, AuthCAS, error) {
 	var err error
 	// attempt to invalidate
-	if cas, err = c.auth.Invalidate(cas); err != nil {
+	if cas, err = c.auth.Invalidate(ctx, cas); err != nil {
 		if debug {
 			log.Printf("[request-%d] Invalidate failed: %s", request.id, err)
 		}
@@ -203,34 +214,20 @@ func (c *Client) handleUnauthorized(ctxTTL time.Duration, request *Request, http
 	}
 	// close previous attempt's body
 	httpResponse.Body.Close()
-	return c.tryDo(nil, ctxTTL, request)
+	return c.tryDo(ctx, request)
 }
 
-func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Request) (*http.Response, AuthCAS, error) {
+func (c *Client) tryDo(ctx context.Context, request *Request) (*http.Response, AuthCAS, error) {
 	var httpRequest *http.Request
 	var httpResponse *http.Response
 	var cas AuthCAS
-	var cancel context.CancelFunc
 	var err error
 
 	if debug {
 		log.Printf("[request-%d] Handling...", request.id)
 	}
 
-	if ctx == nil {
-		if ctxTTL == 0 {
-			log.Printf("[request-%d] WARNING: Provided context had infinite TTL, using infinite TTL for retry attempt...", request.id)
-			ctx = context.Background()
-		} else {
-			if debug {
-				log.Printf("[request-%d] Using %s ttl on retry attempt", request.id, ctxTTL)
-			}
-			ctx, cancel = context.WithTimeout(context.Background(), ctxTTL)
-			defer cancel()
-		}
-	}
-
-	if httpRequest, err = request.toHTTP(ctx, c.config.Scheme, c.config.Address, c.config.PathPrefix); err != nil {
+	if httpRequest, err = request.toHTTP(ctx, c.config); err != nil {
 		if debug {
 			log.Printf("[request-%d] Failed to build *http.Request: %s", request.id, err)
 		}
@@ -242,16 +239,16 @@ func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Reque
 		if debug {
 			log.Printf("[request-%d] Auth required, calling Decorate...", request.id)
 		}
-		if cas, err = c.auth.Decorate(httpRequest); err != nil {
+		if cas, err = c.auth.Decorate(ctx, httpRequest); err != nil {
 			if debug {
 				log.Printf("[request-%d] Decorate returned error, will try calling refresh: %s", request.id, err)
 			}
-			if cas, err = c.auth.Refresh(c, cas); err != nil {
+			if cas, err = c.auth.Refresh(ctx, c, cas); err != nil {
 				if debug {
 					log.Printf("[request-%d] Refresh returned error, bailing out: %s", request.id, err)
 				}
 				return nil, cas, err
-			} else if cas, err = c.auth.Decorate(httpRequest); err != nil {
+			} else if cas, err = c.auth.Decorate(ctx, httpRequest); err != nil {
 				if debug {
 					log.Printf("[request-%d] Post-refresh Decorate returned error, bailing out: %s", request.id, err)
 				}
@@ -274,22 +271,24 @@ func (c *Client) tryDo(ctx context.Context, ctxTTL time.Duration, request *Reque
 	return httpResponse, cas, err
 }
 
-func (c *Client) do(ctx context.Context, request *Request) (time.Duration, AuthCAS, *http.Response, error) {
+func (c *Client) do(ctx context.Context, request *Request) (AuthCAS, *http.Response, error) {
+	if ctx == nil {
+		return 0, nil, errors.New("ctx must not be nil")
+	}
 	var httpResponse *http.Response
 	var cas AuthCAS
 	var err error
-	ctxTTL := fetchContextTTL(ctx)
-	if httpResponse, cas, err = c.tryDo(ctx, ctxTTL, request); err != nil {
+	if httpResponse, cas, err = c.tryDo(ctx, request); err != nil {
 		if httpResponse != nil {
 			httpResponse.Body.Close()
 		}
 		if debug {
 			log.Printf("[request-%d] Request failed: %s", request.id, err)
 		}
-		return ctxTTL, cas, nil, err
+		return cas, nil, err
 	}
 	if debug {
 		log.Printf("[request-%d] Received \"%s\"", request.id, httpResponse.Status)
 	}
-	return ctxTTL, cas, httpResponse, err
+	return cas, httpResponse, err
 }

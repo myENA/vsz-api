@@ -12,7 +12,7 @@ your VSZ version.  We currently will not guarantee any degree of backwards compa
 
 |VSZ Version|Package Version|
 |---|---|
-|3.5.0|0.1-0.4|
+|3.5.0-3.5.1|0.5.*|
 
 ## Basic Usage
 
@@ -33,7 +33,7 @@ func main() {
 	conf := api.DefaultConfig("yourhost.whatever")
 	
 	// create authenticator
-	auth := api.NewPasswordAuthenticator("username", "password", 30 * time.Minute, 2 * time.Second)
+	auth := api.NewPasswordAuthenticator("username", "password", 30 * time.Minute)
 	
 	// nil as a 3rd argument will use a default non-pooled http client
 	client, err := api.NewClient(conf, auth, nil)

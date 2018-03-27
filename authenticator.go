@@ -28,7 +28,12 @@ type (
 		// the CAS value returned by this method.
 		//
 		// In all cases, the current CAS must be returned.
-		Decorate(*http.Request) (AuthCAS, error)
+		//
+		// Arguments:
+		//
+		// 0. the context provided to original API call
+		// 1. the raw http request created as part of api call chain
+		Decorate(context.Context, *http.Request) (AuthCAS, error)
 
 		// Refresh must do one of two things:
 		//
@@ -43,21 +48,33 @@ type (
 		// 1. If the FIRST Decorate call fails
 		// 2. If initial Decorate did not fail but VSZ returned a 401, causing an Invalidate -> Refresh -> Decorate loop
 		// that will execute exactly 1 times.
-		Refresh(*Client, AuthCAS) (AuthCAS, error)
+		//
+		// Arguments:
+		//
+		// 0. the context provided to the original API call
+		// 1. the current VSZ API client
+		// 2. the CAS value seen from the calling routine's most recent action (could be from either Decorate or
+		// Invalidate)
+		Refresh(context.Context, *Client, AuthCAS) (AuthCAS, error)
 
 		// Invalidate will only be called if a 401 is seen after a refresh has been attempted, and should indicate to
 		// the implementor that whatever decoration the authenticator is current using is no longer considered valid by
 		// the VSZ being queried
-		Invalidate(AuthCAS) (AuthCAS, error)
+		//
+		// Arguments:
+		//
+		// 0. the context provided to the original API call
+		// 1. the CAS value seen from the calling routine's most recent action (could be from either Decorate or
+		// Refresh)
+		Invalidate(context.Context, AuthCAS) (AuthCAS, error)
 	}
 )
 
 // PasswordAuthenticator is a simple example implementation of an Authenticator that will decorate a given request
 // with a session id bearing cookie if one exists, and attempt to create one if it doesn't.
 type PasswordAuthenticator struct {
-	username   string
-	password   string
-	requestTTL time.Duration
+	username string
+	password string
 
 	cas       uint64
 	refreshed time.Time
@@ -66,12 +83,11 @@ type PasswordAuthenticator struct {
 	cookieMu  sync.RWMutex
 }
 
-func NewPasswordAuthenticator(username, password string, cookieTTL time.Duration, requestTTL time.Duration) *PasswordAuthenticator {
+func NewPasswordAuthenticator(username, password string, cookieTTL time.Duration) *PasswordAuthenticator {
 	pa := &PasswordAuthenticator{
-		username:   username,
-		password:   password,
-		cookieTTL:  cookieTTL,
-		requestTTL: requestTTL,
+		username:  username,
+		password:  password,
+		cookieTTL: cookieTTL,
 	}
 	return pa
 }
@@ -84,13 +100,17 @@ func (pa *PasswordAuthenticator) Password() string {
 	return pa.password
 }
 
-func (pa *PasswordAuthenticator) Decorate(httpRequest *http.Request) (AuthCAS, error) {
+func (pa *PasswordAuthenticator) Decorate(ctx context.Context, httpRequest *http.Request) (AuthCAS, error) {
 	if debug {
 		log.Printf("[pw-auth-%s] Decorate called for request \"%s\"", pa.username, httpRequest.URL)
 	}
 	if httpRequest == nil {
 		// TODO: yell a bit more if the request is nil?
 		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("httpRequest cannot be nil")
+	}
+	// is context still valid?
+	if err := ctx.Err(); err != nil {
+		return AuthCAS(atomic.LoadUint64(&pa.cas)), err
 	}
 	pa.cookieMu.RLock()
 	cas := atomic.LoadUint64(&pa.cas)
@@ -105,12 +125,16 @@ func (pa *PasswordAuthenticator) Decorate(httpRequest *http.Request) (AuthCAS, e
 	return AuthCAS(cas), errors.New("cookie requires refresh")
 }
 
-func (pa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, error) {
+func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, cas AuthCAS) (AuthCAS, error) {
 	if debug {
 		log.Printf("[pw-auth-%s] Refresh called", pa.username)
 	}
 	if client == nil {
 		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("client cannot be nil")
+	}
+	// is context still valid?
+	if err := ctx.Err(); err != nil {
+		return AuthCAS(atomic.LoadUint64(&pa.cas)), err
 	}
 	pa.cookieMu.Lock()
 	ccas := atomic.LoadUint64(&pa.cas)
@@ -130,8 +154,6 @@ func (pa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, 
 
 	username := pa.username
 	password := pa.password
-	ctx, cancel := context.WithTimeout(context.Background(), pa.requestTTL)
-	defer cancel()
 	request := NewRequest("POST", "/v5_0/session", false)
 	err := request.SetBodyModel(&LoginSessionLogonPostRequest{
 		Username: &username,
@@ -164,9 +186,13 @@ func (pa *PasswordAuthenticator) Refresh(client *Client, cas AuthCAS) (AuthCAS, 
 	return AuthCAS(ncas), nil
 }
 
-func (pa *PasswordAuthenticator) Invalidate(cas AuthCAS) (AuthCAS, error) {
+func (pa *PasswordAuthenticator) Invalidate(ctx context.Context, cas AuthCAS) (AuthCAS, error) {
 	if debug {
 		log.Printf("[pw-auth-%s] Invalidate called", pa.username)
+	}
+	// is context still valid?
+	if err := ctx.Err(); err != nil {
+		return AuthCAS(atomic.LoadUint64(&pa.cas)), err
 	}
 	pa.cookieMu.Lock()
 	ccas := atomic.LoadUint64(&pa.cas)

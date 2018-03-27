@@ -1,11 +1,9 @@
 package api
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 )
 
 func TryExtractSessionCookie(request *Request, resp *http.Response) *http.Cookie {
@@ -36,13 +34,4 @@ func buildQueryParamString(queryParams map[string]string) string {
 	} else {
 		return ""
 	}
-}
-
-func fetchContextTTL(ctx context.Context) time.Duration {
-	if ctx.Err() == nil {
-		if ctxTime, ok := ctx.Deadline(); ok {
-			return ctxTime.Sub(time.Now())
-		}
-	}
-	return 0
 }

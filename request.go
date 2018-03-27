@@ -181,12 +181,12 @@ func (r *Request) compileURI() string {
 }
 
 // toHTTP will attempt to construct an executable http.request
-func (r *Request) toHTTP(ctx context.Context, scheme, address, pathPrefix string) (*http.Request, error) {
+func (r *Request) toHTTP(ctx context.Context, config *Config) (*http.Request, error) {
 	var err error
 	var httpRequest *http.Request
 
 	body := r.Body()
-	compiledURL := fmt.Sprintf("%s://%s/%s", scheme, address, path.Join(pathPrefix, r.compileURI()))
+	compiledURL := fmt.Sprintf("%s://%s:%d/%s", config.Scheme, config.Hostname, config.Port, path.Join(config.PathPrefix, r.compileURI()))
 
 	// if debug mode is enabled, prepare a big'ol log statement.
 	if debug {

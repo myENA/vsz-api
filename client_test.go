@@ -15,19 +15,25 @@ import (
 )
 
 var (
-	addr     string
+	host     string
+	port     int
 	username string
 	password string
 )
 
 func init() {
-	flag.StringVar(&addr, "addr", "", "Address of VSZ to hit")
+	flag.StringVar(&host, "host", "", "Host of VSZ to hit")
+	flag.IntVar(&port, "port", 7443, "Port # to use for API")
 	flag.StringVar(&username, "username", "", "Username of user to use for tests")
 	flag.StringVar(&password, "password", "", "Password of user to use for tests")
 	flag.Parse()
 
-	if addr == "" {
-		log.Println("addr cannot be empty")
+	if host == "" {
+		log.Println("host cannot be empty")
+		os.Exit(1)
+	}
+	if 0 >= port {
+		log.Println("port must be >= 0")
 		os.Exit(1)
 	}
 	if username == "" {
@@ -44,7 +50,7 @@ func init() {
 
 func testClient(t *testing.T) *api.Client {
 	client, err := api.NewClient(
-		api.DefaultConfig(addr),
+		api.DefaultConfig(host),
 		api.NewPasswordAuthenticator(username, password, 30*time.Minute, 2*time.Second),
 		&http.Client{
 			Transport: &http.Transport{
