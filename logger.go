@@ -5,7 +5,9 @@ import (
 	"os"
 )
 
-var debug bool
+var (
+	debug bool
+)
 
 type Logger interface {
 	Print(...interface{})
