@@ -51,7 +51,7 @@ func init() {
 func testClient(t *testing.T) *api.Client {
 	client, err := api.NewClient(
 		api.DefaultConfig(host),
-		api.NewPasswordAuthenticator(username, password, 30*time.Minute, 2*time.Second),
+		api.NewPasswordAuthenticator(username, password, 30*time.Minute),
 		&http.Client{
 			Transport: &http.Transport{
 				Proxy: http.ProxyFromEnvironment,
@@ -119,6 +119,7 @@ func TestClient(t *testing.T) {
 			go func(routine int, client *api.Client, start <-chan struct{}) {
 				var ctx context.Context
 				var cancel context.CancelFunc
+				var zones *api.RuckusWirelessApZoneRetrieveListGet200Response
 				var err error
 				<-start
 				for i := 0; i < 5; i++ {
@@ -126,10 +127,12 @@ func TestClient(t *testing.T) {
 						break
 					}
 					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
-					_, _, err = client.RuckusZones().RuckusWirelessApZoneRetrieveListGet(ctx, nil)
+					_, zones, err = client.RuckusZones().RuckusWirelessApZoneRetrieveListGet(ctx, nil)
 					cancel()
 					if err != nil {
 						t.Logf("Routine %d loop %d query 1 saw error: %+v", routine, i, err)
+					} else if zones == nil || len(zones.List) == 0 || *zones.TotalCount == 0 {
+						t.Logf("Routine %d loop %d returned an empty zone list, expected at least 1: %+v", routine, i, zones)
 					}
 
 					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)

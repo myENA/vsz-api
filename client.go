@@ -138,6 +138,13 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 			}
 			return nil, nil, err
 		}
+
+		// read everything out of the body and close it.
+		buff, err = ioutil.ReadAll(httpResponse.Body)
+		httpResponse.Body.Close()
+		if err != nil {
+			return httpResponse, nil, err
+		}
 	}
 
 	// test for "success"
