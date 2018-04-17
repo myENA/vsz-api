@@ -56,18 +56,21 @@ func NewClient(conf *Config, authenticator Authenticator, client *http.Client) (
 	if authenticator == nil {
 		return nil, errors.New("authenticator cannot be nil")
 	}
-	def := defaultConfig(conf.Hostname)
-	if conf != nil {
-		if conf.Scheme != "" {
-			def.Scheme = conf.Scheme
-		}
-		if conf.Port > 0 {
-			def.Port = conf.Port
-		}
-		if conf.PathPrefix != "" {
-			def.PathPrefix = conf.PathPrefix
-		}
+	if conf == nil {
+		return nil, errors.New("config cannot be nil")
 	}
+
+	def := defaultConfig(conf.Hostname)
+	if conf.Scheme != "" {
+		def.Scheme = conf.Scheme
+	}
+	if conf.Port > 0 {
+		def.Port = conf.Port
+	}
+	if conf.PathPrefix != "" {
+		def.PathPrefix = conf.PathPrefix
+	}
+
 	if client == nil {
 		// shamelessly borrowed from https://github.com/hashicorp/go-cleanhttp/blob/master/cleanhttp.go
 		client = &http.Client{
