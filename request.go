@@ -187,7 +187,7 @@ func (r *Request) toHTTP(ctx context.Context, config *Config) (*http.Request, er
 
 	body := r.Body()
 	bodyLen := len(body)
-	compiledURL := fmt.Sprintf("%s://%s:%d/%s", config.Scheme, config.Hostname, config.Port, path.Join(config.PathPrefix, r.compileURI()))
+	compiledURL := fmt.Sprintf("%s://%s:%d%s", config.Scheme, config.Hostname, config.Port, path.Join(config.PathPrefix, r.compileURI()))
 
 	// if debug mode is enabled, prepare a big'ol log statement.
 	if debug {
