@@ -135,12 +135,15 @@ func TestClient(t *testing.T) {
 						t.Logf("Routine %d loop %d returned an empty zone list, expected at least 1: %+v", routine, i, zones)
 					}
 
-					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
-					_, _, err = client.Session().LoginSessionLogoffDelete(ctx)
-					cancel()
-					if err != nil {
-						t.Logf("Routine %d loop %d query 2 saw error: %+v", routine, i, err)
+					if routine == 0 {
+						ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+						_, _, err = client.Session().LoginSessionLogoffDelete(ctx)
+						cancel()
+						if err != nil {
+							t.Logf("Routine %d loop %d query 2 saw error: %+v", routine, i, err)
+						}
 					}
+
 					ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
 					_, _, err = client.Session().LoginSessionRetrieveGet(ctx)
 					cancel()

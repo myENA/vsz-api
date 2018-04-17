@@ -133,8 +133,12 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 
 	// check for and attempt to handle 401 unauthorized
 	if httpResponse.StatusCode == 401 && request.auth {
-		// TODO: is this logic ok...?
-		if httpResponse, _, err = c.handleUnauthorized(ctx, request, httpResponse, cas); err != nil {
+		// invalidate authenticator state
+		if _, err = c.auth.Invalidate(ctx, cas); err != nil {
+			return nil, nil, err
+		}
+		// attempt request again.
+		if httpResponse, _, err = c.tryDo(ctx, request); err != nil {
 			if httpResponse != nil {
 				httpResponse.Body.Close()
 			}
@@ -169,17 +173,6 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 	}
 
 	return httpResponse, buff, err
-}
-
-func (c *Client) handleUnauthorized(ctx context.Context, request *Request, httpResponse *http.Response, cas AuthCAS) (*http.Response, AuthCAS, error) {
-	var err error
-	// attempt to invalidate
-	if cas, err = c.auth.Invalidate(ctx, cas); err != nil {
-		return httpResponse, cas, err
-	}
-	// close previous attempt's body
-	httpResponse.Body.Close()
-	return c.tryDo(ctx, request)
 }
 
 func (c *Client) tryDo(ctx context.Context, request *Request) (*http.Response, AuthCAS, error) {

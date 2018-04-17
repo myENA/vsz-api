@@ -102,7 +102,7 @@ func (pa *PasswordAuthenticator) Password() string {
 
 func (pa *PasswordAuthenticator) Decorate(ctx context.Context, httpRequest *http.Request) (AuthCAS, error) {
 	if debug {
-		log.Printf("[pw-auth-%s] Decorate called for request \"%s\"", pa.username, httpRequest.URL)
+		log.Printf("[pw-auth-%s] Decorate called for request \"%s %s\"", pa.username, httpRequest.Method, httpRequest.URL)
 	}
 	if httpRequest == nil {
 		// TODO: yell a bit more if the request is nil?
@@ -154,8 +154,7 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 
 	username := pa.username
 	password := pa.password
-	request := NewRequest("POST", "/v5_0/session", false)
-	err := request.SetBodyModel(&LoginSessionLogonPostRequest{
+	resp, _, err := client.Session().LoginSessionLogonPost(ctx, &LoginSessionLogonPostRequest{
 		Username: &username,
 		Password: &password,
 	})
@@ -165,14 +164,7 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), err
 	}
-	resp, _, err := client.Ensure(ctx, request, 200, nil)
-	if err != nil {
-		pa.cookie = nil
-		ncas := atomic.AddUint64(&pa.cas, 1)
-		pa.cookieMu.Unlock()
-		return AuthCAS(ncas), err
-	}
-	cookie := TryExtractSessionCookie(request, resp)
+	cookie := TryExtractSessionCookie(resp)
 	if cookie == nil {
 		pa.cookie = nil
 		ncas := atomic.AddUint64(&pa.cas, 1)
