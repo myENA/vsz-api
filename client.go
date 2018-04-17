@@ -24,7 +24,7 @@ const (
 )
 
 type Config struct {
-	Hostname string // REQUIRED address of your VSZ, including port
+	Hostname string // REQUIRED hostname of your VSZ
 
 	Port       int    // OPTIONAL defaults to 7443
 	Scheme     string // OPTIONAL defaults to https
@@ -36,9 +36,9 @@ func DefaultConfig(hostname string) *Config {
 	return defaultConfig(hostname)
 }
 
-func defaultConfig(address string) *Config {
+func defaultConfig(hostname string) *Config {
 	return &Config{
-		Hostname:   address,
+		Hostname:   hostname,
 		Scheme:     DefaultScheme,
 		Port:       DefaultPort,
 		PathPrefix: DefaultPathPrefix,
