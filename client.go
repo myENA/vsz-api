@@ -24,8 +24,7 @@ const (
 )
 
 type Config struct {
-	Hostname      string        // REQUIRED address of your VSZ, including port
-	Authenticator Authenticator // REQUIRED authentication decorator to use with this client
+	Hostname string // REQUIRED address of your VSZ, including port
 
 	Port       int    // OPTIONAL defaults to 7443
 	Scheme     string // OPTIONAL defaults to https
