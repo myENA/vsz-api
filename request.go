@@ -186,13 +186,14 @@ func (r *Request) toHTTP(ctx context.Context, config *Config) (*http.Request, er
 	var httpRequest *http.Request
 
 	body := r.Body()
+	bodyLen := len(body)
 	compiledURL := fmt.Sprintf("%s://%s:%d/%s", config.Scheme, config.Hostname, config.Port, path.Join(config.PathPrefix, r.compileURI()))
 
 	// if debug mode is enabled, prepare a big'ol log statement.
 	if debug {
 		logMsg := fmt.Sprintf("[request-%d] Preparing request \"%s %s\"", r.id, r.method, compiledURL)
 
-		if len(body) == 0 {
+		if bodyLen == 0 {
 			logMsg = fmt.Sprintf("%s without body", logMsg)
 		} else {
 			logMsg = fmt.Sprintf("%s with body: %s", logMsg, string(body))
@@ -201,17 +202,17 @@ func (r *Request) toHTTP(ctx context.Context, config *Config) (*http.Request, er
 		log.Print(logMsg)
 	}
 
-	if nil == body {
+	if bodyLen == 0 {
 		httpRequest, err = http.NewRequest(r.method, compiledURL, nil)
 	} else {
 		httpRequest, err = http.NewRequest(r.method, compiledURL, bytes.NewBuffer(body))
 	}
 
-	if nil != err {
+	if err != nil {
 		return nil, err
 	}
 
-	if nil != body {
+	if bodyLen != 0 {
 		httpRequest.Header.Set("Content-Type", "application/json")
 	}
 
