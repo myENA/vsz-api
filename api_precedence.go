@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type PrecedenceAPI struct {
 	client *Client
 }
 type (
-	PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequestIDListSlice []*string
+	PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequestIDListSlice []string
 
 	PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequest struct {
 		IDList PrecedenceProfileBulkDeletePrecedenceProfileDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -178,7 +178,7 @@ func (p *PrecedenceAPI) PrecedenceProfileCreatePrecedenceProfilePost(ctx context
 }
 
 type (
-	PrecedenceProfileQueryPrecedenceProfilePostRequestAttributesSlice []*string
+	PrecedenceProfileQueryPrecedenceProfilePostRequestAttributesSlice []string
 
 	PrecedenceProfileQueryPrecedenceProfilePostRequestExtraFiltersSlice []*PrecedenceProfileQueryPrecedenceProfilePostRequestExtraFilters
 
@@ -210,7 +210,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	PrecedenceProfileQueryPrecedenceProfilePostRequestFullTextSearchFieldsSlice []*string
+	PrecedenceProfileQueryPrecedenceProfilePostRequestFullTextSearchFieldsSlice []string
 
 	PrecedenceProfileQueryPrecedenceProfilePostRequestFullTextSearch struct {
 		Fields PrecedenceProfileQueryPrecedenceProfilePostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

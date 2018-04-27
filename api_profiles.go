@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type ProfilesAPI struct {
 	client *Client
 }
 type (
-	AccountingProfileDeleteDelete1RequestIDListSlice []*string
+	AccountingProfileDeleteDelete1RequestIDListSlice []string
 
 	AccountingProfileDeleteDelete1Request struct {
 		IDList AccountingProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -198,7 +198,7 @@ func (p *ProfilesAPI) AccountingProfileClonePost(ctx context.Context, id string,
 }
 
 type (
-	AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestAttributesSlice []*string
+	AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestAttributesSlice []string
 
 	AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestExtraFiltersSlice []*AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestExtraFilters
 
@@ -230,7 +230,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AccountingProfileRetrieveListAccountingProfilesByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -523,7 +523,7 @@ func (p *ProfilesAPI) AccountingProfileModifyRealmMappingsPatch(ctx context.Cont
 }
 
 type (
-	AuthenticationProfileDeleteDelete1RequestIDListSlice []*string
+	AuthenticationProfileDeleteDelete1RequestIDListSlice []string
 
 	AuthenticationProfileDeleteDelete1Request struct {
 		IDList AuthenticationProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -731,7 +731,7 @@ func (p *ProfilesAPI) AuthenticationProfileRetrieveListAuthorizationProfileGet(c
 }
 
 type (
-	AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestAttributesSlice []*string
+	AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestAttributesSlice []string
 
 	AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestExtraFiltersSlice []*AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestExtraFilters
 
@@ -763,7 +763,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestFullTextSearch struct {
 		Fields AuthenticationProfileRetrieveListAuthenticationServiceInfoPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -930,7 +930,7 @@ func (p *ProfilesAPI) AuthenticationProfileClonePost(ctx context.Context, id str
 }
 
 type (
-	AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestAttributesSlice []*string
+	AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestAttributesSlice []string
 
 	AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestExtraFiltersSlice []*AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestExtraFilters
 
@@ -962,7 +962,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AuthenticationProfileRetrieveListAuthenticationProfilesByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1330,7 +1330,7 @@ func (p *ProfilesAPI) AuthenticationProfileModify3gppCommonSettingsPatch(ctx con
 }
 
 type (
-	BridgeDeleteDelete1RequestIDListSlice []*string
+	BridgeDeleteDelete1RequestIDListSlice []string
 
 	BridgeDeleteDelete1Request struct {
 		IDList BridgeDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -1462,7 +1462,7 @@ func (p *ProfilesAPI) BridgeCreatePost(ctx context.Context, requestBody *BridgeC
 }
 
 type (
-	BridgeQueryListPostRequestAttributesSlice []*string
+	BridgeQueryListPostRequestAttributesSlice []string
 
 	BridgeQueryListPostRequestFiltersSlice []*BridgeQueryListPostRequestFilters
 
@@ -1472,7 +1472,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	BridgeQueryListPostRequestFullTextSearchFieldsSlice []*string
+	BridgeQueryListPostRequestFullTextSearchFieldsSlice []string
 
 	BridgeQueryListPostRequestFullTextSearch struct {
 		Fields BridgeQueryListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1742,7 +1742,7 @@ func (p *ProfilesAPI) BridgeModifyDhcpRelayPatch(ctx context.Context, id string,
 }
 
 type (
-	DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequestIDListSlice []*string
+	DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequestIDListSlice []string
 
 	DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequest struct {
 		IDList DnsServerManagementDeleteAListOfDnsServerProfileDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -1861,7 +1861,7 @@ func (p *ProfilesAPI) DnsServerManagementClonePost(ctx context.Context, id strin
 }
 
 type (
-	DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestAttributesSlice []*string
+	DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestAttributesSlice []string
 
 	DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestExtraFiltersSlice []*DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestExtraFilters
 
@@ -1893,7 +1893,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestFullTextSearch struct {
 		Fields DnsServerManagementRetrieveListDnsServerProfileByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2135,7 +2135,7 @@ func (p *ProfilesAPI) DnsServerManagementModifyBasicPatch(ctx context.Context, i
 }
 
 type (
-	Hotspot20IdentityProviderProfileDeleteDelete1RequestIDListSlice []*string
+	Hotspot20IdentityProviderProfileDeleteDelete1RequestIDListSlice []string
 
 	Hotspot20IdentityProviderProfileDeleteDelete1Request struct {
 		IDList Hotspot20IdentityProviderProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -2194,7 +2194,7 @@ type (
 		Oi   *string `json:"oi,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSUSubscriptionDescriptions
 
@@ -2205,7 +2205,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuExternalOSU struct {
 		CommonLanguageIcon       *string                                                                                                   `json:"commonLanguageIcon,omitempty"`
@@ -2242,7 +2242,7 @@ type (
 		Type              *string                                                                                                 `json:"type,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUSubscriptionDescriptions
 
@@ -2253,7 +2253,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSU struct {
 		Certificate              *Hotspot20IdentityProviderProfileRetrieveListGet200ResponseListOsuInternalOSUCertificate                  `json:"certificate,omitempty"`
@@ -2405,7 +2405,7 @@ type (
 		Oi   *string `json:"oi,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSUSubscriptionDescriptions
 
@@ -2416,7 +2416,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileCreatePostRequestOsuExternalOSU struct {
 		CommonLanguageIcon       *string                                                                                      `json:"commonLanguageIcon,omitempty"`
@@ -2455,7 +2455,7 @@ type (
 		Type              *string                                                                                    `json:"type,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileCreatePostRequestOsuInternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileCreatePostRequestOsuInternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileCreatePostRequestOsuInternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileCreatePostRequestOsuInternalOSUSubscriptionDescriptions
 
@@ -2568,7 +2568,7 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileCreatePost(ctx context.Con
 }
 
 type (
-	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestAttributesSlice []*string
+	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestAttributesSlice []string
 
 	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestExtraFiltersSlice []*Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestExtraFilters
 
@@ -2600,7 +2600,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestFullTextSearchFieldsSlice []*string
+	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestFullTextSearchFieldsSlice []string
 
 	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestFullTextSearch struct {
 		Fields Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2705,7 +2705,7 @@ type (
 		Oi   *string `json:"oi,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSUSubscriptionDescriptions
 
@@ -2716,7 +2716,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuExternalOSU struct {
 		CommonLanguageIcon       *string                                                                                                                      `json:"commonLanguageIcon,omitempty"`
@@ -2753,7 +2753,7 @@ type (
 		Type              *string                                                                                                                    `json:"type,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUSubscriptionDescriptions
 
@@ -2764,7 +2764,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSU struct {
 		Certificate              *Hotspot20IdentityProviderProfileQueryHotspot20IdentityProviderPost200ResponseListOsuInternalOSUCertificate                  `json:"certificate,omitempty"`
@@ -2921,7 +2921,7 @@ type (
 		Oi   *string `json:"oi,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSUSubscriptionDescriptions
 
@@ -2932,7 +2932,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuExternalOSU struct {
 		CommonLanguageIcon       *string                                                                                           `json:"commonLanguageIcon,omitempty"`
@@ -2971,7 +2971,7 @@ type (
 		Type              *string                                                                                         `json:"type,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuInternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuInternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuInternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileRetrieveGet200ResponseOsuInternalOSUSubscriptionDescriptions
 
@@ -3294,7 +3294,7 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileDisableOnlineSignupProvisi
 }
 
 type (
-	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSUSubscriptionDescriptions
 
@@ -3305,7 +3305,7 @@ type (
 		Name        *string `json:"name,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSUWhitelistedDomainsSlice []*string
+	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSUWhitelistedDomainsSlice []string
 
 	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestExternalOSU struct {
 		CommonLanguageIcon       *string                                                                                                            `json:"commonLanguageIcon,omitempty"`
@@ -3344,7 +3344,7 @@ type (
 		Type              *string                                                                                                          `json:"type,omitempty"`
 	}
 
-	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestInternalOSUProvisioningProtocalsSlice []*string
+	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestInternalOSUProvisioningProtocalsSlice []string
 
 	Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestInternalOSUSubscriptionDescriptionsSlice []*Hotspot20IdentityProviderProfileModifyOnlineSignupProvisioningPatchRequestInternalOSUSubscriptionDescriptions
 
@@ -3499,7 +3499,7 @@ func (p *ProfilesAPI) Hotspot20IdentityProviderProfileModifyRealmsPatch(ctx cont
 }
 
 type (
-	Hotspot20WiFiOperatorProfileDeleteDelete1RequestIDListSlice []*string
+	Hotspot20WiFiOperatorProfileDeleteDelete1RequestIDListSlice []string
 
 	Hotspot20WiFiOperatorProfileDeleteDelete1Request struct {
 		IDList Hotspot20WiFiOperatorProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -3537,7 +3537,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	Hotspot20WiFiOperatorProfileRetrieveListGet200ResponseListDomainNamesSlice []*string
+	Hotspot20WiFiOperatorProfileRetrieveListGet200ResponseListDomainNamesSlice []string
 
 	Hotspot20WiFiOperatorProfileRetrieveListGet200ResponseListFriendlyNamesSlice []*Hotspot20WiFiOperatorProfileRetrieveListGet200ResponseListFriendlyNames
 
@@ -3621,7 +3621,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	Hotspot20WiFiOperatorProfileCreatePostRequestDomainNamesSlice []*string
+	Hotspot20WiFiOperatorProfileCreatePostRequestDomainNamesSlice []string
 
 	Hotspot20WiFiOperatorProfileCreatePostRequestFriendlyNamesSlice []*Hotspot20WiFiOperatorProfileCreatePostRequestFriendlyNames
 
@@ -3677,7 +3677,7 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileCreatePost(ctx context.Context
 }
 
 type (
-	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestAttributesSlice []*string
+	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestAttributesSlice []string
 
 	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestExtraFiltersSlice []*Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestExtraFilters
 
@@ -3709,7 +3709,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestFullTextSearchFieldsSlice []*string
+	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestFullTextSearchFieldsSlice []string
 
 	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestFullTextSearch struct {
 		Fields Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3793,7 +3793,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200ResponseListDomainNamesSlice []*string
+	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200ResponseListDomainNamesSlice []string
 
 	Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200ResponseListFriendlyNamesSlice []*Hotspot20WiFiOperatorProfileQueryHotspot20WiFiOperatorsPost200ResponseListFriendlyNames
 
@@ -3882,7 +3882,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	Hotspot20WiFiOperatorProfileRetrieveGet200ResponseDomainNamesSlice []*string
+	Hotspot20WiFiOperatorProfileRetrieveGet200ResponseDomainNamesSlice []string
 
 	Hotspot20WiFiOperatorProfileRetrieveGet200ResponseFriendlyNamesSlice []*Hotspot20WiFiOperatorProfileRetrieveGet200ResponseFriendlyNames
 
@@ -4033,7 +4033,7 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyCertificatePatch(ctx con
 }
 
 type (
-	Hotspot20WiFiOperatorProfileModifyDomainNamesPatchRequest []*string
+	Hotspot20WiFiOperatorProfileModifyDomainNamesPatchRequest []string
 )
 
 // Hotspot20WiFiOperatorProfileModifyDomainNamesPatch: Use this API command to modify domain names of a Hotspot 2.0 Wi-Fi operator.
@@ -4104,7 +4104,7 @@ func (p *ProfilesAPI) Hotspot20WiFiOperatorProfileModifyFriendlyNamesPatch(ctx c
 }
 
 type (
-	L2ogreDeleteDelete1RequestIDListSlice []*string
+	L2ogreDeleteDelete1RequestIDListSlice []string
 
 	L2ogreDeleteDelete1Request struct {
 		IDList L2ogreDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -4246,7 +4246,7 @@ func (p *ProfilesAPI) L2ogreCreatePost(ctx context.Context, requestBody *L2ogreC
 }
 
 type (
-	L2ogreQueryListPostRequestAttributesSlice []*string
+	L2ogreQueryListPostRequestAttributesSlice []string
 
 	L2ogreQueryListPostRequestFiltersSlice []*L2ogreQueryListPostRequestFilters
 
@@ -4256,7 +4256,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	L2ogreQueryListPostRequestFullTextSearchFieldsSlice []*string
+	L2ogreQueryListPostRequestFullTextSearchFieldsSlice []string
 
 	L2ogreQueryListPostRequestFullTextSearch struct {
 		Fields L2ogreQueryListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -4586,7 +4586,7 @@ func (p *ProfilesAPI) L2ogreModifyDhcpRelayPatch(ctx context.Context, id string,
 }
 
 type (
-	LbsProfileDeleteMultipleLbsProfileDeleteRequestIDListSlice []*string
+	LbsProfileDeleteMultipleLbsProfileDeleteRequestIDListSlice []string
 
 	LbsProfileDeleteMultipleLbsProfileDeleteRequest struct {
 		IDList LbsProfileDeleteMultipleLbsProfileDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -4665,7 +4665,7 @@ func (p *ProfilesAPI) LbsProfileCreateLbsProfilePost(ctx context.Context, reques
 }
 
 type (
-	LbsProfileQueryLbsProfilesPostRequestAttributesSlice []*string
+	LbsProfileQueryLbsProfilesPostRequestAttributesSlice []string
 
 	LbsProfileQueryLbsProfilesPostRequestFiltersSlice []*LbsProfileQueryLbsProfilesPostRequestFilters
 
@@ -4675,7 +4675,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	LbsProfileQueryLbsProfilesPostRequestFullTextSearchFieldsSlice []*string
+	LbsProfileQueryLbsProfilesPostRequestFullTextSearchFieldsSlice []string
 
 	LbsProfileQueryLbsProfilesPostRequestFullTextSearch struct {
 		Fields LbsProfileQueryLbsProfilesPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -4870,7 +4870,7 @@ func (p *ProfilesAPI) LbsProfileUpdateLbsProfilePatch(ctx context.Context, id st
 }
 
 type (
-	IpsecProfileDeleteDelete1RequestIDListSlice []*string
+	IpsecProfileDeleteDelete1RequestIDListSlice []string
 
 	IpsecProfileDeleteDelete1Request struct {
 		IDList IpsecProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -5067,7 +5067,7 @@ func (p *ProfilesAPI) IpsecProfileCreateIpsecPost(ctx context.Context, requestBo
 }
 
 type (
-	IpsecProfileQueryListPostRequestAttributesSlice []*string
+	IpsecProfileQueryListPostRequestAttributesSlice []string
 
 	IpsecProfileQueryListPostRequestExtraFiltersSlice []*IpsecProfileQueryListPostRequestExtraFilters
 
@@ -5099,7 +5099,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	IpsecProfileQueryListPostRequestFullTextSearchFieldsSlice []*string
+	IpsecProfileQueryListPostRequestFullTextSearchFieldsSlice []string
 
 	IpsecProfileQueryListPostRequestFullTextSearch struct {
 		Fields IpsecProfileQueryListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -5734,7 +5734,7 @@ func (p *ProfilesAPI) L3RoamingRetriveL3RoamingConfigurationPost(ctx context.Con
 }
 
 type (
-	RuckusgreTunnelProfileDeleteDelete1RequestIDListSlice []*string
+	RuckusgreTunnelProfileDeleteDelete1RequestIDListSlice []string
 
 	RuckusgreTunnelProfileDeleteDelete1Request struct {
 		IDList RuckusgreTunnelProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -5849,7 +5849,7 @@ func (p *ProfilesAPI) RuckusgreTunnelProfileCreatePost(ctx context.Context, requ
 }
 
 type (
-	RuckusgreTunnelProfileQueryListPostRequestAttributesSlice []*string
+	RuckusgreTunnelProfileQueryListPostRequestAttributesSlice []string
 
 	RuckusgreTunnelProfileQueryListPostRequestExtraFiltersSlice []*RuckusgreTunnelProfileQueryListPostRequestExtraFilters
 
@@ -5881,7 +5881,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	RuckusgreTunnelProfileQueryListPostRequestFullTextSearchFieldsSlice []*string
+	RuckusgreTunnelProfileQueryListPostRequestFullTextSearchFieldsSlice []string
 
 	RuckusgreTunnelProfileQueryListPostRequestFullTextSearch struct {
 		Fields RuckusgreTunnelProfileQueryListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -6123,7 +6123,7 @@ func (p *ProfilesAPI) RuckusgreTunnelProfileModifyBasicPatch(ctx context.Context
 }
 
 type (
-	SoftgreTunnelProfileDeleteDelete1RequestIDListSlice []*string
+	SoftgreTunnelProfileDeleteDelete1RequestIDListSlice []string
 
 	SoftgreTunnelProfileDeleteDelete1Request struct {
 		IDList SoftgreTunnelProfileDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -6242,7 +6242,7 @@ func (p *ProfilesAPI) SoftgreTunnelProfileCreatePost(ctx context.Context, reques
 }
 
 type (
-	SoftgreTunnelProfileQueryListPostRequestAttributesSlice []*string
+	SoftgreTunnelProfileQueryListPostRequestAttributesSlice []string
 
 	SoftgreTunnelProfileQueryListPostRequestExtraFiltersSlice []*SoftgreTunnelProfileQueryListPostRequestExtraFilters
 
@@ -6274,7 +6274,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	SoftgreTunnelProfileQueryListPostRequestFullTextSearchFieldsSlice []*string
+	SoftgreTunnelProfileQueryListPostRequestFullTextSearchFieldsSlice []string
 
 	SoftgreTunnelProfileQueryListPostRequestFullTextSearch struct {
 		Fields SoftgreTunnelProfileQueryListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -6527,7 +6527,7 @@ func (p *ProfilesAPI) SoftgreTunnelProfileModifyBasicPatch(ctx context.Context, 
 }
 
 type (
-	UserTrafficProfileDeleteDeleteRequestIDListSlice []*string
+	UserTrafficProfileDeleteDeleteRequestIDListSlice []string
 
 	UserTrafficProfileDeleteDeleteRequest struct {
 		IDList UserTrafficProfileDeleteDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -6751,7 +6751,7 @@ func (p *ProfilesAPI) UserTrafficProfileClonePost(ctx context.Context, id string
 }
 
 type (
-	UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestAttributesSlice []*string
+	UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestAttributesSlice []string
 
 	UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestExtraFiltersSlice []*UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestExtraFilters
 
@@ -6783,7 +6783,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestFullTextSearch struct {
 		Fields UserTrafficProfileRetrieveListUserTrafficProfileByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -7475,7 +7475,7 @@ func (p *ProfilesAPI) VdpProfileApprovePut(ctx context.Context, id string) (*htt
 type (
 	ZoneAffinityProfileGetAllZoneAffinityProfilesGet200ResponseListSlice []*ZoneAffinityProfileGetAllZoneAffinityProfilesGet200ResponseList
 
-	ZoneAffinityProfileGetAllZoneAffinityProfilesGet200ResponseListZoneAffinityListSlice []*string
+	ZoneAffinityProfileGetAllZoneAffinityProfilesGet200ResponseListZoneAffinityListSlice []string
 
 	ZoneAffinityProfileGetAllZoneAffinityProfilesGet200ResponseList struct {
 		CreateDateTime   *int                                                                                 `json:"createDateTime,omitempty"`
@@ -7515,7 +7515,7 @@ func (p *ProfilesAPI) ZoneAffinityProfileGetAllZoneAffinityProfilesGet(ctx conte
 }
 
 type (
-	ZoneAffinityProfileCreateZoneAffinityProfileSettingPostRequestZoneAffinityListSlice []*string
+	ZoneAffinityProfileCreateZoneAffinityProfileSettingPostRequestZoneAffinityListSlice []string
 
 	ZoneAffinityProfileCreateZoneAffinityProfileSettingPostRequest struct {
 		Description      *string                                                                             `json:"description,omitempty"`
@@ -7578,7 +7578,7 @@ func (p *ProfilesAPI) ZoneAffinityProfileDeleteZoneAffinityProfileSettingDelete(
 }
 
 type (
-	ZoneAffinityProfileGetOneZoneAffinityProfileGet200ResponseZoneAffinityListSlice []*string
+	ZoneAffinityProfileGetOneZoneAffinityProfileGet200ResponseZoneAffinityListSlice []string
 
 	ZoneAffinityProfileGetOneZoneAffinityProfileGet200Response struct {
 		CreateDateTime   *int                                                                            `json:"createDateTime,omitempty"`

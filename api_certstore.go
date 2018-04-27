@@ -9,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type CertStoreAPI struct {
@@ -82,7 +82,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	CertificateCreateCertificatePostRequestIntermediateDataSlice []*string
+	CertificateCreateCertificatePostRequestIntermediateDataSlice []string
 
 	CertificateCreateCertificatePostRequest struct {
 		CertificasSigningRequest *CertificateCreateCertificatePostRequestCertificasSigningRequest `json:"certificasSigningRequest,omitempty"`
@@ -155,7 +155,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	CertificateRetrieveCertificateGet200ResponseIntermediateDataSlice []*string
+	CertificateRetrieveCertificateGet200ResponseIntermediateDataSlice []string
 
 	CertificateRetrieveCertificateGet200Response struct {
 		CertificasSigningRequest *CertificateRetrieveCertificateGet200ResponseCertificasSigningRequest `json:"certificasSigningRequest,omitempty"`
@@ -441,7 +441,7 @@ func (c *CertStoreAPI) CertificateModifyServicecertificatesPatch(ctx context.Con
 }
 
 type (
-	CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequestIDListSlice []*string
+	CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequestIDListSlice []string
 
 	CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequest struct {
 		IDList CertificateDeleteBulkTrustedCaChainCertificatesDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -474,7 +474,7 @@ func (c *CertStoreAPI) CertificateDeleteBulkTrustedCaChainCertificatesDelete(ctx
 type (
 	CertificateRetrieveTrustedCaChainCertificatesListGet200ResponseListSlice []*CertificateRetrieveTrustedCaChainCertificatesListGet200ResponseList
 
-	CertificateRetrieveTrustedCaChainCertificatesListGet200ResponseListInterCertDataSlice []*string
+	CertificateRetrieveTrustedCaChainCertificatesListGet200ResponseListInterCertDataSlice []string
 
 	CertificateRetrieveTrustedCaChainCertificatesListGet200ResponseList struct {
 		Description      *string                                                                               `json:"description,omitempty"`
@@ -540,7 +540,7 @@ func (c *CertStoreAPI) CertificateRetrieveTrustedCaChainCertificatesListGet(ctx 
 }
 
 type (
-	CertificateCreateTrustedCaChainCertificatesPostRequestInterCertDataSlice []*string
+	CertificateCreateTrustedCaChainCertificatesPostRequestInterCertDataSlice []string
 
 	CertificateCreateTrustedCaChainCertificatesPostRequest struct {
 		Description   *string                                                                  `json:"description,omitempty"`
@@ -604,7 +604,7 @@ func (c *CertStoreAPI) CertificateDeleteTrustedCaChainCertificatesDelete(ctx con
 }
 
 type (
-	CertificateRetrieveTrustedCaChainCertificatesGet200ResponseInterCertDataSlice []*string
+	CertificateRetrieveTrustedCaChainCertificatesGet200ResponseInterCertDataSlice []string
 
 	CertificateRetrieveTrustedCaChainCertificatesGet200Response struct {
 		Description   *string                                                                       `json:"description,omitempty"`

@@ -9,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type APsAPI struct {
@@ -345,7 +345,7 @@ type (
 		ApLoginPassword *string `json:"apLoginPassword,omitempty"`
 	}
 
-	AccessPointConfigurationRetrieveGet200ResponseMeshOptionsMeshUplinkEntryListSlice []*string
+	AccessPointConfigurationRetrieveGet200ResponseMeshOptionsMeshUplinkEntryListSlice []string
 
 	AccessPointConfigurationRetrieveGet200ResponseMeshOptions struct {
 		MeshMode            *string                                                                           `json:"meshMode,omitempty"`
@@ -461,9 +461,9 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	AccessPointConfigurationRetrieveGet200ResponseWifi24AvailableChannelRangeSlice []*float64
+	AccessPointConfigurationRetrieveGet200ResponseWifi24AvailableChannelRangeSlice []float64
 
-	AccessPointConfigurationRetrieveGet200ResponseWifi24ChannelRangeSlice []*float64
+	AccessPointConfigurationRetrieveGet200ResponseWifi24ChannelRangeSlice []float64
 
 	AccessPointConfigurationRetrieveGet200ResponseWifi24 struct {
 		AvailableChannelRange AccessPointConfigurationRetrieveGet200ResponseWifi24AvailableChannelRangeSlice `json:"availableChannelRange,omitempty"`
@@ -473,9 +473,9 @@ type (
 		TxPower               *string                                                                        `json:"txPower,omitempty"`
 	}
 
-	AccessPointConfigurationRetrieveGet200ResponseWifi50AvailableChannelRangeSlice []*float64
+	AccessPointConfigurationRetrieveGet200ResponseWifi50AvailableChannelRangeSlice []float64
 
-	AccessPointConfigurationRetrieveGet200ResponseWifi50ChannelRangeSlice []*float64
+	AccessPointConfigurationRetrieveGet200ResponseWifi50ChannelRangeSlice []float64
 
 	AccessPointConfigurationRetrieveGet200ResponseWifi50 struct {
 		AvailableChannelRange AccessPointConfigurationRetrieveGet200ResponseWifi50AvailableChannelRangeSlice `json:"availableChannelRange,omitempty"`
@@ -1262,7 +1262,7 @@ func (a *APsAPI) AccessPointConfigurationDisableMeshOptionsDelete(ctx context.Co
 }
 
 type (
-	AccessPointConfigurationModifyMeshOptionsPatchRequestMeshUplinkEntryListSlice []*string
+	AccessPointConfigurationModifyMeshOptionsPatchRequestMeshUplinkEntryListSlice []string
 
 	AccessPointConfigurationModifyMeshOptionsPatchRequest struct {
 		MeshMode            *string                                                                       `json:"meshMode,omitempty"`
@@ -2215,7 +2215,7 @@ func (a *APsAPI) AccessPointConfigurationDisableApUsbSoftwarePackageDelete(ctx c
 }
 
 type (
-	AccessPointConfigurationModifyApUsbSoftwarePackagePatchRequestApplyModelSlice []*string
+	AccessPointConfigurationModifyApUsbSoftwarePackagePatchRequestApplyModelSlice []string
 
 	AccessPointConfigurationModifyApUsbSoftwarePackagePatchRequestUsbSoftware struct {
 		ID   *string `json:"id,omitempty"`
@@ -2342,7 +2342,7 @@ func (a *APsAPI) AccessPointConfigurationDisableRadio24gOverrideDelete(ctx conte
 }
 
 type (
-	AccessPointConfigurationModifyRadio24gOverridePatchRequestChannelRangeSlice []*float64
+	AccessPointConfigurationModifyRadio24gOverridePatchRequestChannelRangeSlice []float64
 
 	AccessPointConfigurationModifyRadio24gOverridePatchRequest struct {
 		Channel      *int                                                                        `json:"channel,omitempty"`
@@ -2502,7 +2502,7 @@ func (a *APsAPI) AccessPointConfigurationDisableRadio5gOverrideDelete(ctx contex
 }
 
 type (
-	AccessPointConfigurationModifyRadio5gOverridePatchRequestChannelRangeSlice []*float64
+	AccessPointConfigurationModifyRadio5gOverridePatchRequestChannelRangeSlice []float64
 
 	AccessPointConfigurationModifyRadio5gOverridePatchRequest struct {
 		Channel          *int                                                                       `json:"channel,omitempty"`

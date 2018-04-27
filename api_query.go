@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type QueryAPI struct {
 	client *Client
 }
 type (
-	QueryWithFilterQueryApsRequestAttributesSlice []*string
+	QueryWithFilterQueryApsRequestAttributesSlice []string
 
 	QueryWithFilterQueryApsRequestFiltersSlice []*QueryWithFilterQueryApsRequestFilters
 
@@ -27,7 +27,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryApsRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryApsRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryApsRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryApsRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -173,7 +173,7 @@ func (q *QueryAPI) QueryWithFilterQueryAps(ctx context.Context, requestBody *Que
 }
 
 type (
-	ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestAttributesSlice []*string
+	ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestAttributesSlice []string
 
 	ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestExtraFiltersSlice []*ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestExtraFilters
 
@@ -205,7 +205,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestFullTextSearchFieldsSlice []*string
+	ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestFullTextSearchFieldsSlice []string
 
 	ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestFullTextSearch struct {
 		Fields ApplicationVisibilityControlApplicationPolicyRetrieveListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -351,7 +351,7 @@ func (q *QueryAPI) ApplicationVisibilityControlApplicationPolicyRetrieveListPost
 }
 
 type (
-	QueryWithFilterQueryClientsPostRequestAttributesSlice []*string
+	QueryWithFilterQueryClientsPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryClientsPostRequestExtraFiltersSlice []*QueryWithFilterQueryClientsPostRequestExtraFilters
 
@@ -383,7 +383,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryClientsPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryClientsPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryClientsPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryClientsPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -538,7 +538,7 @@ func (q *QueryAPI) QueryWithFilterQueryClientsPost(ctx context.Context, requestB
 }
 
 type (
-	QueryWithFilterQueryDpsksPostRequestAttributesSlice []*string
+	QueryWithFilterQueryDpsksPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryDpsksPostRequestExtraFiltersSlice []*QueryWithFilterQueryDpsksPostRequestExtraFilters
 
@@ -570,7 +570,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryDpsksPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryDpsksPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryDpsksPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryDpsksPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -703,7 +703,7 @@ func (q *QueryAPI) QueryWithFilterQueryDpsksPost(ctx context.Context, requestBod
 }
 
 type (
-	WirelessClientHistoricalClientPostRequestAttributesSlice []*string
+	WirelessClientHistoricalClientPostRequestAttributesSlice []string
 
 	WirelessClientHistoricalClientPostRequestExtraFiltersSlice []*WirelessClientHistoricalClientPostRequestExtraFilters
 
@@ -735,7 +735,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	WirelessClientHistoricalClientPostRequestFullTextSearchFieldsSlice []*string
+	WirelessClientHistoricalClientPostRequestFullTextSearchFieldsSlice []string
 
 	WirelessClientHistoricalClientPostRequestFullTextSearch struct {
 		Fields WirelessClientHistoricalClientPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -868,7 +868,7 @@ func (q *QueryAPI) WirelessClientHistoricalClientPost(ctx context.Context, reque
 }
 
 type (
-	QueryWithFilterRetrieveIndoormapListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveIndoormapListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveIndoormapListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveIndoormapListPostRequestExtraFilters
 
@@ -900,7 +900,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveIndoormapListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveIndoormapListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveIndoormapListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveIndoormapListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1050,7 +1050,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveIndoormapListPost(ctx context.Context,
 }
 
 type (
-	QueryWithFilterQueryMeshNeighborApListPostRequestAttributesSlice []*string
+	QueryWithFilterQueryMeshNeighborApListPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryMeshNeighborApListPostRequestFiltersSlice []*QueryWithFilterQueryMeshNeighborApListPostRequestFilters
 
@@ -1060,7 +1060,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryMeshNeighborApListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryMeshNeighborApListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryMeshNeighborApListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryMeshNeighborApListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1141,7 +1141,7 @@ func (q *QueryAPI) QueryWithFilterQueryMeshNeighborApListPost(ctx context.Contex
 }
 
 type (
-	QueryWithFilterQueryRogueApListPostRequestAttributesSlice []*string
+	QueryWithFilterQueryRogueApListPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryRogueApListPostRequestExtraFiltersSlice []*QueryWithFilterQueryRogueApListPostRequestExtraFilters
 
@@ -1173,7 +1173,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryRogueApListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryRogueApListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryRogueApListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryRogueApListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1310,7 +1310,7 @@ func (q *QueryAPI) QueryWithFilterQueryRogueApListPost(ctx context.Context, requ
 }
 
 type (
-	QueryWithFilterQueryAaaserversPostRequestAttributesSlice []*string
+	QueryWithFilterQueryAaaserversPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryAaaserversPostRequestExtraFiltersSlice []*QueryWithFilterQueryAaaserversPostRequestExtraFilters
 
@@ -1342,7 +1342,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryAaaserversPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryAaaserversPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryAaaserversPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryAaaserversPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1489,7 +1489,7 @@ func (q *QueryAPI) QueryWithFilterQueryAaaserversPost(ctx context.Context, reque
 }
 
 type (
-	QueryWithFilterQueryAccountingAaaserversPostRequestAttributesSlice []*string
+	QueryWithFilterQueryAccountingAaaserversPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryAccountingAaaserversPostRequestExtraFiltersSlice []*QueryWithFilterQueryAccountingAaaserversPostRequestExtraFilters
 
@@ -1521,7 +1521,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryAccountingAaaserversPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryAccountingAaaserversPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryAccountingAaaserversPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryAccountingAaaserversPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1668,7 +1668,7 @@ func (q *QueryAPI) QueryWithFilterQueryAccountingAaaserversPost(ctx context.Cont
 }
 
 type (
-	QueryWithFilterQueryAuthenticationAaaserversPostRequestAttributesSlice []*string
+	QueryWithFilterQueryAuthenticationAaaserversPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryAuthenticationAaaserversPostRequestExtraFiltersSlice []*QueryWithFilterQueryAuthenticationAaaserversPostRequestExtraFilters
 
@@ -1700,7 +1700,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryAuthenticationAaaserversPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryAuthenticationAaaserversPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryAuthenticationAaaserversPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryAuthenticationAaaserversPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1847,7 +1847,7 @@ func (q *QueryAPI) QueryWithFilterQueryAuthenticationAaaserversPost(ctx context.
 }
 
 type (
-	QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestExtraFilters
 
@@ -1879,7 +1879,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1981,7 +1981,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveApUsbsoftwarePackageProfileListPost(ct
 }
 
 type (
-	BonjourFencingPolicyRetrieveListPostRequestAttributesSlice []*string
+	BonjourFencingPolicyRetrieveListPostRequestAttributesSlice []string
 
 	BonjourFencingPolicyRetrieveListPostRequestExtraFiltersSlice []*BonjourFencingPolicyRetrieveListPostRequestExtraFilters
 
@@ -2013,7 +2013,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	BonjourFencingPolicyRetrieveListPostRequestFullTextSearchFieldsSlice []*string
+	BonjourFencingPolicyRetrieveListPostRequestFullTextSearchFieldsSlice []string
 
 	BonjourFencingPolicyRetrieveListPostRequestFullTextSearch struct {
 		Fields BonjourFencingPolicyRetrieveListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2151,7 +2151,7 @@ func (q *QueryAPI) BonjourFencingPolicyRetrieveListPost(ctx context.Context, req
 }
 
 type (
-	QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestExtraFilters
 
@@ -2183,7 +2183,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveBonjourpolicyProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2285,7 +2285,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveBonjourpolicyProfileListPost(ctx conte
 }
 
 type (
-	ClientIsolationWhitelistRetrieveListPostRequestAttributesSlice []*string
+	ClientIsolationWhitelistRetrieveListPostRequestAttributesSlice []string
 
 	ClientIsolationWhitelistRetrieveListPostRequestExtraFiltersSlice []*ClientIsolationWhitelistRetrieveListPostRequestExtraFilters
 
@@ -2317,7 +2317,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	ClientIsolationWhitelistRetrieveListPostRequestFullTextSearchFieldsSlice []*string
+	ClientIsolationWhitelistRetrieveListPostRequestFullTextSearchFieldsSlice []string
 
 	ClientIsolationWhitelistRetrieveListPostRequestFullTextSearch struct {
 		Fields ClientIsolationWhitelistRetrieveListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2459,7 +2459,7 @@ func (q *QueryAPI) ClientIsolationWhitelistRetrieveListPost(ctx context.Context,
 }
 
 type (
-	QueryWithFilterRetrieveDevicePolicyProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveDevicePolicyProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveDevicePolicyProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveDevicePolicyProfileListPostRequestExtraFilters
 
@@ -2491,7 +2491,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveDevicePolicyProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveDevicePolicyProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveDevicePolicyProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveDevicePolicyProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2593,7 +2593,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveDevicePolicyProfileListPost(ctx contex
 }
 
 type (
-	QueryWithFilterRetrieveDhcpProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveDhcpProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveDhcpProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveDhcpProfileListPostRequestExtraFilters
 
@@ -2625,7 +2625,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveDhcpProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveDhcpProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveDhcpProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveDhcpProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2760,7 +2760,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveDhcpProfileListPost(ctx context.Contex
 }
 
 type (
-	QueryWithFilterRetrieveDscpProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveDscpProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveDscpProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveDscpProfileListPostRequestExtraFilters
 
@@ -2792,7 +2792,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveDscpProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveDscpProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveDscpProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveDscpProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2894,7 +2894,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveDscpProfileListPost(ctx context.Contex
 }
 
 type (
-	QueryWithFilterRetrieveEthernetPortProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveEthernetPortProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveEthernetPortProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveEthernetPortProfileListPostRequestExtraFilters
 
@@ -2926,7 +2926,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveEthernetPortProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveEthernetPortProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveEthernetPortProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveEthernetPortProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3028,7 +3028,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveEthernetPortProfileListPost(ctx contex
 }
 
 type (
-	QueryWithFilterRetrieveGuessAccessProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveGuessAccessProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveGuessAccessProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveGuessAccessProfileListPostRequestExtraFilters
 
@@ -3060,7 +3060,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveGuessAccessProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveGuessAccessProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveGuessAccessProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveGuessAccessProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3162,7 +3162,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveGuessAccessProfileListPost(ctx context
 }
 
 type (
-	QueryWithFilterRetrieveHotspotProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveHotspotProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveHotspotProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveHotspotProfileListPostRequestExtraFilters
 
@@ -3194,7 +3194,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveHotspotProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveHotspotProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveHotspotProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveHotspotProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3296,7 +3296,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveHotspotProfileListPost(ctx context.Con
 }
 
 type (
-	QueryWithFilterRetrieveHotspot20ProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveHotspot20ProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveHotspot20ProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveHotspot20ProfileListPostRequestExtraFilters
 
@@ -3328,7 +3328,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveHotspot20ProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveHotspot20ProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveHotspot20ProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveHotspot20ProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3430,7 +3430,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveHotspot20ProfileListPost(ctx context.C
 }
 
 type (
-	QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestExtraFilters
 
@@ -3462,7 +3462,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveL2AccesscontrolProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3564,7 +3564,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveL2AccesscontrolProfileListPost(ctx con
 }
 
 type (
-	QueryWithFilterRetrieveVenueProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveVenueProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveVenueProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveVenueProfileListPostRequestExtraFilters
 
@@ -3596,7 +3596,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveVenueProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveVenueProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveVenueProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveVenueProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3698,7 +3698,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveVenueProfileListPost(ctx context.Conte
 }
 
 type (
-	QueryWithFilterRetrieveVlanPoolingProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveVlanPoolingProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveVlanPoolingProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveVlanPoolingProfileListPostRequestExtraFilters
 
@@ -3730,7 +3730,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveVlanPoolingProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveVlanPoolingProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveVlanPoolingProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveVlanPoolingProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3832,7 +3832,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveVlanPoolingProfileListPost(ctx context
 }
 
 type (
-	QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestExtraFilters
 
@@ -3864,7 +3864,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveWebAuthenticationProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3966,7 +3966,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveWebAuthenticationProfileListPost(ctx c
 }
 
 type (
-	QueryWithFilterRetrieveWechatProfileListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveWechatProfileListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveWechatProfileListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveWechatProfileListPostRequestExtraFilters
 
@@ -3998,7 +3998,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveWechatProfileListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveWechatProfileListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveWechatProfileListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveWechatProfileListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -4100,7 +4100,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveWechatProfileListPost(ctx context.Cont
 }
 
 type (
-	QueryWithFilterRetrieveWlanSchedulerListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveWlanSchedulerListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveWlanSchedulerListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveWlanSchedulerListPostRequestExtraFilters
 
@@ -4132,7 +4132,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveWlanSchedulerListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveWlanSchedulerListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveWlanSchedulerListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveWlanSchedulerListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -4234,7 +4234,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveWlanSchedulerListPost(ctx context.Cont
 }
 
 type (
-	QueryWithFilterRetrieveUserListPostRequestAttributesSlice []*string
+	QueryWithFilterRetrieveUserListPostRequestAttributesSlice []string
 
 	QueryWithFilterRetrieveUserListPostRequestExtraFiltersSlice []*QueryWithFilterRetrieveUserListPostRequestExtraFilters
 
@@ -4266,7 +4266,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterRetrieveUserListPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterRetrieveUserListPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterRetrieveUserListPostRequestFullTextSearch struct {
 		Fields QueryWithFilterRetrieveUserListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -4368,7 +4368,7 @@ func (q *QueryAPI) QueryWithFilterRetrieveUserListPost(ctx context.Context, requ
 }
 
 type (
-	ApplicationVisibilityControlUserDefinedRetrieveListPostRequestAttributesSlice []*string
+	ApplicationVisibilityControlUserDefinedRetrieveListPostRequestAttributesSlice []string
 
 	ApplicationVisibilityControlUserDefinedRetrieveListPostRequestExtraFiltersSlice []*ApplicationVisibilityControlUserDefinedRetrieveListPostRequestExtraFilters
 
@@ -4400,7 +4400,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	ApplicationVisibilityControlUserDefinedRetrieveListPostRequestFullTextSearchFieldsSlice []*string
+	ApplicationVisibilityControlUserDefinedRetrieveListPostRequestFullTextSearchFieldsSlice []string
 
 	ApplicationVisibilityControlUserDefinedRetrieveListPostRequestFullTextSearch struct {
 		Fields ApplicationVisibilityControlUserDefinedRetrieveListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -4533,7 +4533,7 @@ func (q *QueryAPI) ApplicationVisibilityControlUserDefinedRetrieveListPost(ctx c
 }
 
 type (
-	QueryWithFilterQueryWlansPostRequestAttributesSlice []*string
+	QueryWithFilterQueryWlansPostRequestAttributesSlice []string
 
 	QueryWithFilterQueryWlansPostRequestExtraFiltersSlice []*QueryWithFilterQueryWlansPostRequestExtraFilters
 
@@ -4565,7 +4565,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	QueryWithFilterQueryWlansPostRequestFullTextSearchFieldsSlice []*string
+	QueryWithFilterQueryWlansPostRequestFullTextSearchFieldsSlice []string
 
 	QueryWithFilterQueryWlansPostRequestFullTextSearch struct {
 		Fields QueryWithFilterQueryWlansPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

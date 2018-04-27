@@ -10,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type SCIAPI struct {
@@ -81,7 +81,7 @@ func (s *SCIAPI) SciRetrieveSciAcceptedEventCodesGet(ctx context.Context) (*http
 }
 
 type (
-	SciModifySciAcceptedEventCodesPostRequestSciAcceptedEventCodesSlice []*float64
+	SciModifySciAcceptedEventCodesPostRequestSciAcceptedEventCodesSlice []float64
 
 	SciModifySciAcceptedEventCodesPostRequest struct {
 		SciAcceptedEventCodes SciModifySciAcceptedEventCodesPostRequestSciAcceptedEventCodesSlice `json:"sciAcceptedEventCodes,omitempty"`

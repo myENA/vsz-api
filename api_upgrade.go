@@ -9,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type UpgradeAPI struct {
@@ -166,7 +166,7 @@ type (
 		PreviousOperationRecord    *SystemUpgradeRetriveUploadPatchInfoGet200ResponseClusterOperationProgressPreviousOperationRecord `json:"previousOperationRecord,omitempty"`
 	}
 
-	SystemUpgradeRetriveUploadPatchInfoGet200ResponseUploadPatchInfoAllowVersionsSlice []*string
+	SystemUpgradeRetriveUploadPatchInfoGet200ResponseUploadPatchInfoAllowVersionsSlice []string
 
 	SystemUpgradeRetriveUploadPatchInfoGet200ResponseUploadPatchInfo struct {
 		AllowVersions       SystemUpgradeRetriveUploadPatchInfoGet200ResponseUploadPatchInfoAllowVersionsSlice `json:"allowVersions,omitempty"`

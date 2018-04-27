@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type UsersAPI struct {
 	client *Client
 }
 type (
-	ScgUserDeleteScgUserDelete1RequestIDListSlice []*string
+	ScgUserDeleteScgUserDelete1RequestIDListSlice []string
 
 	ScgUserDeleteScgUserDelete1Request struct {
 		IDList ScgUserDeleteScgUserDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -99,7 +99,7 @@ func (u *UsersAPI) ScgUserAddScgUserPost(ctx context.Context, requestBody *ScgUs
 }
 
 type (
-	ScgUserQueryScgUsersPostRequestAttributesSlice []*string
+	ScgUserQueryScgUsersPostRequestAttributesSlice []string
 
 	ScgUserQueryScgUsersPostRequestFiltersSlice []*ScgUserQueryScgUsersPostRequestFilters
 
@@ -109,7 +109,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	ScgUserQueryScgUsersPostRequestFullTextSearchFieldsSlice []*string
+	ScgUserQueryScgUsersPostRequestFullTextSearchFieldsSlice []string
 
 	ScgUserQueryScgUsersPostRequestFullTextSearch struct {
 		Fields ScgUserQueryScgUsersPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

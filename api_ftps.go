@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type FTPSAPI struct {
 	client *Client
 }
 type (
-	FtpserversettingsRemoveFtpServersDeleteRequestIDListSlice []*string
+	FtpserversettingsRemoveFtpServersDeleteRequestIDListSlice []string
 
 	FtpserversettingsRemoveFtpServersDeleteRequest struct {
 		IDList FtpserversettingsRemoveFtpServersDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -90,7 +90,7 @@ func (f *FTPSAPI) FtpserversettingsAddFtpServerPost(ctx context.Context, request
 }
 
 type (
-	FtpserversettingsRetrieveFtpServerListPostRequestAttributesSlice []*string
+	FtpserversettingsRetrieveFtpServerListPostRequestAttributesSlice []string
 
 	FtpserversettingsRetrieveFtpServerListPostRequestExtraFiltersSlice []*FtpserversettingsRetrieveFtpServerListPostRequestExtraFilters
 
@@ -122,7 +122,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	FtpserversettingsRetrieveFtpServerListPostRequestFullTextSearchFieldsSlice []*string
+	FtpserversettingsRetrieveFtpServerListPostRequestFullTextSearchFieldsSlice []string
 
 	FtpserversettingsRetrieveFtpServerListPostRequestFullTextSearch struct {
 		Fields FtpserversettingsRetrieveFtpServerListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

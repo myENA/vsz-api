@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type ServicesAPI struct {
 	client *Client
 }
 type (
-	AccountingServiceDeleteAListOfAccountingServiceDeleteRequestIDListSlice []*string
+	AccountingServiceDeleteAListOfAccountingServiceDeleteRequestIDListSlice []string
 
 	AccountingServiceDeleteAListOfAccountingServiceDeleteRequest struct {
 		IDList AccountingServiceDeleteAListOfAccountingServiceDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -48,7 +48,7 @@ func (s *ServicesAPI) AccountingServiceDeleteAListOfAccountingServiceDelete(ctx 
 }
 
 type (
-	AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestExtraFiltersSlice []*AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestExtraFilters
 
@@ -80,7 +80,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AccountingServiceRetrieveListAllTypesOfAccountingServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -357,7 +357,7 @@ func (s *ServicesAPI) AccountingServiceCreateRadiusAccountingServicePost(ctx con
 }
 
 type (
-	AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestExtraFiltersSlice []*AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestExtraFilters
 
@@ -389,7 +389,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AccountingServiceRetrieveListRadiusAccountingServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -928,7 +928,7 @@ func (s *ServicesAPI) AccountingServiceDeleteAccountingServiceDelete(ctx context
 }
 
 type (
-	AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequestIDListSlice []*string
+	AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequestIDListSlice []string
 
 	AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequest struct {
 		IDList AuthenticationServiceDeleteAListOfAuthenticationServiceDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -1094,7 +1094,7 @@ func (s *ServicesAPI) AuthenticationServiceCreateActiveDirectoryAuthenticationSe
 }
 
 type (
-	AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestExtraFiltersSlice []*AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestExtraFilters
 
@@ -1126,7 +1126,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AuthenticationServiceRetrieveListAdAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1672,7 +1672,7 @@ func (s *ServicesAPI) AuthenticationServiceCreateLdapAuthenticationServicePost(c
 }
 
 type (
-	AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestExtraFiltersSlice []*AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestExtraFilters
 
@@ -1704,7 +1704,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AuthenticationServiceRetrieveListLdapAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2203,7 +2203,7 @@ func (s *ServicesAPI) AuthenticationServiceUpdateUserRoleMappingsOfLocaldbAuthen
 type (
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListSlice []*AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseList
 
-	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListDefaultWhitelistedDomainsSlice []*string
+	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListDefaultWhitelistedDomainsSlice []string
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListMappingsSlice []*AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListMappings
 
@@ -2224,7 +2224,7 @@ type (
 		UserRole  *AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListMappingsUserRole `json:"userRole,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListWhitelistedDomainsSlice []*string
+	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseListWhitelistedDomainsSlice []string
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceGet200ResponseList struct {
 		ApplicationID             *string                                                                                                     `json:"applicationId,omitempty"`
@@ -2290,7 +2290,7 @@ type (
 		UserRole  *AuthenticationServiceCreateOauthAuthenticationServicePostRequestMappingsUserRole `json:"userRole,omitempty"`
 	}
 
-	AuthenticationServiceCreateOauthAuthenticationServicePostRequestWhitelistedDomainsSlice []*string
+	AuthenticationServiceCreateOauthAuthenticationServicePostRequestWhitelistedDomainsSlice []string
 
 	AuthenticationServiceCreateOauthAuthenticationServicePostRequest struct {
 		ApplicationID      *string                                                                                 `json:"applicationId,omitempty"`
@@ -2338,7 +2338,7 @@ func (s *ServicesAPI) AuthenticationServiceCreateOauthAuthenticationServicePost(
 }
 
 type (
-	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestExtraFiltersSlice []*AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestExtraFilters
 
@@ -2370,7 +2370,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -2449,7 +2449,7 @@ type (
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListSlice []*AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseList
 
-	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListDefaultWhitelistedDomainsSlice []*string
+	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListDefaultWhitelistedDomainsSlice []string
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListMappingsSlice []*AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListMappings
 
@@ -2470,7 +2470,7 @@ type (
 		UserRole  *AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListMappingsUserRole `json:"userRole,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListWhitelistedDomainsSlice []*string
+	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseListWhitelistedDomainsSlice []string
 
 	AuthenticationServiceRetrieveListOauthAuthenticationServiceByQueryCritariaPost200ResponseList struct {
 		ApplicationID             *string                                                                                                                     `json:"applicationId,omitempty"`
@@ -2554,7 +2554,7 @@ func (s *ServicesAPI) AuthenticationServiceDeleteOauthAuthenticationServiceDelet
 }
 
 type (
-	AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseDefaultWhitelistedDomainsSlice []*string
+	AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseDefaultWhitelistedDomainsSlice []string
 
 	AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseMappingsSlice []*AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseMappings
 
@@ -2575,7 +2575,7 @@ type (
 		UserRole  *AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseMappingsUserRole `json:"userRole,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseWhitelistedDomainsSlice []*string
+	AuthenticationServiceRetrieveOauthAuthenticationServiceGet200ResponseWhitelistedDomainsSlice []string
 
 	AuthenticationServiceRetrieveOauthAuthenticationServiceGet200Response struct {
 		ApplicationID             *string                                                                                             `json:"applicationId,omitempty"`
@@ -2715,7 +2715,7 @@ func (s *ServicesAPI) AuthenticationServiceModifyUserTrafficProfileMappingOfOaut
 }
 
 type (
-	AuthenticationServiceModifyWhitelistedDomainsOfOauthPatchRequest []*string
+	AuthenticationServiceModifyWhitelistedDomainsOfOauthPatchRequest []string
 )
 
 // AuthenticationServiceModifyWhitelistedDomainsOfOauthPatch: Use this API command to modify whitelisted domains of an OAuth authentication service.
@@ -2748,7 +2748,7 @@ func (s *ServicesAPI) AuthenticationServiceModifyWhitelistedDomainsOfOauthPatch(
 }
 
 type (
-	AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestExtraFiltersSlice []*AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestExtraFilters
 
@@ -2780,7 +2780,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AuthenticationServiceRetrieveListAllTypesOfAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -3114,7 +3114,7 @@ func (s *ServicesAPI) AuthenticationServiceCreateRadiusAuthenticationServicePost
 }
 
 type (
-	AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []*string
+	AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestAttributesSlice []string
 
 	AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestExtraFiltersSlice []*AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestExtraFilters
 
@@ -3146,7 +3146,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []*string
+	AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice []string
 
 	AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestFullTextSearch struct {
 		Fields AuthenticationServiceRetrieveListRadiusAuthenticationServiceByQueryCritariaPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

@@ -10,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type ClientsAPI struct {
@@ -89,7 +89,7 @@ func (c *ClientsAPI) WirelessClientBulkDisconnectClientPost(ctx context.Context,
 }
 
 type (
-	WirelessClientQueryClientByWlanNamePostRequestAttributesSlice []*string
+	WirelessClientQueryClientByWlanNamePostRequestAttributesSlice []string
 
 	WirelessClientQueryClientByWlanNamePostRequestExtraFiltersSlice []*WirelessClientQueryClientByWlanNamePostRequestExtraFilters
 
@@ -121,7 +121,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	WirelessClientQueryClientByWlanNamePostRequestFullTextSearchFieldsSlice []*string
+	WirelessClientQueryClientByWlanNamePostRequestFullTextSearchFieldsSlice []string
 
 	WirelessClientQueryClientByWlanNamePostRequestFullTextSearch struct {
 		Fields WirelessClientQueryClientByWlanNamePostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

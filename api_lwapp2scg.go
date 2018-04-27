@@ -7,7 +7,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type LWAPP2SCGAPI struct {
@@ -46,7 +46,7 @@ func (l *LWAPP2SCGAPI) LwappToScgModifyBasicPatch(ctx context.Context, requestBo
 }
 
 type (
-	LwappToScgModifyAplistPatchRequest []*string
+	LwappToScgModifyAplistPatchRequest []string
 )
 
 // LwappToScgModifyAplistPatch: Use this API command to modify the apList of the Lwapp Config.

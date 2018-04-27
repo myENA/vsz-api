@@ -9,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type RuckusZonesAPI struct {
@@ -131,7 +131,7 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZonePost(ctx context.Context,
 }
 
 type (
-	BonjourFencingPolicyDeleteDelete1RequestIDListSlice []*string
+	BonjourFencingPolicyDeleteDelete1RequestIDListSlice []string
 
 	BonjourFencingPolicyDeleteDelete1Request struct {
 		IDList BonjourFencingPolicyDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -186,7 +186,7 @@ func (r *RuckusZonesAPI) BonjourFencingPolicyDeleteDelete(ctx context.Context, i
 }
 
 type (
-	ClientIsolationWhitelistDeleteDelete1RequestIDListSlice []*string
+	ClientIsolationWhitelistDeleteDelete1RequestIDListSlice []string
 
 	ClientIsolationWhitelistDeleteDelete1Request struct {
 		IDList ClientIsolationWhitelistDeleteDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -376,7 +376,7 @@ type (
 		Name        *DomainCreatePostRequestPropertiesName        `json:"name,omitempty"`
 	}
 
-	DomainCreatePostRequestRequiredSlice []*string
+	DomainCreatePostRequestRequiredSlice []string
 
 	DomainCreatePostRequest struct {
 		AdditionalProperties *bool                                `json:"additionalProperties,omitempty"`
@@ -865,7 +865,7 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneCreateZoneOfIpv6Post(ctx context.Co
 }
 
 type (
-	RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestAttributesSlice []*string
+	RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestAttributesSlice []string
 
 	RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestExtraFiltersSlice []*RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestExtraFilters
 
@@ -897,7 +897,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestFullTextSearchFieldsSlice []*string
+	RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestFullTextSearchFieldsSlice []string
 
 	RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestFullTextSearch struct {
 		Fields RuckusWirelessApZoneRetrieveDhcpNatServiceConfigurationWithinDomainPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1147,7 +1147,7 @@ type (
 		ApStatus        *string `json:"apStatus,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveGet200ResponseDhcpSiteConfigSiteProfileIdsSlice []*string
+	RuckusWirelessApZoneRetrieveGet200ResponseDhcpSiteConfigSiteProfileIdsSlice []string
 
 	RuckusWirelessApZoneRetrieveGet200ResponseDhcpSiteConfig struct {
 		ManualSelect   *bool                                                                       `json:"manualSelect,omitempty"`
@@ -1188,7 +1188,7 @@ type (
 		RecoverySsidPskKey *string  `json:"recoverySsidPskKey,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveGet200ResponseRogueMaliciousTypesSlice []*string
+	RuckusWirelessApZoneRetrieveGet200ResponseRogueMaliciousTypesSlice []string
 
 	RuckusWirelessApZoneRetrieveGet200ResponseRogue struct {
 		MaliciousTypes    RuckusWirelessApZoneRetrieveGet200ResponseRogueMaliciousTypesSlice `json:"maliciousTypes,omitempty"`
@@ -1286,7 +1286,7 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveGet200ResponseUsbSoftwarePackageApplyModelSlice []*string
+	RuckusWirelessApZoneRetrieveGet200ResponseUsbSoftwarePackageApplyModelSlice []string
 
 	RuckusWirelessApZoneRetrieveGet200ResponseUsbSoftwarePackageUsbSoftware struct {
 		ID   *string `json:"id,omitempty"`
@@ -1303,9 +1303,9 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveGet200ResponseWifi24AvailableChannelRangeSlice []*float64
+	RuckusWirelessApZoneRetrieveGet200ResponseWifi24AvailableChannelRangeSlice []float64
 
-	RuckusWirelessApZoneRetrieveGet200ResponseWifi24ChannelRangeSlice []*float64
+	RuckusWirelessApZoneRetrieveGet200ResponseWifi24ChannelRangeSlice []float64
 
 	RuckusWirelessApZoneRetrieveGet200ResponseWifi24 struct {
 		AvailableChannelRange RuckusWirelessApZoneRetrieveGet200ResponseWifi24AvailableChannelRangeSlice `json:"availableChannelRange,omitempty"`
@@ -1315,13 +1315,13 @@ type (
 		TxPower               *string                                                                    `json:"txPower,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveGet200ResponseWifi50AvailableIndoorChannelRangeSlice []*float64
+	RuckusWirelessApZoneRetrieveGet200ResponseWifi50AvailableIndoorChannelRangeSlice []float64
 
-	RuckusWirelessApZoneRetrieveGet200ResponseWifi50AvailableOutdoorChannelRangeSlice []*float64
+	RuckusWirelessApZoneRetrieveGet200ResponseWifi50AvailableOutdoorChannelRangeSlice []float64
 
-	RuckusWirelessApZoneRetrieveGet200ResponseWifi50IndoorChannelRangeSlice []*float64
+	RuckusWirelessApZoneRetrieveGet200ResponseWifi50IndoorChannelRangeSlice []float64
 
-	RuckusWirelessApZoneRetrieveGet200ResponseWifi50OutdoorChannelRangeSlice []*float64
+	RuckusWirelessApZoneRetrieveGet200ResponseWifi50OutdoorChannelRangeSlice []float64
 
 	RuckusWirelessApZoneRetrieveGet200ResponseWifi50 struct {
 		AvailableIndoorChannelRange  RuckusWirelessApZoneRetrieveGet200ResponseWifi50AvailableIndoorChannelRangeSlice  `json:"availableIndoorChannelRange,omitempty"`
@@ -2145,7 +2145,7 @@ type (
 		ApStatus        *string `json:"apStatus,omitempty"`
 	}
 
-	RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatchRequestSiteProfileIdsSlice []*string
+	RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatchRequestSiteProfileIdsSlice []string
 
 	RuckusWirelessApZoneModifyDhcpNatServiceConfigurationPatchRequest struct {
 		ManualSelect   *bool                                                                                `json:"manualSelect,omitempty"`
@@ -2531,7 +2531,7 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableRogueDelete(ctx context.Cont
 }
 
 type (
-	RuckusWirelessApZoneModifyRoguePatchRequestMaliciousTypesSlice []*string
+	RuckusWirelessApZoneModifyRoguePatchRequestMaliciousTypesSlice []string
 
 	RuckusWirelessApZoneModifyRoguePatchRequest struct {
 		MaliciousTypes    RuckusWirelessApZoneModifyRoguePatchRequestMaliciousTypesSlice `json:"maliciousTypes,omitempty"`
@@ -2915,7 +2915,7 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneDisableApUsbSoftwarePackageDelete(c
 }
 
 type (
-	RuckusWirelessApZoneModifyApUsbSoftwarePackagePatchRequestApplyModelSlice []*string
+	RuckusWirelessApZoneModifyApUsbSoftwarePackagePatchRequestApplyModelSlice []string
 
 	RuckusWirelessApZoneModifyApUsbSoftwarePackagePatchRequestUsbSoftware struct {
 		ID   *string `json:"id,omitempty"`
@@ -3018,7 +3018,7 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyHotspot20VenueProfilePatch(ct
 }
 
 type (
-	RuckusWirelessApZoneModifyRadio24gPatchRequestChannelRangeSlice []*float64
+	RuckusWirelessApZoneModifyRadio24gPatchRequestChannelRangeSlice []float64
 
 	RuckusWirelessApZoneModifyRadio24gPatchRequest struct {
 		Channel      *int                                                            `json:"channel,omitempty"`
@@ -3058,9 +3058,9 @@ func (r *RuckusZonesAPI) RuckusWirelessApZoneModifyRadio24gPatch(ctx context.Con
 }
 
 type (
-	RuckusWirelessApZoneModifyRadio5gPatchRequestIndoorChannelRangeSlice []*float64
+	RuckusWirelessApZoneModifyRadio5gPatchRequestIndoorChannelRangeSlice []float64
 
-	RuckusWirelessApZoneModifyRadio5gPatchRequestOutdoorChannelRangeSlice []*float64
+	RuckusWirelessApZoneModifyRadio5gPatchRequestOutdoorChannelRangeSlice []float64
 
 	RuckusWirelessApZoneModifyRadio5gPatchRequest struct {
 		ChannelWidth            *int                                                                  `json:"channelWidth,omitempty"`
@@ -4520,9 +4520,9 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	ApGroupRetrieveGet1200ResponseWifi24AvailableChannelRangeSlice []*float64
+	ApGroupRetrieveGet1200ResponseWifi24AvailableChannelRangeSlice []float64
 
-	ApGroupRetrieveGet1200ResponseWifi24ChannelRangeSlice []*float64
+	ApGroupRetrieveGet1200ResponseWifi24ChannelRangeSlice []float64
 
 	ApGroupRetrieveGet1200ResponseWifi24 struct {
 		AvailableChannelRange ApGroupRetrieveGet1200ResponseWifi24AvailableChannelRangeSlice `json:"availableChannelRange,omitempty"`
@@ -4532,13 +4532,13 @@ type (
 		TxPower               *string                                                        `json:"txPower,omitempty"`
 	}
 
-	ApGroupRetrieveGet1200ResponseWifi50AvailableIndoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet1200ResponseWifi50AvailableIndoorChannelRangeSlice []float64
 
-	ApGroupRetrieveGet1200ResponseWifi50AvailableOutdoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet1200ResponseWifi50AvailableOutdoorChannelRangeSlice []float64
 
-	ApGroupRetrieveGet1200ResponseWifi50IndoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet1200ResponseWifi50IndoorChannelRangeSlice []float64
 
-	ApGroupRetrieveGet1200ResponseWifi50OutdoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet1200ResponseWifi50OutdoorChannelRangeSlice []float64
 
 	ApGroupRetrieveGet1200ResponseWifi50 struct {
 		AvailableIndoorChannelRange  ApGroupRetrieveGet1200ResponseWifi50AvailableIndoorChannelRangeSlice  `json:"availableIndoorChannelRange,omitempty"`
@@ -4698,9 +4698,9 @@ type (
 		Name *string `json:"name,omitempty"`
 	}
 
-	ApGroupRetrieveGet200ResponseWifi24AvailableChannelRangeSlice []*float64
+	ApGroupRetrieveGet200ResponseWifi24AvailableChannelRangeSlice []float64
 
-	ApGroupRetrieveGet200ResponseWifi24ChannelRangeSlice []*float64
+	ApGroupRetrieveGet200ResponseWifi24ChannelRangeSlice []float64
 
 	ApGroupRetrieveGet200ResponseWifi24 struct {
 		AvailableChannelRange ApGroupRetrieveGet200ResponseWifi24AvailableChannelRangeSlice `json:"availableChannelRange,omitempty"`
@@ -4710,13 +4710,13 @@ type (
 		TxPower               *string                                                       `json:"txPower,omitempty"`
 	}
 
-	ApGroupRetrieveGet200ResponseWifi50AvailableIndoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet200ResponseWifi50AvailableIndoorChannelRangeSlice []float64
 
-	ApGroupRetrieveGet200ResponseWifi50AvailableOutdoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet200ResponseWifi50AvailableOutdoorChannelRangeSlice []float64
 
-	ApGroupRetrieveGet200ResponseWifi50IndoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet200ResponseWifi50IndoorChannelRangeSlice []float64
 
-	ApGroupRetrieveGet200ResponseWifi50OutdoorChannelRangeSlice []*float64
+	ApGroupRetrieveGet200ResponseWifi50OutdoorChannelRangeSlice []float64
 
 	ApGroupRetrieveGet200ResponseWifi50 struct {
 		AvailableIndoorChannelRange  ApGroupRetrieveGet200ResponseWifi50AvailableIndoorChannelRangeSlice  `json:"availableIndoorChannelRange,omitempty"`
@@ -5814,7 +5814,7 @@ func (r *RuckusZonesAPI) ApGroupDisableApUsbSoftwarePackageDelete(ctx context.Co
 }
 
 type (
-	ApGroupModifyApUsbSoftwarePackagePatchRequestApplyModelSlice []*string
+	ApGroupModifyApUsbSoftwarePackagePatchRequestApplyModelSlice []string
 
 	ApGroupModifyApUsbSoftwarePackagePatchRequestUsbSoftware struct {
 		ID   *string `json:"id,omitempty"`
@@ -6010,7 +6010,7 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio24gOverrideDelete(ctx context.Contex
 }
 
 type (
-	ApGroupModifyRadio24gOverridePatchRequestChannelRangeSlice []*float64
+	ApGroupModifyRadio24gOverridePatchRequestChannelRangeSlice []float64
 
 	ApGroupModifyRadio24gOverridePatchRequest struct {
 		Channel      *int                                                       `json:"channel,omitempty"`
@@ -6206,9 +6206,9 @@ func (r *RuckusZonesAPI) ApGroupDisableRadio5gOverrideDelete(ctx context.Context
 }
 
 type (
-	ApGroupModifyRadio5gOverridePatchRequestIndoorChannelRangeSlice []*float64
+	ApGroupModifyRadio5gOverridePatchRequestIndoorChannelRangeSlice []float64
 
-	ApGroupModifyRadio5gOverridePatchRequestOutdoorChannelRangeSlice []*float64
+	ApGroupModifyRadio5gOverridePatchRequestOutdoorChannelRangeSlice []float64
 
 	ApGroupModifyRadio5gOverridePatchRequest struct {
 		ChannelWidth            *int                                                             `json:"channelWidth,omitempty"`
@@ -7928,7 +7928,7 @@ func (r *RuckusZonesAPI) DevicePolicyModifyRuleOfDevicePolicyPorfilePatch(ctx co
 }
 
 type (
-	DhcpDeleteMultipleDhcpPoolsDeleteRequestIDListSlice []*string
+	DhcpDeleteMultipleDhcpPoolsDeleteRequestIDListSlice []string
 
 	DhcpDeleteMultipleDhcpPoolsDeleteRequest struct {
 		IDList DhcpDeleteMultipleDhcpPoolsDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -8219,7 +8219,7 @@ type (
 		ApStatus         *string `json:"apStatus,omitempty"`
 	}
 
-	DhcpGetDhcpConfigurationGet200ResponseSiteProfilesSlice []*string
+	DhcpGetDhcpConfigurationGet200ResponseSiteProfilesSlice []string
 
 	DhcpGetDhcpConfigurationGet200Response struct {
 		ManualSelect *bool                                                   `json:"manualSelect,omitempty"`
@@ -8266,7 +8266,7 @@ type (
 		ApServerPrimary *bool   `json:"apServerPrimary,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPostRequestSiteProfileIdsSlice []*string
+	RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPostRequestSiteProfileIdsSlice []string
 
 	RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPostRequest struct {
 		ManualSelect   *bool                                                                                `json:"manualSelect,omitempty"`
@@ -8289,7 +8289,7 @@ type (
 		ApStatus         *string `json:"apStatus,omitempty"`
 	}
 
-	RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200ResponseSiteProfilesSlice []*string
+	RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200ResponseSiteProfilesSlice []string
 
 	RuckusWirelessApZoneRetrieveDhcpNatServiceIpAssignmentPost200Response struct {
 		ManualSelect *bool                                                                                  `json:"manualSelect,omitempty"`
@@ -8380,7 +8380,7 @@ type (
 		DownlinkEnable *bool   `json:"downlinkEnable,omitempty"`
 	}
 
-	DiffservCreatePostRequestPreservedListSlice []*string
+	DiffservCreatePostRequestPreservedListSlice []string
 
 	DiffservCreatePostRequestUplinkDiffServ struct {
 		Uplink       *string `json:"uplink,omitempty"`
@@ -8467,7 +8467,7 @@ type (
 		DownlinkEnable *bool   `json:"downlinkEnable,omitempty"`
 	}
 
-	DiffservRetrieveGet200ResponsePreservedListSlice []*string
+	DiffservRetrieveGet200ResponsePreservedListSlice []string
 
 	DiffservRetrieveGet200ResponseUplinkDiffServ struct {
 		Uplink       *string `json:"uplink,omitempty"`
@@ -8601,7 +8601,7 @@ func (r *RuckusZonesAPI) DiffservModifyDownlinkDiffservPatch(ctx context.Context
 }
 
 type (
-	DiffservModifyPreservedListPatchRequest []*string
+	DiffservModifyPreservedListPatchRequest []string
 )
 
 // DiffservModifyPreservedListPatch: Use this API command to modify preserved list.
@@ -9653,7 +9653,7 @@ func (r *RuckusZonesAPI) L2AccessControlRetrieveListGet(ctx context.Context, zon
 }
 
 type (
-	L2AccessControlCreateL2AccessControlPostRequestRuleMacsSlice []*string
+	L2AccessControlCreateL2AccessControlPostRequestRuleMacsSlice []string
 
 	L2AccessControlCreateL2AccessControlPostRequest struct {
 		Description *string                                                      `json:"description,omitempty"`
@@ -9729,7 +9729,7 @@ func (r *RuckusZonesAPI) L2AccessControlDeleteDelete(ctx context.Context, zoneId
 }
 
 type (
-	L2AccessControlRetrieveGet200ResponseRuleMacsSlice []*string
+	L2AccessControlRetrieveGet200ResponseRuleMacsSlice []string
 
 	L2AccessControlRetrieveGet200Response struct {
 		Description *string                                            `json:"description,omitempty"`
@@ -9817,7 +9817,7 @@ func (r *RuckusZonesAPI) L2AccessControlModifyBasicPatch(ctx context.Context, zo
 }
 
 type (
-	L2AccessControlModifyRuleMacsPatchRequest []*string
+	L2AccessControlModifyRuleMacsPatchRequest []string
 )
 
 // L2AccessControlModifyRuleMacsPatch: Modify a specific L2 Access Control Rule Macs
@@ -10391,7 +10391,7 @@ type (
 		TimeoutInMin     *float64 `json:"timeoutInMin,omitempty"`
 	}
 
-	HotspotServiceCreateExternalPostRequestWalledGardensSlice []*string
+	HotspotServiceCreateExternalPostRequestWalledGardensSlice []string
 
 	HotspotServiceCreateExternalPostRequest struct {
 		Description        *string                                                   `json:"description,omitempty"`
@@ -10456,7 +10456,7 @@ type (
 		TimeoutInMin     *float64 `json:"timeoutInMin,omitempty"`
 	}
 
-	HotspotServiceCreateInternalPostRequestWalledGardensSlice []*string
+	HotspotServiceCreateInternalPostRequestWalledGardensSlice []string
 
 	HotspotServiceCreateInternalPostRequest struct {
 		Description        *string                                                   `json:"description,omitempty"`
@@ -10520,7 +10520,7 @@ type (
 		TimeoutInMin     *float64 `json:"timeoutInMin,omitempty"`
 	}
 
-	HotspotServiceCreateSmartClientOnlyPostRequestWalledGardensSlice []*string
+	HotspotServiceCreateSmartClientOnlyPostRequestWalledGardensSlice []string
 
 	HotspotServiceCreateSmartClientOnlyPostRequest struct {
 		Description      *string                                                          `json:"description,omitempty"`
@@ -10622,7 +10622,7 @@ type (
 		TimeoutInMin     *float64 `json:"timeoutInMin,omitempty"`
 	}
 
-	HotspotServiceRetrieveGet200ResponseWalledGardensSlice []*string
+	HotspotServiceRetrieveGet200ResponseWalledGardensSlice []string
 
 	HotspotServiceRetrieveGet200Response struct {
 		Description         *string                                                  `json:"description,omitempty"`
@@ -10849,7 +10849,7 @@ func (r *RuckusZonesAPI) HotspotServiceModifyRedirectPatch(ctx context.Context, 
 }
 
 type (
-	HotspotServiceModifyWalledGardensPatchRequest []*string
+	HotspotServiceModifyWalledGardensPatchRequest []string
 )
 
 // HotspotServiceModifyWalledGardensPatch: Use this API command to modify walled gardens on Hotspot(WISPr) of a zone.
@@ -11284,7 +11284,7 @@ type (
 		SourcePort *float64 `json:"sourcePort,omitempty"`
 	}
 
-	WechatCreatePostRequestWhiteListSlice []*string
+	WechatCreatePostRequestWhiteListSlice []string
 
 	WechatCreatePostRequest struct {
 		AuthURL         *string                                     `json:"authUrl,omitempty"`
@@ -11371,7 +11371,7 @@ type (
 		SourcePort *float64 `json:"sourcePort,omitempty"`
 	}
 
-	WechatRetrieveGet200ResponseWhiteListSlice []*string
+	WechatRetrieveGet200ResponseWhiteListSlice []string
 
 	WechatRetrieveGet200Response struct {
 		AuthURL         *string                                          `json:"authUrl,omitempty"`
@@ -11508,7 +11508,7 @@ func (r *RuckusZonesAPI) WechatModifyDnatPortMappingPatch(ctx context.Context, z
 }
 
 type (
-	WechatModifyWhitelistPatchRequest []*string
+	WechatModifyWhitelistPatchRequest []string
 )
 
 // WechatModifyWhitelistPatch: Use this API command to modify whiteList of a wechat profile.
@@ -12740,19 +12740,19 @@ func (r *RuckusZonesAPI) WlanCreateStandardOpenPost(ctx context.Context, zoneId 
 type (
 	WlanSchedulerRetrieveListGet200ResponseListSlice []*WlanSchedulerRetrieveListGet200ResponseList
 
-	WlanSchedulerRetrieveListGet200ResponseListFriSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListFriSlice []string
 
-	WlanSchedulerRetrieveListGet200ResponseListMonSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListMonSlice []string
 
-	WlanSchedulerRetrieveListGet200ResponseListSatSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListSatSlice []string
 
-	WlanSchedulerRetrieveListGet200ResponseListSunSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListSunSlice []string
 
-	WlanSchedulerRetrieveListGet200ResponseListThuSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListThuSlice []string
 
-	WlanSchedulerRetrieveListGet200ResponseListTueSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListTueSlice []string
 
-	WlanSchedulerRetrieveListGet200ResponseListWedSlice []*string
+	WlanSchedulerRetrieveListGet200ResponseListWedSlice []string
 
 	WlanSchedulerRetrieveListGet200ResponseList struct {
 		Description *string                                             `json:"description,omitempty"`
@@ -12827,19 +12827,19 @@ func (r *RuckusZonesAPI) WlanSchedulerRetrieveListGet(ctx context.Context, zoneI
 }
 
 type (
-	WlanSchedulerCreatePostRequestFriSlice []*string
+	WlanSchedulerCreatePostRequestFriSlice []string
 
-	WlanSchedulerCreatePostRequestMonSlice []*string
+	WlanSchedulerCreatePostRequestMonSlice []string
 
-	WlanSchedulerCreatePostRequestSatSlice []*string
+	WlanSchedulerCreatePostRequestSatSlice []string
 
-	WlanSchedulerCreatePostRequestSunSlice []*string
+	WlanSchedulerCreatePostRequestSunSlice []string
 
-	WlanSchedulerCreatePostRequestThuSlice []*string
+	WlanSchedulerCreatePostRequestThuSlice []string
 
-	WlanSchedulerCreatePostRequestTueSlice []*string
+	WlanSchedulerCreatePostRequestTueSlice []string
 
-	WlanSchedulerCreatePostRequestWedSlice []*string
+	WlanSchedulerCreatePostRequestWedSlice []string
 
 	WlanSchedulerCreatePostRequest struct {
 		Description *string                                `json:"description,omitempty"`
@@ -12920,19 +12920,19 @@ func (r *RuckusZonesAPI) WlanSchedulerDeleteDelete(ctx context.Context, zoneId s
 }
 
 type (
-	WlanSchedulerRetrieveGet200ResponseFriSlice []*string
+	WlanSchedulerRetrieveGet200ResponseFriSlice []string
 
-	WlanSchedulerRetrieveGet200ResponseMonSlice []*string
+	WlanSchedulerRetrieveGet200ResponseMonSlice []string
 
-	WlanSchedulerRetrieveGet200ResponseSatSlice []*string
+	WlanSchedulerRetrieveGet200ResponseSatSlice []string
 
-	WlanSchedulerRetrieveGet200ResponseSunSlice []*string
+	WlanSchedulerRetrieveGet200ResponseSunSlice []string
 
-	WlanSchedulerRetrieveGet200ResponseThuSlice []*string
+	WlanSchedulerRetrieveGet200ResponseThuSlice []string
 
-	WlanSchedulerRetrieveGet200ResponseTueSlice []*string
+	WlanSchedulerRetrieveGet200ResponseTueSlice []string
 
-	WlanSchedulerRetrieveGet200ResponseWedSlice []*string
+	WlanSchedulerRetrieveGet200ResponseWedSlice []string
 
 	WlanSchedulerRetrieveGet200Response struct {
 		Description *string                                     `json:"description,omitempty"`
@@ -13654,7 +13654,7 @@ type (
 
 	WlanRetrieveGet200ResponseQosMapsSlice []*WlanRetrieveGet200ResponseQosMaps
 
-	WlanRetrieveGet200ResponseQosMapsExceptsSlice []*float64
+	WlanRetrieveGet200ResponseQosMapsExceptsSlice []float64
 
 	WlanRetrieveGet200ResponseQosMaps struct {
 		Enable   *bool                                         `json:"enable,omitempty"`
@@ -14457,7 +14457,7 @@ func (r *RuckusZonesAPI) WlanModifyDpskSettingPatch(ctx context.Context, zoneId 
 }
 
 type (
-	DynamicPskDeleteDpskPostRequestIDListSlice []*string
+	DynamicPskDeleteDpskPostRequestIDListSlice []string
 
 	DynamicPskDeleteDpskPostRequest struct {
 		IDList DynamicPskDeleteDpskPostRequestIDListSlice `json:"idList,omitempty"`
@@ -14506,7 +14506,7 @@ func (r *RuckusZonesAPI) DynamicPskDeleteDpskPost(ctx context.Context, zoneId st
 }
 
 type (
-	DynamicPskBatchGenerateDpsksPostRequestPassphraseListSlice []*string
+	DynamicPskBatchGenerateDpsksPostRequestPassphraseListSlice []string
 
 	DynamicPskBatchGenerateDpsksPostRequest struct {
 		Amount         *float64                                                   `json:"amount,omitempty"`
@@ -14963,7 +14963,7 @@ func (r *RuckusZonesAPI) WlanDisableQosMapSetDelete(ctx context.Context, zoneId 
 type (
 	WlanModifyQosMapSetPatchRequestSlice []*WlanModifyQosMapSetPatchRequest
 
-	WlanModifyQosMapSetPatchRequestExceptsSlice []*float64
+	WlanModifyQosMapSetPatchRequestExceptsSlice []float64
 
 	WlanModifyQosMapSetPatchRequest struct {
 		Enable   *bool                                       `json:"enable,omitempty"`

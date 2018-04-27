@@ -10,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type IdentityAPI struct {
@@ -236,7 +236,7 @@ func (i *IdentityAPI) IdentityGuestPassGenerateIdentityGuestPassPost(ctx context
 }
 
 type (
-	IdentityGuestPassRetrieveIdentityGuestPassListPostRequestAttributesSlice []*string
+	IdentityGuestPassRetrieveIdentityGuestPassListPostRequestAttributesSlice []string
 
 	IdentityGuestPassRetrieveIdentityGuestPassListPostRequestExtraFiltersSlice []*IdentityGuestPassRetrieveIdentityGuestPassListPostRequestExtraFilters
 
@@ -268,7 +268,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	IdentityGuestPassRetrieveIdentityGuestPassListPostRequestFullTextSearchFieldsSlice []*string
+	IdentityGuestPassRetrieveIdentityGuestPassListPostRequestFullTextSearchFieldsSlice []string
 
 	IdentityGuestPassRetrieveIdentityGuestPassListPostRequestFullTextSearch struct {
 		Fields IdentityGuestPassRetrieveIdentityGuestPassListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -532,7 +532,7 @@ func (i *IdentityAPI) IdentityGuestPassDeleteDelete(ctx context.Context, userId 
 }
 
 type (
-	IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestAttributesSlice []*string
+	IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestAttributesSlice []string
 
 	IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestExtraFiltersSlice []*IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestExtraFilters
 
@@ -564,7 +564,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestFullTextSearchFieldsSlice []*string
+	IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestFullTextSearchFieldsSlice []string
 
 	IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestFullTextSearch struct {
 		Fields IdentitySubscriptionPackageRetrieveSubscriptionPackageListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -889,7 +889,7 @@ func (i *IdentityAPI) IdentitySubscriptionPackageModifyBasicPatch(ctx context.Co
 }
 
 type (
-	IdentityUserRetrieveIdentityUserListPostRequestAttributesSlice []*string
+	IdentityUserRetrieveIdentityUserListPostRequestAttributesSlice []string
 
 	IdentityUserRetrieveIdentityUserListPostRequestExtraFiltersSlice []*IdentityUserRetrieveIdentityUserListPostRequestExtraFilters
 
@@ -921,7 +921,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	IdentityUserRetrieveIdentityUserListPostRequestFullTextSearchFieldsSlice []*string
+	IdentityUserRetrieveIdentityUserListPostRequestFullTextSearchFieldsSlice []string
 
 	IdentityUserRetrieveIdentityUserListPostRequestFullTextSearch struct {
 		Fields IdentityUserRetrieveIdentityUserListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -1182,7 +1182,7 @@ func (i *IdentityAPI) IdentityUserRoleCreatePost(ctx context.Context, requestBod
 }
 
 type (
-	IdentityUserRoleRetrieveListPostRequestAttributesSlice []*string
+	IdentityUserRoleRetrieveListPostRequestAttributesSlice []string
 
 	IdentityUserRoleRetrieveListPostRequestExtraFiltersSlice []*IdentityUserRoleRetrieveListPostRequestExtraFilters
 
@@ -1214,7 +1214,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	IdentityUserRoleRetrieveListPostRequestFullTextSearchFieldsSlice []*string
+	IdentityUserRoleRetrieveListPostRequestFullTextSearchFieldsSlice []string
 
 	IdentityUserRoleRetrieveListPostRequestFullTextSearch struct {
 		Fields IdentityUserRoleRetrieveListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

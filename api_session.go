@@ -7,7 +7,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type SessionAPI struct {
@@ -32,7 +32,7 @@ func (s *SessionAPI) LoginSessionLogoffDelete(ctx context.Context) (*http.Respon
 }
 
 type (
-	LoginSessionRetrieveGet200ResponseAPIVersionsSlice []*string
+	LoginSessionRetrieveGet200ResponseAPIVersionsSlice []string
 
 	LoginSessionRetrieveGet200Response struct {
 		AdminID           *string                                            `json:"adminId,omitempty"`
@@ -66,7 +66,7 @@ func (s *SessionAPI) LoginSessionRetrieveGet(ctx context.Context) (*http.Respons
 }
 
 type (
-	LoginSessionLogonPostRequestAPIVersionsSlice []*string
+	LoginSessionLogonPostRequestAPIVersionsSlice []string
 
 	LoginSessionLogonPostRequest struct {
 		APIVersions       LoginSessionLogonPostRequestAPIVersionsSlice `json:"apiVersions,omitempty"`

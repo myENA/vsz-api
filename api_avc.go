@@ -9,14 +9,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type AVCAPI struct {
 	client *Client
 }
 type (
-	ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequestIDListSlice []*string
+	ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequestIDListSlice []string
 
 	ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequest struct {
 		IDList ApplicationVisibilityControlApplicationPolicyMultipleDeleteDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -464,7 +464,7 @@ func (a *AVCAPI) ApplicationVisibilityControlUploadFilePost(ctx context.Context)
 }
 
 type (
-	ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200ResponseIDListSlice []*string
+	ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200ResponseIDListSlice []string
 
 	ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200Response struct {
 		IDList ApplicationVisibilityControlUserDefinedMultipleDeleteDelete200ResponseIDListSlice `json:"idList,omitempty"`

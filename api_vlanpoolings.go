@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type VLANPoolingsAPI struct {
 	client *Client
 }
 type (
-	VlanpoolingBulkDeleteVlanPoolingDeleteRequestIDListSlice []*string
+	VlanpoolingBulkDeleteVlanPoolingDeleteRequestIDListSlice []string
 
 	VlanpoolingBulkDeleteVlanPoolingDeleteRequest struct {
 		IDList VlanpoolingBulkDeleteVlanPoolingDeleteRequestIDListSlice `json:"idList,omitempty"`
@@ -87,7 +87,7 @@ func (v *VLANPoolingsAPI) VlanpoolingCreatePost(ctx context.Context, requestBody
 }
 
 type (
-	VlanpoolingRetrieveListPostRequestAttributesSlice []*string
+	VlanpoolingRetrieveListPostRequestAttributesSlice []string
 
 	VlanpoolingRetrieveListPostRequestExtraFiltersSlice []*VlanpoolingRetrieveListPostRequestExtraFilters
 
@@ -119,7 +119,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	VlanpoolingRetrieveListPostRequestFullTextSearchFieldsSlice []*string
+	VlanpoolingRetrieveListPostRequestFullTextSearchFieldsSlice []string
 
 	VlanpoolingRetrieveListPostRequestFullTextSearch struct {
 		Fields VlanpoolingRetrieveListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

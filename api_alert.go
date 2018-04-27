@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type AlertAPI struct {
 	client *Client
 }
 type (
-	EventAndAlarmAcknowledgeAlarmsPutRequestIDListSlice []*string
+	EventAndAlarmAcknowledgeAlarmsPutRequestIDListSlice []string
 
 	EventAndAlarmAcknowledgeAlarmsPutRequest struct {
 		IDList EventAndAlarmAcknowledgeAlarmsPutRequestIDListSlice `json:"idList,omitempty"`
@@ -48,7 +48,7 @@ func (a *AlertAPI) EventAndAlarmAcknowledgeAlarmsPut(ctx context.Context, reques
 }
 
 type (
-	EventAndAlarmClearAlarmsPutRequestIDListSlice []*string
+	EventAndAlarmClearAlarmsPutRequestIDListSlice []string
 
 	EventAndAlarmClearAlarmsPutRequest struct {
 		Comment *string                                       `json:"comment,omitempty"`
@@ -80,7 +80,7 @@ func (a *AlertAPI) EventAndAlarmClearAlarmsPut(ctx context.Context, requestBody 
 }
 
 type (
-	EventAndAlarmRetrieveAlarmListPostRequestAttributesSlice []*string
+	EventAndAlarmRetrieveAlarmListPostRequestAttributesSlice []string
 
 	EventAndAlarmRetrieveAlarmListPostRequestExtraFiltersSlice []*EventAndAlarmRetrieveAlarmListPostRequestExtraFilters
 
@@ -112,7 +112,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	EventAndAlarmRetrieveAlarmListPostRequestFullTextSearchFieldsSlice []*string
+	EventAndAlarmRetrieveAlarmListPostRequestFullTextSearchFieldsSlice []string
 
 	EventAndAlarmRetrieveAlarmListPostRequestFullTextSearch struct {
 		Fields EventAndAlarmRetrieveAlarmListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -292,7 +292,7 @@ func (a *AlertAPI) EventAndAlarmClearAlarmPut(ctx context.Context, alarmID strin
 }
 
 type (
-	EventAndAlarmRetrieveEventListPostRequestAttributesSlice []*string
+	EventAndAlarmRetrieveEventListPostRequestAttributesSlice []string
 
 	EventAndAlarmRetrieveEventListPostRequestExtraFiltersSlice []*EventAndAlarmRetrieveEventListPostRequestExtraFilters
 
@@ -324,7 +324,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	EventAndAlarmRetrieveEventListPostRequestFullTextSearchFieldsSlice []*string
+	EventAndAlarmRetrieveEventListPostRequestFullTextSearchFieldsSlice []string
 
 	EventAndAlarmRetrieveEventListPostRequestFullTextSearch struct {
 		Fields EventAndAlarmRetrieveEventListPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

@@ -9,7 +9,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type SystemAPI struct {
@@ -138,7 +138,7 @@ func (s *SystemAPI) SystemModifyApRecoverySettingPost(ctx context.Context, reque
 }
 
 type (
-	SystemApModelsGet200Response []*string
+	SystemApModelsGet200Response []string
 )
 
 // SystemApModelsGet: Use this API command to retrieve AP models.
@@ -276,7 +276,7 @@ func (s *SystemAPI) CaleaSetCaleaCommonSettingPost(ctx context.Context, requestB
 }
 
 type (
-	CaleaDeleteCaleaUeMacListDelete1RequestMacListSlice []*string
+	CaleaDeleteCaleaUeMacListDelete1RequestMacListSlice []string
 
 	CaleaDeleteCaleaUeMacListDelete1Request struct {
 		MacList CaleaDeleteCaleaUeMacListDelete1RequestMacListSlice `json:"macList,omitempty"`
@@ -307,7 +307,7 @@ func (s *SystemAPI) CaleaDeleteCaleaUeMacListDelete1(ctx context.Context, reques
 }
 
 type (
-	CaleaAddCaleaUeMacListPostRequestMacListSlice []*string
+	CaleaAddCaleaUeMacListPostRequestMacListSlice []string
 
 	CaleaAddCaleaUeMacListPostRequest struct {
 		MacList CaleaAddCaleaUeMacListPostRequestMacListSlice `json:"macList,omitempty"`
@@ -355,7 +355,7 @@ func (s *SystemAPI) CaleaDeleteCaleaUeMacListDelete(ctx context.Context) (*http.
 }
 
 type (
-	CaleaGetCaleaUeMacListGet200ResponseListSlice []*string
+	CaleaGetCaleaUeMacListGet200ResponseListSlice []string
 
 	CaleaGetCaleaUeMacListGet200Response struct {
 		FirstIndex *int                                          `json:"firstIndex,omitempty"`

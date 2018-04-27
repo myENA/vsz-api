@@ -10,7 +10,7 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type MapsAPI struct {
@@ -166,7 +166,7 @@ func (m *MapsAPI) IndoormapCreateIndoormapPost(ctx context.Context, requestBody 
 }
 
 type (
-	IndoormapQueryIndoormapPostRequestAttributesSlice []*string
+	IndoormapQueryIndoormapPostRequestAttributesSlice []string
 
 	IndoormapQueryIndoormapPostRequestFiltersSlice []*IndoormapQueryIndoormapPostRequestFilters
 
@@ -176,7 +176,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	IndoormapQueryIndoormapPostRequestFullTextSearchFieldsSlice []*string
+	IndoormapQueryIndoormapPostRequestFullTextSearchFieldsSlice []string
 
 	IndoormapQueryIndoormapPostRequestFullTextSearch struct {
 		Fields IndoormapQueryIndoormapPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`

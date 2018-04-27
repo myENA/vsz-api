@@ -10,14 +10,14 @@ import (
 )
 
 // This file is auto-generated
-// Generation Date: 2018-03-16T16:29:52-0500
+// Generation Date: 2018-04-27T15:10:38-0500
 // API Version: v5
 
 type UserGroupsAPI struct {
 	client *Client
 }
 type (
-	ScgUserGroupDeleteScgUserGroupDelete1RequestIDListSlice []*string
+	ScgUserGroupDeleteScgUserGroupDelete1RequestIDListSlice []string
 
 	ScgUserGroupDeleteScgUserGroupDelete1Request struct {
 		IDList ScgUserGroupDeleteScgUserGroupDelete1RequestIDListSlice `json:"idList,omitempty"`
@@ -50,7 +50,7 @@ func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete1(ctx context.Contex
 type (
 	ScgUserGroupAddScgUserGroupPostRequestPermissionsSlice []*ScgUserGroupAddScgUserGroupPostRequestPermissions
 
-	ScgUserGroupAddScgUserGroupPostRequestPermissionsIdsSlice []*string
+	ScgUserGroupAddScgUserGroupPostRequestPermissionsIdsSlice []string
 
 	ScgUserGroupAddScgUserGroupPostRequestPermissions struct {
 		Access   *string                                                   `json:"access,omitempty"`
@@ -147,7 +147,7 @@ type (
 		Resource *string `json:"resource,omitempty"`
 	}
 
-	ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200ResponseListItemsDescriptionSlice []*string
+	ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200ResponseListItemsDescriptionSlice []string
 
 	ScgUserGroupGetPermittedCategoriesOfCurrentUserGet200ResponseList struct {
 		Access           *string                                                                                `json:"access,omitempty"`
@@ -186,7 +186,7 @@ func (u *UserGroupsAPI) ScgUserGroupGetPermittedCategoriesOfCurrentUserGet(ctx c
 }
 
 type (
-	ScgUserGroupQueryUserGroupsPostRequestAttributesSlice []*string
+	ScgUserGroupQueryUserGroupsPostRequestAttributesSlice []string
 
 	ScgUserGroupQueryUserGroupsPostRequestExtraFiltersSlice []*ScgUserGroupQueryUserGroupsPostRequestExtraFilters
 
@@ -218,7 +218,7 @@ type (
 		Value    *string `json:"value,omitempty"`
 	}
 
-	ScgUserGroupQueryUserGroupsPostRequestFullTextSearchFieldsSlice []*string
+	ScgUserGroupQueryUserGroupsPostRequestFullTextSearchFieldsSlice []string
 
 	ScgUserGroupQueryUserGroupsPostRequestFullTextSearch struct {
 		Fields ScgUserGroupQueryUserGroupsPostRequestFullTextSearchFieldsSlice `json:"fields,omitempty"`
@@ -299,7 +299,7 @@ type (
 
 	ScgUserGroupQueryUserGroupsPost200ResponseListPermissionsSlice []*ScgUserGroupQueryUserGroupsPost200ResponseListPermissions
 
-	ScgUserGroupQueryUserGroupsPost200ResponseListPermissionsIdsSlice []*string
+	ScgUserGroupQueryUserGroupsPost200ResponseListPermissionsIdsSlice []string
 
 	ScgUserGroupQueryUserGroupsPost200ResponseListPermissions struct {
 		Access   *string                                                           `json:"access,omitempty"`
@@ -435,7 +435,7 @@ type (
 		Resource *string `json:"resource,omitempty"`
 	}
 
-	ScgUserGroupGetPermissionItemsOfRoleGet200ResponseListItemsDescriptionSlice []*string
+	ScgUserGroupGetPermissionItemsOfRoleGet200ResponseListItemsDescriptionSlice []string
 
 	ScgUserGroupGetPermissionItemsOfRoleGet200ResponseList struct {
 		Access           *string                                                                     `json:"access,omitempty"`
@@ -515,7 +515,7 @@ func (u *UserGroupsAPI) ScgUserGroupDeleteScgUserGroupDelete(ctx context.Context
 type (
 	ScgUserGroupGetScgUserGroupGet200ResponsePermissionsSlice []*ScgUserGroupGetScgUserGroupGet200ResponsePermissions
 
-	ScgUserGroupGetScgUserGroupGet200ResponsePermissionsIdsSlice []*string
+	ScgUserGroupGetScgUserGroupGet200ResponsePermissionsIdsSlice []string
 
 	ScgUserGroupGetScgUserGroupGet200ResponsePermissions struct {
 		Access   *string                                                      `json:"access,omitempty"`
@@ -677,7 +677,7 @@ func (u *UserGroupsAPI) ScgUserGroupUpdateUserGroupsPatch(ctx context.Context, u
 type (
 	ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequestSlice []*ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequest
 
-	ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequestIdsSlice []*string
+	ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequestIdsSlice []string
 
 	ScgUserGroupUpdatePermissionsOfUserGroupsPatchRequest struct {
 		Access   *string                                                       `json:"access,omitempty"`
