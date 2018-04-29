@@ -12,7 +12,7 @@ your VSZ version.  We currently will not guarantee any degree of backwards compa
 
 |VSZ Version|Package Version|
 |---|---|
-|3.5.0-3.5.1|0.5.*|
+|3.5.0-3.5.1|0.6.*|
 
 ## Basic Usage
 

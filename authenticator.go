@@ -5,7 +5,6 @@ import (
 	"errors"
 	"net/http"
 	"sync"
-	"sync/atomic"
 	"time"
 )
 
@@ -104,16 +103,21 @@ func (pa *PasswordAuthenticator) Decorate(ctx context.Context, httpRequest *http
 	if debug {
 		log.Printf("[pw-auth-%s] Decorate called for request \"%s %s\"", pa.username, httpRequest.Method, httpRequest.URL)
 	}
+
+	pa.cookieMu.RLock()
+	cas := pa.cas
+
 	if httpRequest == nil {
 		// TODO: yell a bit more if the request is nil?
-		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("httpRequest cannot be nil")
+		pa.cookieMu.RUnlock()
+		return AuthCAS(cas), errors.New("httpRequest cannot be nil")
 	}
 	// is context still valid?
 	if err := ctx.Err(); err != nil {
-		return AuthCAS(atomic.LoadUint64(&pa.cas)), err
+		pa.cookieMu.RUnlock()
+		return AuthCAS(cas), err
 	}
-	pa.cookieMu.RLock()
-	cas := atomic.LoadUint64(&pa.cas)
+
 	cookie := pa.cookie
 	// TODO improve efficiency of this?
 	if cookie != nil && !pa.refreshed.IsZero() && pa.refreshed.Add(pa.cookieTTL).After(time.Now()) {
@@ -129,15 +133,19 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 	if debug {
 		log.Printf("[pw-auth-%s] Refresh called", pa.username)
 	}
+
+	pa.cookieMu.Lock()
+	ccas := pa.cas
+
 	if client == nil {
-		return AuthCAS(atomic.LoadUint64(&pa.cas)), errors.New("client cannot be nil")
+		pa.cookieMu.Unlock()
+		return AuthCAS(ccas), errors.New("client cannot be nil")
 	}
 	// is context still valid?
 	if err := ctx.Err(); err != nil {
-		return AuthCAS(atomic.LoadUint64(&pa.cas)), err
+		pa.cookieMu.Unlock()
+		return AuthCAS(ccas), err
 	}
-	pa.cookieMu.Lock()
-	ccas := atomic.LoadUint64(&pa.cas)
 	// if the passed cas value is greater than the internal CAS, assume weirdness and return current CAS and an error
 	if ccas < uint64(cas) {
 		pa.cookieMu.Unlock()
@@ -152,28 +160,39 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 
 	// if cas matches internal...
 
+	// try to execute logon
 	username := pa.username
 	password := pa.password
 	resp, _, err := client.Session().LoginSessionLogonPost(ctx, &LoginSessionLogonPostRequest{
 		Username: &username,
 		Password: &password,
 	})
+
+	if resp != nil {
+		resp.Body.Close()
+	}
+
 	if err != nil {
 		pa.cookie = nil
-		ncas := atomic.AddUint64(&pa.cas, 1)
+		pa.cas++
+		ncas := pa.cas
 		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), err
 	}
+
 	cookie := TryExtractSessionCookie(resp)
 	if cookie == nil {
 		pa.cookie = nil
-		ncas := atomic.AddUint64(&pa.cas, 1)
+		pa.cas++
+		ncas := pa.cas
 		pa.cookieMu.Unlock()
 		return AuthCAS(ncas), errors.New("unable to locate cookie in response")
 	}
+
 	pa.cookie = cookie
 	pa.refreshed = time.Now()
-	ncas := atomic.AddUint64(&pa.cas, 1)
+	pa.cas++
+	ncas := pa.cas
 	pa.cookieMu.Unlock()
 	return AuthCAS(ncas), nil
 }
@@ -182,12 +201,15 @@ func (pa *PasswordAuthenticator) Invalidate(ctx context.Context, cas AuthCAS) (A
 	if debug {
 		log.Printf("[pw-auth-%s] Invalidate called", pa.username)
 	}
+
+	pa.cookieMu.Lock()
+	ccas := pa.cas
+
 	// is context still valid?
 	if err := ctx.Err(); err != nil {
-		return AuthCAS(atomic.LoadUint64(&pa.cas)), err
+		pa.cookieMu.Unlock()
+		return AuthCAS(ccas), err
 	}
-	pa.cookieMu.Lock()
-	ccas := atomic.LoadUint64(&pa.cas)
 	// if current cas is less than provided, assume insanity.
 	if ccas < uint64(cas) {
 		pa.cookieMu.Unlock()
@@ -198,7 +220,9 @@ func (pa *PasswordAuthenticator) Invalidate(ctx context.Context, cas AuthCAS) (A
 		pa.cookieMu.Unlock()
 		return AuthCAS(ccas), nil
 	}
-	ncas := atomic.AddUint64(&pa.cas, 1)
+
+	pa.cas++
+	ncas := pa.cas
 	pa.cookie = nil
 	pa.refreshed = time.Now()
 	pa.cookieMu.Unlock()
