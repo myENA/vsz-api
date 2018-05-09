@@ -75,11 +75,12 @@ type PasswordAuthenticator struct {
 	username string
 	password string
 
+	mu sync.RWMutex
+
 	cas       uint64
 	refreshed time.Time
 	cookieTTL time.Duration
 	cookie    *http.Cookie
-	cookieMu  sync.RWMutex
 }
 
 func NewPasswordAuthenticator(username, password string, cookieTTL time.Duration) *PasswordAuthenticator {
@@ -104,17 +105,17 @@ func (pa *PasswordAuthenticator) Decorate(ctx context.Context, httpRequest *http
 		log.Printf("[pw-auth-%s] Decorate called for request \"%s %s\"", pa.username, httpRequest.Method, httpRequest.URL)
 	}
 
-	pa.cookieMu.RLock()
+	pa.mu.RLock()
 	cas := pa.cas
 
 	if httpRequest == nil {
 		// TODO: yell a bit more if the request is nil?
-		pa.cookieMu.RUnlock()
+		pa.mu.RUnlock()
 		return AuthCAS(cas), errors.New("httpRequest cannot be nil")
 	}
 	// is context still valid?
 	if err := ctx.Err(); err != nil {
-		pa.cookieMu.RUnlock()
+		pa.mu.RUnlock()
 		return AuthCAS(cas), err
 	}
 
@@ -122,10 +123,10 @@ func (pa *PasswordAuthenticator) Decorate(ctx context.Context, httpRequest *http
 	// TODO improve efficiency of this?
 	if cookie != nil && !pa.refreshed.IsZero() && pa.refreshed.Add(pa.cookieTTL).After(time.Now()) {
 		httpRequest.AddCookie(cookie)
-		pa.cookieMu.RUnlock()
+		pa.mu.RUnlock()
 		return AuthCAS(cas), nil
 	}
-	pa.cookieMu.RUnlock()
+	pa.mu.RUnlock()
 	return AuthCAS(cas), errors.New("cookie requires refresh")
 }
 
@@ -134,27 +135,27 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 		log.Printf("[pw-auth-%s] Refresh called", pa.username)
 	}
 
-	pa.cookieMu.Lock()
+	pa.mu.Lock()
 	ccas := pa.cas
 
 	if client == nil {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), errors.New("client cannot be nil")
 	}
 	// is context still valid?
 	if err := ctx.Err(); err != nil {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), err
 	}
 	// if the passed cas value is greater than the internal CAS, assume weirdness and return current CAS and an error
 	if ccas < uint64(cas) {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), errors.New("provided cas value is greater than possible")
 	}
 	// if the passed in CAS value is less than the currently stored one, assume another routine called either Refresh
 	// or Invalidate and just return current cas
 	if ccas > uint64(cas) {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), nil
 	}
 
@@ -176,7 +177,7 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 		pa.cookie = nil
 		pa.cas++
 		ncas := pa.cas
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ncas), err
 	}
 
@@ -185,7 +186,7 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 		pa.cookie = nil
 		pa.cas++
 		ncas := pa.cas
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ncas), errors.New("unable to locate cookie in response")
 	}
 
@@ -193,7 +194,7 @@ func (pa *PasswordAuthenticator) Refresh(ctx context.Context, client *Client, ca
 	pa.refreshed = time.Now()
 	pa.cas++
 	ncas := pa.cas
-	pa.cookieMu.Unlock()
+	pa.mu.Unlock()
 	return AuthCAS(ncas), nil
 }
 
@@ -202,22 +203,22 @@ func (pa *PasswordAuthenticator) Invalidate(ctx context.Context, cas AuthCAS) (A
 		log.Printf("[pw-auth-%s] Invalidate called", pa.username)
 	}
 
-	pa.cookieMu.Lock()
+	pa.mu.Lock()
 	ccas := pa.cas
 
 	// is context still valid?
 	if err := ctx.Err(); err != nil {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), err
 	}
 	// if current cas is less than provided, assume insanity.
 	if ccas < uint64(cas) {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), errors.New("provided cas value greater than possible")
 	}
 	// if current cas is greater than provided, assume Refresh or Invalidate has already been called.
 	if ccas > uint64(cas) {
-		pa.cookieMu.Unlock()
+		pa.mu.Unlock()
 		return AuthCAS(ccas), nil
 	}
 
@@ -225,6 +226,6 @@ func (pa *PasswordAuthenticator) Invalidate(ctx context.Context, cas AuthCAS) (A
 	ncas := pa.cas
 	pa.cookie = nil
 	pa.refreshed = time.Now()
-	pa.cookieMu.Unlock()
+	pa.mu.Unlock()
 	return AuthCAS(ncas), nil
 }

@@ -132,7 +132,7 @@ func (c *Client) Ensure(ctx context.Context, request *Request, successCode int, 
 	}
 
 	// check for and attempt to handle 401 unauthorized
-	if httpResponse.StatusCode == 401 && request.auth {
+	if httpResponse.StatusCode == 401 && request.authenticated {
 		// invalidate authenticator state
 		if _, err = c.auth.Invalidate(ctx, cas); err != nil {
 			return nil, nil, err
@@ -186,7 +186,7 @@ func (c *Client) tryDo(ctx context.Context, request *Request) (*http.Response, A
 	}
 
 	// if this api requires an active auth session, try to locate cookie
-	if request.auth {
+	if request.authenticated {
 		if cas, err = c.auth.Decorate(ctx, httpRequest); err != nil {
 			if cas, err = c.auth.Refresh(ctx, c, cas); err != nil {
 				return nil, cas, err

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"path"
 	"strings"
 	"sync"
@@ -15,16 +16,22 @@ import (
 var requestID uint64
 
 type Request struct {
-	id     uint64
-	method string
-	uri    string
-	auth   bool
+	id            uint64
+	method        string
+	uri           string
+	authenticated bool
 
-	pathParams   map[string]string
-	pathParamsMu sync.RWMutex
+	queryParameters   map[string]string
+	queryParametersMu sync.RWMutex
 
-	queryParams   map[string]string
-	queryParamsMu sync.RWMutex
+	pathParameters    map[string]string
+	routeParametersMu sync.RWMutex
+
+	headers   url.Values
+	headersMu sync.RWMutex
+
+	cookies   []*http.Cookie
+	cookiesMu sync.RWMutex
 
 	body   []byte
 	bodyMu sync.RWMutex
@@ -32,12 +39,14 @@ type Request struct {
 
 func NewRequest(method, uri string, authenticated bool) *Request {
 	r := &Request{
-		id:          atomic.AddUint64(&requestID, 1),
-		method:      method,
-		uri:         uri,
-		auth:        authenticated,
-		pathParams:  make(map[string]string),
-		queryParams: make(map[string]string),
+		id:              atomic.AddUint64(&requestID, 1),
+		method:          method,
+		uri:             uri,
+		authenticated:   authenticated,
+		queryParameters: make(map[string]string),
+		pathParameters:  make(map[string]string),
+		headers:         make(url.Values),
+		cookies:         make([]*http.Cookie, 0),
 	}
 	return r
 }
@@ -55,84 +64,172 @@ func (r *Request) URI() string {
 }
 
 func (r *Request) Authenticated() bool {
-	return r.auth
+	return r.authenticated
 }
 
-// PathParameters will return a clone of the current list of path parameters
-func (r *Request) PathParameters() map[string]string {
-	r.pathParamsMu.RLock()
-	l := len(r.pathParams)
+func (r *Request) SetHeaders(headers url.Values) {
+	var l int
+	r.headersMu.Lock()
+	r.headers = make(url.Values, len(headers))
+	for name, values := range headers {
+		l = len(values)
+		r.headers[name] = make([]string, l, l)
+		copy(r.headers[name], values)
+	}
+	r.headersMu.Unlock()
+}
+
+func (r *Request) AddHeader(name, value string) {
+	r.headersMu.Lock()
+	r.headers.Add(name, value)
+	r.headersMu.Unlock()
+}
+
+// SetHeader will attempt to overwrite an existing header with the same name, simply adding it if one is not found.
+func (r *Request) SetHeader(name, value string) {
+	r.headersMu.Lock()
+	r.headers.Set(name, value)
+	r.headersMu.Unlock()
+}
+
+// RemoveHeader will attempt to remove a header from this request, returning the value being removed.
+func (r *Request) RemoveHeader(name string) (string, bool) {
+	r.headersMu.Lock()
+	current := r.headers.Get(name)
+	if current == "" {
+		r.headersMu.Unlock()
+		return "", false
+	}
+	r.headers.Del(name)
+	r.headersMu.Unlock()
+	return current, true
+}
+
+// Headers will return a copy of current headers on this request
+func (r *Request) Headers() url.Values {
+	var l int
+	r.headersMu.RLock()
+	l = len(r.headers)
 	if l == 0 {
-		r.pathParamsMu.RUnlock()
-		return make(map[string]string)
+		r.headersMu.RUnlock()
+		return nil
 	}
-	tmp := make(map[string]string, len(r.pathParams))
-	for k, v := range r.pathParams {
-		tmp[k] = v
+	headers := make(url.Values, l)
+	for name, values := range r.headers {
+		l = len(values)
+		headers[name] = make([]string, l, l)
+		copy(headers[name], values)
 	}
-	r.pathParamsMu.RUnlock()
-	return tmp
+	r.headersMu.RUnlock()
+	return headers
 }
 
-// SetPathParameter will add / overwrite a single path parameter to the provided value
-func (r *Request) SetPathParameter(parameter, value string) {
-	r.pathParamsMu.Lock()
-	r.pathParams[parameter] = value
-	r.pathParamsMu.Unlock()
+func (r *Request) SetCookies(cookies []*http.Cookie) {
+	r.cookiesMu.Lock()
+	l := len(cookies)
+	r.cookies = make([]*http.Cookie, l, l)
+	copy(r.cookies, cookies)
+	r.cookiesMu.Unlock()
 }
 
-// SetPathParameters will replace the existing map of path parameters with whatever you pass in.
-func (r *Request) SetPathParameters(parameters map[string]string) {
-	r.pathParamsMu.Lock()
-	r.pathParams = parameters
-	r.pathParamsMu.Unlock()
+func (r *Request) AddCookie(cookie *http.Cookie) {
+	r.cookiesMu.Lock()
+	r.cookies = append(r.cookies, cookie)
+	r.cookiesMu.Unlock()
 }
 
-// QueryParameters will return a clone of the current list of query parameters
+// SetCookie will attempt to locate and overwrite a cookie with the same name, simply appending it to the list if one is
+// not found
+func (r *Request) SetCookie(cookie *http.Cookie) {
+	r.cookiesMu.Lock()
+	for i, cc := range r.cookies {
+		if cc.Name == cookie.Name {
+			r.cookies[i] = cookie
+			r.cookiesMu.Unlock()
+			return
+		}
+	}
+	r.cookies = append(r.cookies, cookie)
+	r.cookiesMu.Unlock()
+}
+
+func (r *Request) RemoveCookie(name string) (*http.Cookie, bool) {
+	r.cookiesMu.Lock()
+	for _, cookie := range r.cookies {
+		if cookie.Name == name {
+			r.cookiesMu.Unlock()
+			return cookie, true
+		}
+	}
+	r.cookiesMu.Unlock()
+	return nil, false
+}
+
+// Cookies will return a copy of the list of cookies to be used with this request
+// NOTE: The cookies are pointers.  Be aware.
+func (r *Request) Cookies() []*http.Cookie {
+	r.cookiesMu.RLock()
+	l := len(r.cookies)
+	if l == 0 {
+		r.cookiesMu.RUnlock()
+		return nil
+	}
+	cookies := make([]*http.Cookie, l, l)
+	copy(cookies, r.cookies)
+	r.cookiesMu.RUnlock()
+	return cookies
+}
+
+func (r *Request) SetQueryParameters(params map[string]string) {
+	r.queryParametersMu.Lock()
+	r.queryParameters = make(map[string]string, len(params))
+	for k, v := range params {
+		r.queryParameters[k] = v
+	}
+	r.queryParametersMu.Unlock()
+}
+
+func (r *Request) SetQueryParameter(param, value string) {
+	r.queryParametersMu.Lock()
+	r.queryParameters[param] = value
+	r.queryParametersMu.Unlock()
+}
+
 func (r *Request) QueryParameters() map[string]string {
-	r.queryParamsMu.RLock()
-	l := len(r.queryParams)
-	if l == 0 {
-		r.queryParamsMu.RUnlock()
-		return make(map[string]string)
+	r.queryParametersMu.RLock()
+	params := make(map[string]string, len(r.queryParameters))
+	for k, v := range r.queryParameters {
+		params[k] = v
 	}
-	tmp := make(map[string]string, l)
-	for k, v := range r.queryParams {
-		tmp[k] = v
+	r.queryParametersMu.RUnlock()
+	return params
+}
+
+func (r *Request) SetPathParameters(params map[string]string) {
+	r.routeParametersMu.Lock()
+	r.pathParameters = make(map[string]string, len(params))
+	for k, v := range params {
+		r.pathParameters[k] = v
 	}
-	r.queryParamsMu.RUnlock()
-	return tmp
+	r.routeParametersMu.Unlock()
 }
 
-// SetQueryParameter will add / overwrite a single query parameter with the provided value
-func (r *Request) SetQueryParameter(parameter, value string) {
-	r.queryParamsMu.Lock()
-	r.queryParams[parameter] = value
-	r.queryParamsMu.Unlock()
+func (r *Request) SetPathParameter(param, value string) {
+	r.routeParametersMu.Lock()
+	r.pathParameters[param] = value
+	r.routeParametersMu.Unlock()
 }
 
-// SetQueryParameters will replace the existing query parameter map with whatever you pass in
-func (r *Request) SetQueryParameters(parameters map[string]string) {
-	r.queryParamsMu.Lock()
-	r.queryParams = parameters
-	r.queryParamsMu.Unlock()
-}
-
-// Body will return a clone of the current request body
-func (r *Request) Body() []byte {
-	r.bodyMu.RLock()
-	l := len(r.body)
-	if l == 0 {
-		r.bodyMu.RUnlock()
-		return make([]byte, 0)
+func (r *Request) PathParameters() map[string]string {
+	r.routeParametersMu.RLock()
+	params := make(map[string]string, len(r.pathParameters))
+	for k, v := range r.pathParameters {
+		params[k] = v
 	}
-	tmp := make([]byte, l, l)
-	copy(tmp, r.body)
-	r.bodyMu.RUnlock()
-	return tmp
+	r.routeParametersMu.RUnlock()
+	return params
 }
 
-// SetBody will copy the contents of the provided body to this request
 func (r *Request) SetBody(body []byte) {
 	r.bodyMu.Lock()
 	l := len(body)
@@ -146,23 +243,30 @@ func (r *Request) SetBody(body []byte) {
 	r.bodyMu.Unlock()
 }
 
-// SetBodyModel will attempt to json.Marshal the input to use as the body of this request.  The body will only be set
-// if the marshalling is successful.
 func (r *Request) SetBodyModel(model interface{}) error {
-	r.bodyMu.Lock()
 	if model == nil {
-		r.body = nil
-		r.bodyMu.Unlock()
+		r.SetBody(nil)
 		return nil
 	}
 	b, err := json.Marshal(model)
 	if err != nil {
-		r.bodyMu.Unlock()
 		return err
 	}
-	r.body = b
-	r.bodyMu.Unlock()
+	r.SetBody(b)
 	return nil
+}
+
+func (r *Request) Body() []byte {
+	r.bodyMu.RLock()
+	l := len(r.body)
+	if l == 0 {
+		r.bodyMu.RUnlock()
+		return nil
+	}
+	tmp := make([]byte, l, l)
+	copy(tmp, r.body)
+	r.bodyMu.RUnlock()
+	return tmp
 }
 
 func (r *Request) compileURI() string {
